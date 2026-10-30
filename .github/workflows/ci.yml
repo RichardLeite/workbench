@@ -32,8 +32,8 @@ jobs:
       - name: CLI smoke
         run: uv run python -m workbench version --json
 
-  workbench-validators:
-    name: 🛠️ Workbench — validators
+  workbench-scripts:
+    name: 🛠️ Workbench — script tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -42,6 +42,18 @@ jobs:
         run: uv sync --all-groups
       - name: Process validator
         run: uv run --frozen python -m workbench process validate
+      - name: Project discovery
+        run: |
+          uv run --frozen python -m workbench projects scan --json > /dev/null
+          uv run --frozen python -m workbench projects sync --quiet
+          uv run --frozen python -m workbench projects list --json > /dev/null
+      - name: Workbench tests
+        run: |
+          uv run --frozen pytest \
+            tests/unit/test_discovery.py \
+            tests/unit/test_projects_command.py \
+            tests/unit/test_process.py \
+            tests/unit/test_repository.py -q
 
   orchestrator:
     name: ⚙️ Orchestrator — TypeScript compile + contract tests
