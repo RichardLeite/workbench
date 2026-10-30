@@ -6,21 +6,18 @@ from argparse import _SubParsersAction
 from collections.abc import Callable
 
 from workbench.commands import (
-    ado,
     docs,
     doctor,
-    hotfix,
     issue,
     knowledge,
     metrics,
-    pipeline,
+    process,
+    projects,
     release,
     repo,
     reviewers,
     spec,
-    sprint,
     sync,
-    teams,
     validate,
     version,
     vision,
@@ -34,13 +31,10 @@ def register_all(subparsers: _SubParsersAction) -> None:
     version.register(subparsers)
     validate.register(subparsers)
     repo.register(subparsers)
-    sprint.register(subparsers)
-    pipeline.register(subparsers)
-    ado.register(subparsers)
-    hotfix.register(subparsers)
+    process.register(subparsers)
+    projects.register(subparsers)
     release.register(subparsers)
     issue.register(subparsers)
-    teams.register(subparsers)
     spec.register(subparsers)
     sync.register(subparsers)
     knowledge.register(subparsers)

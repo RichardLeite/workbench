@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+from workbench import discovery
 from workbench.commands import repo
 from workbench.errors import WorkbenchError
 
@@ -52,3 +53,13 @@ def test_resolve_unknown_project(tmp_path: Path) -> None:
     mapping = repo._load_mapping(path)
     with pytest.raises(WorkbenchError, match="Unknown project"):
         repo._resolve_project("missing", mapping, tmp_path)
+
+
+def test_resolve_uses_discovered_overlay(tmp_path: Path, capsys) -> None:
+    (tmp_path / "api" / ".git").mkdir(parents=True)
+    write_mapping(tmp_path, {})
+    discovery.sync_projects(tmp_path)
+    args = repo.Namespace(project="api", repo=None, mapping=None, root=str(tmp_path), json=True)
+    assert repo._run_resolve(args) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["status"] == "complete"

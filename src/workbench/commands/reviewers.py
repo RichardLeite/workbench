@@ -284,7 +284,7 @@ def _run_sort(args: Namespace) -> int:
         try:
             fresh = _load_config(root)
             reviewers = fresh.get("reviewers", [])
-            max_allowed = (fresh.get("constraints") or {}).get("maxReviewsPerPersonPerSprint", 5)
+            max_allowed = (fresh.get("constraints") or {}).get("maxReviewsPerPerson", 5)
             eligible = [
                 reviewer
                 for reviewer in _filter_complexity(reviewers, complexity)

@@ -1,0 +1,74 @@
+{
+  "name": "default",
+  "description": "Fluxo mínimo: descobrir → planejar → implementar → testar → revisar → documentar",
+  "version": 1,
+  "license": "MIT",
+  "stages": [
+    {
+      "id": "discover",
+      "name": "Descoberta",
+      "agent": "explorador",
+      "optional": true
+    },
+    {
+      "id": "plan",
+      "name": "Plano",
+      "agent": "planner",
+      "gate": "plan-review"
+    },
+    {
+      "id": "implement",
+      "name": "Implementação",
+      "agent": null,
+      "agent_by_layer": true,
+      "gate": "tests"
+    },
+    {
+      "id": "review",
+      "name": "Revisão",
+      "agent": "revisor",
+      "gate": "review"
+    },
+    {
+      "id": "docs",
+      "name": "Documentação",
+      "agent": "vault-updater",
+      "optional": true
+    }
+  ],
+  "gates": [
+    {
+      "id": "plan-review",
+      "agent": "tech-lead",
+      "blocking": true
+    },
+    {
+      "id": "tests",
+      "command": "uv run pytest",
+      "blocking": true,
+      "timeout_min": 15
+    },
+    {
+      "id": "review",
+      "agent": "revisor",
+      "blocking": true
+    }
+  ],
+  "agents_by_layer": {
+    "backend": "backend-dev",
+    "frontend": "frontend-dev",
+    "database": "database-dev"
+  },
+  "artifacts": [
+    {
+      "id": "spec",
+      "path": "knowledge/specs/spec-{slug}.md",
+      "template": ".opencode/templates/spec-template.md"
+    }
+  ],
+  "limits": {
+    "max_modules_per_batch": 6,
+    "max_validation_cycles": 2,
+    "max_pr_lines": 400
+  }
+}

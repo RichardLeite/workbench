@@ -44,6 +44,7 @@ def test_gen_mcp_and_settings(tmp_path: Path) -> None:
     settings = json.loads((tmp_path / ".claude" / "settings.json").read_text(encoding="utf-8"))
     assert settings["permissions"]["defaultMode"] == "acceptEdits"
     assert settings["hooks"]["PreToolUse"]
+    assert settings["hooks"]["SessionStart"]
 
 
 def test_gen_agents(tmp_path: Path) -> None:

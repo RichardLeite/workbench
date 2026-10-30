@@ -179,7 +179,7 @@ def migrate_spec(spec_path: Path, dry_run: bool = False, root: Path | None = Non
     validation = _first_section(content, "Validation", "Validação")
     notes = _first_section(content, "Notes", "Notas", "Notas Técnicas")
     task_match = re.search(r"TASK[:\s]+([\w-]+)", content, re.I)
-    task_id = task_match.group(1) if task_match else "TASK-XXXX"
+    task_id = task_match.group(1) if task_match else "N/A"
 
     modules, module_count = _build_modules(objective, scope, validation, risks)
 
@@ -191,7 +191,7 @@ def migrate_spec(spec_path: Path, dry_run: bool = False, root: Path | None = Non
         f"> **Gerado em:** {date.today().isoformat()}\n"
         "> **Esquema:** Spec Executável v1 — Migrado automaticamente do formato antigo\n"
         "> **Uso:** Projetada para ser executada pelo `/execute-spec`\n\n"
-        "## TASK\n\n"
+        "## Task\n\n"
         f"{task_id}\n\n"
         "## Objetivo\n\n"
         f"{objective or '*(extrair do contexto original)*'}\n\n"

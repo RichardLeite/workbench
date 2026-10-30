@@ -1,9 +1,9 @@
 {
   "description": "Lista de revisores elegíveis para PRs com sistema de sorteio inteligente (peso por senioridade, balanceamento de carga, exclusão de ausentes).",
-  "instructions": "Adicione membros conforme necessário. Campos: name (exibição), email (menção/Teams), github (username GitHub), seniority (pleno/senior/junior), weightMultiplier (peso no sorteio), active (true/false para ausentes), reviewCount (contagem de revisões recentes).",
+  "instructions": "Adicione membros conforme necessário. Campos: name (exibição), email (contato), github (username GitHub), seniority (pleno/senior/junior), weightMultiplier (peso no sorteio), active (true/false para ausentes), reviewCount (contagem de revisões recentes).",
   "constraints": {
-    "minReviewersForSprint": 2,
-    "maxReviewsPerPersonPerSprint": 5,
+    "minReviewers": 2,
+    "maxReviewsPerPerson": 5,
     "defaultWeight": {
       "pleno": 3,
       "senior": 2,

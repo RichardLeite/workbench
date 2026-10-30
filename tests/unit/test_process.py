@@ -1,30 +1,61 @@
 from __future__ import annotations
 
-import sys
+import json
+from pathlib import Path
 
-import pytest
-
-from workbench import process
-from workbench.errors import ExternalCommandError, MissingDependencyError, WorkbenchError
+from workbench import process_engine as engine
 
 
-def test_run_success() -> None:
-    result = process.run([sys.executable, "-c", "print('ok')"])
-    assert result.ok
-    assert result.stdout.strip() == "ok"
-    assert result.duration_ms >= 0
+def test_default_process_is_valid() -> None:
+    definition = engine.load_process("default")
+    assert definition.name == "default"
+    assert engine.validate_process(definition) == []
+    assert definition.license == "MIT"
 
 
-def test_run_missing_command() -> None:
-    with pytest.raises(MissingDependencyError):
-        process.run(["definitely-not-a-command-workbench"])
+def test_plan_payload() -> None:
+    definition = engine.load_process("default")
+    plan = engine.plan_payload(definition)
+    assert plan["process"] == "default"
+    assert plan["stages"][0]["id"] == "discover"
+    assert plan["gates"]
 
 
-def test_run_timeout() -> None:
-    with pytest.raises(WorkbenchError, match="Timeout"):
-        process.run([sys.executable, "-c", "import time; time.sleep(2)"], timeout=0.2)
+def test_state_roundtrip(tmp_path: Path) -> None:
+    definition = engine.load_process("default")
+    state = engine.create_state(definition, "demo", "workbench")
+    path = engine.save_state(state, tmp_path)
+    assert path.is_file()
+    loaded = engine.load_state("default", "demo", tmp_path)
+    assert loaded is not None
+    assert loaded["process"] == "default"
+    assert engine.resume_prompt("default", "demo", tmp_path)["exists"] is True
+    assert engine.resume_prompt("default", "missing", tmp_path)["exists"] is False
 
 
-def test_run_check() -> None:
-    with pytest.raises(ExternalCommandError):
-        process.run([sys.executable, "-c", "raise SystemExit(2)"], check=True)
+def test_run_manual_gate(tmp_path: Path) -> None:
+    definition = engine.load_process("default")
+    state = engine.create_state(definition, "demo", "workbench")
+    result = engine.run_gate(
+        definition, state, "plan-review", root=tmp_path, manual_status="approved"
+    )
+    assert result["status"] == "passed"
+    assert state["gates"]["plan-review"]["status"] == "passed"
+
+
+def test_run_command_gate(tmp_path: Path) -> None:
+    process_dir = tmp_path / ".opencode" / "processes" / "sample"
+    process_dir.mkdir(parents=True)
+    data = {
+        "name": "sample",
+        "description": "sample",
+        "version": 1,
+        "stages": [{"id": "build", "name": "Build", "agent": None, "gate": "ok"}],
+        "gates": [{"id": "ok", "command": "git --version", "blocking": True}],
+    }
+    (process_dir / "process.json").write_text(json.dumps(data), encoding="utf-8")
+    definition = engine.load_process("sample", root=tmp_path)
+    state = engine.create_state(definition, "demo", "workbench")
+    result = engine.run_gate(definition, state, "ok", root=tmp_path)
+    assert result["status"] == "passed"
+    assert result["exit_code"] == 0

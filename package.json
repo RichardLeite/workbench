@@ -1,16 +1,10 @@
 {
   "scripts": {
-    "validate:sprint-tasks": "uv run --frozen python -m workbench sprint validate",
-    "validate:pipeline": "uv run --frozen python -m workbench pipeline validate",
-    "validate:ado": "uv run --frozen python -m workbench ado resolve --validate",
-    "validate:all": "npm run validate:sprint-tasks && npm run validate:pipeline && npm run validate:ado",
+    "validate": "uv run --frozen python -m workbench process validate",
     "sync:claude": "uv run --frozen python -m workbench sync claude",
     "sync:codex": "uv run --frozen python -m workbench sync codex",
     "test": "uv run pytest",
     "lint": "uv run ruff check src tests",
     "format": "uv run ruff format src tests"
-  },
-  "dependencies": {
-    "@floriscornel/teams-mcp": "^0.9.0"
   }
 }

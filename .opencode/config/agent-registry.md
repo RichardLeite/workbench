@@ -26,7 +26,7 @@
 |-------|----------|------|------|------|
 | vault-updater | docs | `agents/project/vault-updater.md` | 2 | Update project vault |
 
-### Review (7)
+### Review (6)
 | Agent | Category | File | Tier | When |
 |-------|----------|------|------|------|
 | revisor | review | `agents/review/revisor.md` | 2 | Code review, architecture analysis, debugging |
@@ -34,16 +34,14 @@
 | security-reviewer | review | `agents/review/security-reviewer.md` | 3 | OWASP Top 10, secrets, injection, auth |
 | tech-architect | architecture | `agents/review/tech-architect.md` | 2 | ADRs, cross-layer impact, design decisions |
 | tech-lead | tech lead | `agents/review/tech-lead.md` | 4 | Technical guidance, oversight, bridge |
-| pr-insight | PR review | `agents/review/pr-insight.md` | 5 | Complete PR analysis + Azure + Teams |
-| sec-arch | security | `agents/review/sec-arch.md` | 4 | Threat modeling STRIDE, LGPD gate |
+| sec-arch | security | `agents/review/sec-arch.md` | 4 | Threat modeling STRIDE, privacy gate |
 
-### Process (4)
+### Process (3)
 | Agent | Category | File | Tier | When |
 |-------|----------|------|------|------|
-| scrum-master | process | `agents/process/scrum-master.md` | 2 | Sprints, impediments, metrics |
+| scrum-master | process | `agents/process/scrum-master.md` | 2 | Process metrics, impediments, retrospectives |
 | business-analyst | requirements | `agents/process/business-analyst.md` | 2 | Refine requirements, specs |
 | product-manager | product | `agents/process/product-manager.md` | 2 | Vision, roadmap, prioritization |
-| task-refiner-ado | ADO | `agents/process/task-refiner-ado.md` | 4 | Azure DevOps task management |
 
 ### Infrastructure (3)
 | Agent | Category | File | Tier | When |
@@ -91,7 +89,7 @@
 | general | Vago, sem especialização | Usar agente específico |
 
 ## Project-Specific Resolution
-Consulte `project-mapping.json#projects.<slug>.agents`:
+Consulte `<slug>.agents` no catálogo mesclado (`wb projects list`):
 - Cada projeto declara os agentes compatíveis no catálogo.
 - Vazio → usar os agentes genéricos do catalog (backend-dev, frontend-dev, database-dev).
 

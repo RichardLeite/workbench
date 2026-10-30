@@ -288,209 +288,6 @@ def _handle_save_url(
         return {"ok": False, "code": code, "warnings": [message], "saved_path": None}
 
 
-def _handle_save_ado(value: Any, max_bytes: int, request_id: Any) -> dict[str, Any]:
-    if not isinstance(value, dict):
-        return {
-            "ok": False,
-            "code": "SOURCE_INVALID",
-            "warnings": ["value must be { workItemId, attachmentId? }"],
-            "saved_path": None,
-        }
-    work_item_id = value.get("workItemId")
-    attachment_id = value.get("attachmentId")
-    if not isinstance(work_item_id, int) or work_item_id <= 0:
-        return {
-            "ok": False,
-            "code": "SOURCE_INVALID",
-            "warnings": ["workItemId (number) is required"],
-            "saved_path": None,
-        }
-
-    if attachment_id:
-        output = vision.resolve_output_path(attachment_id, "png")
-        if output.exists():
-            try:
-                cached = output.read_bytes()
-                mime = vision.validate_magic_header(cached)["mime"]
-                vision.assert_size_cap(cached, max_bytes)
-                logger(
-                    "info",
-                    "image_save.success",
-                    {
-                        "request_id": request_id,
-                        "size_bytes": len(cached),
-                        "source": "ado",
-                        "mime": mime,
-                        "cached": True,
-                    },
-                )
-                return {
-                    "ok": True,
-                    "saved_path": str(output),
-                    "warnings": [],
-                    "size_bytes": len(cached),
-                    "mime": mime,
-                    "cached": True,
-                }
-            except Exception:
-                safe_unlink(output)
-        try:
-            buffer = vision.download_ado_attachment(
-                work_item_id, attachment_id, max_bytes=max_bytes
-            )
-            mime = vision.validate_magic_header(buffer)["mime"]
-            vision.assert_size_cap(buffer, max_bytes)
-            final_path = vision.resolve_output_path(attachment_id, ext_from_mime(mime))
-            if final_path != output:
-                safe_unlink(output)
-            final_path.write_bytes(buffer)
-            logger(
-                "info",
-                "image_save.success",
-                {
-                    "request_id": request_id,
-                    "size_bytes": len(buffer),
-                    "source": "ado",
-                    "mime": mime,
-                },
-            )
-            return {
-                "ok": True,
-                "saved_path": str(final_path),
-                "warnings": [],
-                "size_bytes": len(buffer),
-                "mime": mime,
-            }
-        except ValueError as exc:
-            message = str(exc)
-            safe_unlink(output)
-            code = "SIZE_EXCEEDED" if message.startswith("SIZE_EXCEEDED") else "FETCH_FAILED"
-            logger(
-                "warn",
-                "image_save.error",
-                {"request_id": request_id, "code": code, "source": "ado"},
-            )
-            return {"ok": False, "code": code, "warnings": [message], "saved_path": None}
-
-    try:
-        attachments = vision.list_image_attachments(work_item_id)
-    except ValueError as exc:
-        logger(
-            "warn",
-            "image_save.error",
-            {
-                "request_id": request_id,
-                "code": "FETCH_FAILED",
-                "source": "ado",
-                "step": "listImageAttachments",
-            },
-        )
-        return {
-            "ok": False,
-            "code": "FETCH_FAILED",
-            "warnings": [str(exc)],
-            "saved_path": None,
-            "count": 0,
-        }
-
-    if not attachments:
-        logger(
-            "warn",
-            "image_save.no_attachments",
-            {"request_id": request_id, "source": "ado", "workItemId": work_item_id},
-        )
-        return {
-            "ok": False,
-            "code": "SOURCE_INVALID",
-            "warnings": [f"No image attachments found in work item {work_item_id}"],
-            "saved_path": None,
-            "count": 0,
-        }
-
-    saved_paths: list[str] = []
-    warnings: list[str] = []
-    cached_count = 0
-    for attachment in attachments:
-        name_ext = (attachment.get("name") or "file").split(".")[-1].lower() or "png"
-        output = vision.resolve_output_path(attachment["attachmentId"], name_ext)
-        if output.exists():
-            try:
-                cached = output.read_bytes()
-                mime = vision.validate_magic_header(cached)["mime"]
-                vision.assert_size_cap(cached, max_bytes)
-                saved_paths.append(str(output))
-                cached_count += 1
-                logger(
-                    "info",
-                    "image_save.success",
-                    {
-                        "request_id": request_id,
-                        "size_bytes": len(cached),
-                        "source": "ado",
-                        "mime": mime,
-                        "attachment_name": attachment.get("name"),
-                        "cached": True,
-                    },
-                )
-                continue
-            except Exception:
-                safe_unlink(output)
-        try:
-            buffer = vision.download_ado_attachment(
-                work_item_id, attachment["attachmentId"], max_bytes=max_bytes
-            )
-            mime = vision.validate_magic_header(buffer)["mime"]
-            vision.assert_size_cap(buffer, max_bytes)
-            final_path = vision.resolve_output_path(attachment["attachmentId"], ext_from_mime(mime))
-            if final_path != output:
-                safe_unlink(output)
-            final_path.write_bytes(buffer)
-            saved_paths.append(str(final_path))
-            logger(
-                "info",
-                "image_save.success",
-                {
-                    "request_id": request_id,
-                    "size_bytes": len(buffer),
-                    "source": "ado",
-                    "mime": mime,
-                    "attachment_name": attachment.get("name"),
-                },
-            )
-        except Exception as exc:
-            safe_unlink(output)
-            warnings.append(
-                f"Failed to download {attachment.get('name')} ({attachment['attachmentId']}): {exc}"
-            )
-            logger(
-                "warn",
-                "image_save.attachment_failed",
-                {
-                    "request_id": request_id,
-                    "attachment_id": attachment["attachmentId"],
-                    "name": attachment.get("name"),
-                    "error": str(exc),
-                },
-            )
-
-    if not saved_paths:
-        return {
-            "ok": False,
-            "code": "FETCH_FAILED",
-            "warnings": [*warnings, "All attachments failed to download or validate"],
-            "saved_path": None,
-            "saved_paths": [],
-            "count": 0,
-        }
-    return {
-        "ok": True,
-        "saved_paths": saved_paths,
-        "warnings": warnings,
-        "count": len(saved_paths),
-        "cached_count": cached_count,
-    }
-
-
 def handle_image_save(args: dict[str, Any], request_id: Any) -> dict[str, Any]:
     source = args.get("source")
     value = args.get("value")
@@ -506,12 +303,10 @@ def handle_image_save(args: dict[str, Any], request_id: Any) -> dict[str, Any]:
             return _handle_save_path(str(value), max_bytes, request_id)
         if source == "url":
             return _handle_save_url(str(value), max_bytes, timeout_ms, request_id)
-        if source == "ado":
-            return _handle_save_ado(value, max_bytes, request_id)
         return {
             "ok": False,
             "code": "SOURCE_INVALID",
-            "warnings": [f"unknown source '{source}', expected 'path'|'url'|'ado'"],
+            "warnings": [f"unknown source '{source}', expected 'path'|'url'"],
             "saved_path": None,
         }
     except ValueError as exc:
@@ -531,54 +326,22 @@ TOOL_DEFINITIONS = [
     {
         "name": "image_save",
         "description": (
-            "Save a file from a local path, URL, or Azure DevOps attachment to the "
-            "vision temp directory. Detects known image formats (PNG/JPEG/WebP/GIF/AVIF) "
-            "via magic header for metadata; unknown formats are saved as "
-            "application/octet-stream. Enforces size cap."
+            "Save a file from a local path or URL to the vision temp directory. "
+            "Detects known image formats (PNG/JPEG/WebP/GIF/AVIF) via magic header "
+            "for metadata; unknown formats are saved as application/octet-stream. "
+            "Enforces size cap."
         ),
         "inputSchema": {
             "type": "object",
             "properties": {
                 "source": {
                     "type": "string",
-                    "enum": ["path", "url", "ado"],
-                    "description": (
-                        'Source type: "path" (local file), "url" (HTTP/HTTPS), '
-                        'or "ado" (Azure DevOps attachment).'
-                    ),
+                    "enum": ["path", "url"],
+                    "description": 'Source type: "path" (local file) or "url" (HTTP/HTTPS).',
                 },
                 "value": {
-                    "description": (
-                        'Source value. For "path": file path string. For "url": URL string. '
-                        'For "ado": { workItemId: number, attachmentId?: string }. '
-                        "If attachmentId is omitted, ALL image attachments are downloaded."
-                    ),
-                    "oneOf": [
-                        {
-                            "type": "string",
-                            "description": 'File path (source="path") or URL (source="url")',
-                        },
-                        {
-                            "type": "object",
-                            "properties": {
-                                "workItemId": {
-                                    "type": "number",
-                                    "description": (
-                                        'Azure DevOps work item ID (required for source="ado")'
-                                    ),
-                                },
-                                "attachmentId": {
-                                    "type": "string",
-                                    "description": (
-                                        "Optional: specific attachment GUID. If omitted, "
-                                        "all image attachments are downloaded."
-                                    ),
-                                },
-                            },
-                            "required": ["workItemId"],
-                            "additionalProperties": False,
-                        },
-                    ],
+                    "type": "string",
+                    "description": 'File path (source="path") or URL (source="url").',
                 },
                 "options": {
                     "type": "object",

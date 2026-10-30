@@ -10,7 +10,7 @@
 ## Projeto
 
 - `.workbench` — infraestrutura de orquestração, agentes, skills e vault
-- Projetos registrados em `project-mapping.json`
+- Projetos no catálogo mesclado
 - Stack: OpenCode engine + Node.js + markdown agents/skills
 
 ## Agentes

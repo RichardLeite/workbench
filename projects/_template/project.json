@@ -1,0 +1,12 @@
+{
+  "slug": "{{project_slug}}",
+  "name": "{{project_name}}",
+  "description": "{{project_description}}",
+  "process": "default",
+  "license": null,
+  "tracker": "none",
+  "agents": [],
+  "knowledge": "projects/{{project_slug}}/knowledge",
+  "vault": null,
+  "repos": {}
+}

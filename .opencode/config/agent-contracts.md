@@ -13,7 +13,7 @@ All agents share a base structure for errors and generic responses:
 {
   "tipo": "resumo|analise|decisao|revisao|resultado|recomendacao_custo|auditoria_custo|analise_pr",
   "timestamp": "ISO date (auto-injected by orchestrator)",
-  "context": { "agent": "agent-name", "task": "TASK-XXXX or description" }
+  "context": { "agent": "agent-name", "task": "issue #123 or description" }
 }
 ```
 
@@ -96,59 +96,6 @@ Lighter than explorador. Same `tipo: "resultado"` pattern. No write/edit access.
   "erro": "Could not review. Reason: Insufficient context provided"
 }
 ```
-
-#### pr-insight — PR Analysis
-
-Complete PR analysis with Azure DevOps integration.
-
-```json
-{
-  "tipo": "analise_pr",
-  "pr_number": 123,
-  "repo": "my-api",
-  "task_number": 20028,
-  "veredito": "approved | needs_changes | blocked",
-  "total_findings": {
-    "critical": 0,
-    "warnings": 2,
-    "suggestions": 3
-  },
-  "por_area": {
-    "simplicidade": 0,
-    "acoplamento": 1,
-    "performance": 0,
-    "testabilidade": 1,
-    "seguranca": 0,
-    "arquitetura": 0,
-    "completude": 0,
-    "deploy": 0,
-    "observabilidade": 0,
-    "configuracao": 0,
-    "compatibilidade": 0,
-    "rollback": 0,
-    "dependencias": 0
-  },
-  "cobertura_task": {
-    "encontrada": true,
-    "implementados": 3,
-    "nao_implementados": 0,
-    "parciais": 1
-  },
-  "acoes_realizadas": {
-    "github_comments_posted": true,
-    "github_approved": true,
-    "github_changes_requested": false,
-    "github_comment_count": 5,
-    "teams_notified": true,
-    "teams_recipient": "Igor Gomes"
-  },
-  "nivel_confianca": "alta"
-}
-```
-
----
-
-### Implementation Agents
 
 #### pedreiro — Fast Implementation
 
@@ -290,7 +237,7 @@ Returns JSON only (never Markdown):
   "status": "updated|unchanged|skipped",
   "classificacao": "STRUCTURAL_ADD|RULE_CHANGE|NEW_FLOW|FLOW_CHANGE|NEW_DOMAIN|FIX_ONLY|NO_CHANGE",
   "alteracoes": [
-    { "path": "database/06-financeiro.md", "tipo": "STRUCTURAL_ADD", "descricao": "Novo endpoint GET /extrato (TASK-XXXX)" }
+    { "path": "database/06-financeiro.md", "tipo": "STRUCTURAL_ADD", "descricao": "Novo endpoint GET /extrato (#123)" }
   ],
   "erro": "opcional se falhar"
 }
@@ -317,7 +264,7 @@ Delegation payload sent to subagents:
   "task": "description of work",
   "subagent_type": "pedreiro|revisor|explorador|...",
   "context": {
-    "branch": "feat/TASK-1234",
+    "branch": "feat/add-feature",
     "base": "release",
     "files": ["src/file1.js", "src/file2.js"]
   }
@@ -336,7 +283,7 @@ Delegation payload sent to subagents:
 | `erro` | If present, `motivo` SHOULD be included |
 | `nivel_confianca` | Must be `alta`, `media`, or `baixa` |
 | `alteracoes` | Array of strings, each describing a change |
-| `veredito` (pr-insight) | Must be `approved`, `needs_changes`, or `blocked` |
+| `veredito` (code-reviewer/revisor) | Must be `approved`, `needs_changes`, or `blocked` |
 
 > Orchestrator validates every subagent output against these contracts before proceeding.
 > Validation script: `node .opencode/orchestrator/dist/index.js validate`

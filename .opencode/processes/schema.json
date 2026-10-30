@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Workbench Process",
+  "type": "object",
+  "required": ["description", "version", "stages"],
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "description": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "license": { "type": "string" },
+    "stages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "name": { "type": "string" },
+          "agent": { "type": ["string", "null"] },
+          "agent_by_layer": { "type": "boolean", "default": false },
+          "gate": { "type": ["string", "null"] },
+          "optional": { "type": "boolean", "default": false },
+          "artifacts": { "type": "array", "items": { "type": "string" } },
+          "instructions": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "command": { "type": ["string", "null"] },
+          "agent": { "type": ["string", "null"] },
+          "blocking": { "type": "boolean", "default": true },
+          "timeout_min": { "type": "integer", "minimum": 1, "default": 10 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "agents_by_layer": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "path"],
+        "properties": {
+          "id": { "type": "string" },
+          "path": { "type": "string" },
+          "template": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "max_modules_per_batch": { "type": "integer", "minimum": 1 },
+        "max_validation_cycles": { "type": "integer", "minimum": 1 },
+        "max_pr_lines": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

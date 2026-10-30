@@ -22,9 +22,8 @@
 
 | Tipo | Branch de origem | Branch de destino |
 |------|------------------|-------------------|
-| Sprint / feature | `main` (ou `release`, se o projeto usar) | `main` |
-| Hotfix | `main` | `main` |
-| Hotfix em release | `release` | `release` |
+| Feature/fix | base padrão do projeto (`main`) | `main` |
+| Fluxo com release | `release` (se o projeto usar) | `release` |
 | Workbench | `main` | `main` |
 
 Projetos que usam `release` devem declarar isso no `AGENTS.md` do projeto.
@@ -34,7 +33,6 @@ Projetos que usam `release` devem declarar isso no `AGENTS.md` do projeto.
 - Nunca commitar diretamente em `main` ou `release`.
 - Branch criada a partir da base correta, com nome descritivo.
 - Um PR = uma intenção. Evite misturar refactor e feature.
-- Hotfix: escopo mínimo, sem refactor paralelo.
 - Todo PR precisa de rollback descrito.
 
 ---
@@ -42,11 +40,11 @@ Projetos que usam `release` devem declarar isso no `AGENTS.md` do projeto.
 ## 2. PR TITLE FORMAT
 
 ```
-[TASK-XXXX] Descrição curta em inglês
+type(scope): descrição curta em inglês
 ```
 
-- Workbench não usa prefixo de task: `feat(workbench): descrição`.
-- Projetos podem usar o identificador do seu tracker (`TASK-`, `AB#`, `#123`).
+- O escopo é opcional.
+- Projetos podem referenciar um issue no corpo (`#123`) ou no escopo.
 - Título em inglês; descrição livre no corpo.
 
 ---
@@ -120,7 +118,7 @@ Regras:
 
 ## 5. REPO MAPPING
 
-Os repositórios vêm de `project-mapping.json#projects.<slug>.repos`. Não
+Os repositórios vêm do catálogo mesclado (`wb projects list`). Não
 duplique tabelas de repositório neste arquivo.
 
 Exemplo de resolução:
@@ -189,4 +187,4 @@ Regras:
 
 | Data | Versão | Mudança |
 |------|--------|---------|
-| 2026-10-29 | 3.0 | Versão genérica independente de empresa; removidas seções específicas de Teams/ADO/squads. |
+| 2026-10-29 | 3.0 | Versão genérica independente de empresa. |

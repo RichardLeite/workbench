@@ -52,8 +52,10 @@ def resolve_api_repo(slug: str, root: Path) -> Path | None:
     project = (mapping.get("projects") or {}).get(slug)
     if isinstance(project, dict):
         repos = project.get("repos")
-        if isinstance(repos, dict) and repos.get("api"):
-            return (root / str(repos["api"]) / "src" / "routes").resolve()
+        if isinstance(repos, dict):
+            repo = repos.get("api") or repos.get("root")
+            if repo:
+                return (root / str(repo) / "src" / "routes").resolve()
     return None
 
 
@@ -75,7 +77,11 @@ def scan_readme() -> dict[str, Any]:
     dirs = sorted(
         path.name
         for path in cwd.iterdir()
-        if path.is_dir() and not path.name.startswith(".") and path.name != "node_modules"
+        if (
+            path.is_dir()
+            and not path.name.startswith(".")
+            and path.name not in {"node_modules", "tmp", "dist", "build"}
+        )
     )
     dependencies = package.get("dependencies")
     stack = "\n".join(f"- {name}" for name in list(dependencies)[:15]) if dependencies else "N/A"

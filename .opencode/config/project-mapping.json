@@ -1,14 +1,23 @@
 {
-  "description": "Catálogo central de projetos do workbench. Usado para resolução de contexto, paths de knowledge e seleção de agentes. Adicione um projeto novo aqui para que scripts, orquestrador e templates o reconheçam.",
-  "version": "3.0",
+  "description": "Catálogo base do Workbench. Use projects/<slug>/project.json para metadados; o catálogo local é gerado em project-mapping.local.json.",
+  "version": "4.1",
   "projects": {
     "workbench": {
       "name": "Workbench",
-      "description": "Infraestrutura do workbench — regras, agentes, skills, comandos",
+      "description": "Infraestrutura do Workbench — regras, agentes, skills, comandos e processos",
       "repos": {},
       "knowledge": ".opencode/knowledge",
       "agents": [],
-      "vault": ".opencode/knowledge"
+      "vault": ".opencode/knowledge",
+      "process": "default",
+      "license": "MIT",
+      "tracker": "none"
     }
+  },
+  "discovery": {
+    "roots": [
+      "."
+    ],
+    "exclude": []
   }
 }

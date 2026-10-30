@@ -14,7 +14,7 @@ def write_config(root: Path) -> Path:
     path.write_text(
         json.dumps(
             {
-                "constraints": {"maxReviewsPerPersonPerSprint": 5},
+                "constraints": {"maxReviewsPerPerson": 5},
                 "reviewers": [
                     {
                         "name": "Pessoa Um",

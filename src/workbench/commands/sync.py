@@ -36,7 +36,6 @@ EXPECTED_CODEX_AGENTS = [
     "revisor",
     "code-reviewer",
     "security-reviewer",
-    "pr-insight",
     "tech-architect",
     "tech-lead",
     "sec-arch",
@@ -48,7 +47,6 @@ EXPECTED_CODEX_AGENTS = [
     "scrum-master",
     "business-analyst",
     "product-manager",
-    "task-refiner-ado",
     "devops-engineer",
     "qa-engineer",
     "general",
@@ -126,10 +124,6 @@ def tools_for(config: dict[str, Any]) -> list[str] | None:
         tools.append("Bash")
     if any(key.startswith("mcp-image") for key in permissions):
         tools.append("mcp__mcp-image")
-    if any(key.startswith("azure-devops") for key in permissions):
-        tools.append("mcp__azure-devops")
-    if any(key.startswith("teams-graph") for key in permissions):
-        tools.append("mcp__teams-graph")
     return tools
 
 
@@ -199,6 +193,18 @@ def gen_settings(root: Path) -> None:
         "$schema": "https://json.schemastore.org/claude-code-settings.json",
         "permissions": {"ask": ASK_RULES, "deny": DENY_RULES, "defaultMode": "acceptEdits"},
         "hooks": {
+            "SessionStart": [
+                {
+                    "hooks": [
+                        {
+                            "type": "command",
+                            "command": (
+                                'bash "$CLAUDE_PROJECT_DIR/.opencode/hooks/refresh-projects.sh"'
+                            ),
+                        }
+                    ],
+                }
+            ],
             "PreToolUse": [
                 {
                     "matcher": "Bash",
@@ -212,7 +218,7 @@ def gen_settings(root: Path) -> None:
                         }
                     ],
                 }
-            ]
+            ],
         },
         "enableAllProjectMcpServers": True,
     }
@@ -223,7 +229,8 @@ def gen_settings(root: Path) -> None:
     )
     print(
         f"   settings.json: {len(ASK_RULES)} ask, {len(DENY_RULES)} deny, "
-        f"{len(settings['hooks']['PreToolUse'])} PreToolUse hook(s)"
+        f"{len(settings['hooks']['PreToolUse'])} PreToolUse, "
+        f"{len(settings['hooks']['SessionStart'])} SessionStart hook(s)"
     )
 
 

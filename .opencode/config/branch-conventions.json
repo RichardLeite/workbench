@@ -1,26 +1,22 @@
 {
   "description": "Convenções de branch — tipos, padrões e regras. Fonte única extraída de pr-config.md Seção 11.",
-  "version": 1,
+  "version": 2,
   "pattern": "type/descricao-kebab-case",
-  "patternWithTask": "type/TASK-XXXX-descricao-kebab-case",
   "language": "en",
   "maxDescriptionLength": 50,
   "allowedTypes": ["feat", "fix", "chore", "refactor", "test", "docs", "perf", "style"],
   "patterns": [
-    { "atividade": "SPRINT", "contexto": "projeto com tracker", "pattern": "feat/TASK-XXXX", "example": "feat/TASK-1234" },
-    { "atividade": "HOTFIX → main", "contexto": "projeto com tracker", "pattern": "fix/TASK-XXXX", "example": "fix/TASK-1234" },
-    { "atividade": "HOTFIX → release", "contexto": "projeto com release", "pattern": "fix/TASK-XXXX-release", "example": "fix/TASK-1234-release" },
-    { "atividade": "Sprint (workbench)", "contexto": ".workbench", "pattern": "type/descricao-kebab-case", "example": "feat/add-pr-centralization" },
-    { "atividade": "Chore (workbench)", "contexto": ".workbench", "pattern": "type/descricao-kebab-case", "example": "chore/update-dependencies" },
-    { "atividade": "Refactor", "contexto": "qualquer", "pattern": "refactor/TASK-XXXX ou refactor/descricao", "example": "refactor/TASK-5678" },
-    { "atividade": "Docs", "contexto": "qualquer", "pattern": "docs/descricao", "example": "docs/update-conventions" }
+    { "atividade": "Feature", "contexto": "qualquer", "pattern": "feat/descricao", "example": "feat/add-feature" },
+    { "atividade": "Bugfix", "contexto": "qualquer", "pattern": "fix/descricao", "example": "fix/corrige-login" },
+    { "atividade": "Chore", "contexto": "qualquer", "pattern": "chore/descricao", "example": "chore/update-dependencies" },
+    { "atividade": "Refactor", "contexto": "qualquer", "pattern": "refactor/descricao", "example": "refactor/extrai-servico" },
+    { "atividade": "Docs", "contexto": "qualquer", "pattern": "docs/descricao", "example": "docs/atualiza-readme" }
   ],
   "rules": [
     "Nunca criar branch em main ou release — sempre da base correta",
     "Prefixo do tipo em minúsculo com /: feat/, fix/, chore/",
-    "Descrição opcional para contextos sem TASK, mas recomendada",
-    "kebab-case para descrições (nunca camelCase ou snake_case)",
-    "Sem caracteres especiais: evitar acentos, @, # (exceto TASK ID)",
+    "Descrição em kebab-case",
+    "Sem caracteres especiais: evitar acentos, @, #",
     "Curta e objetiva: máximo ~50 caracteres",
     "Branches efêmeras: apagadas após merge"
   ]

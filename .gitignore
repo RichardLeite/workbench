@@ -66,3 +66,6 @@ delegations.ndjson
 .claude/skills
 .claude/commands
 .claude/settings.local.json
+
+# Project discovery (local)
+.opencode/config/project-mapping.local.json

@@ -11,6 +11,7 @@ from workbench.paths import config_dir, resolve_root_path
 
 OPENCODE_FILE = "opencode.json"
 PROJECT_MAPPING_FILE = "project-mapping.json"
+PROJECT_OVERLAY_FILE = "project-mapping.local.json"
 
 
 class ConfigError(WorkbenchError):
@@ -34,8 +35,41 @@ def load_opencode(root: Path | None = None) -> dict[str, Any]:
     return read_json(resolve_root_path(OPENCODE_FILE, root=root))
 
 
+def _merge_projects(
+    base: dict[str, Any],
+    overlay: dict[str, Any],
+) -> dict[str, Any]:
+    projects = dict(base.get("projects") or {})
+    discovered = overlay.get("projects")
+    if not isinstance(discovered, dict):
+        return projects
+    for slug, item in discovered.items():
+        if not isinstance(item, dict):
+            continue
+        explicit = projects.get(slug)
+        if not isinstance(explicit, dict):
+            projects[slug] = item
+            continue
+        merged = dict(item)
+        merged.update(explicit)
+        explicit_repos = explicit.get("repos")
+        if isinstance(explicit_repos, dict) and explicit_repos:
+            merged["repos"] = explicit_repos
+        else:
+            merged["repos"] = dict(item.get("repos") or {})
+        projects[slug] = merged
+    return projects
+
+
 def load_project_mapping(root: Path | None = None) -> dict[str, Any]:
-    return read_json(config_dir(root) / PROJECT_MAPPING_FILE)
+    base = read_json(config_dir(root) / PROJECT_MAPPING_FILE)
+    overlay_path = config_dir(root) / PROJECT_OVERLAY_FILE
+    if not overlay_path.is_file():
+        return base
+    overlay = read_json(overlay_path)
+    result = dict(base)
+    result["projects"] = _merge_projects(base, overlay)
+    return result
 
 
 def load_config(name: str, root: Path | None = None) -> dict[str, Any]:

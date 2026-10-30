@@ -22,7 +22,7 @@ def register(subparsers: _SubParsersAction) -> None:
     metrics_sub = parser.add_subparsers(dest="metrics_command", required=True)
     cycle = metrics_sub.add_parser("cycle-time", help="Relatório de cycle time.")
     cycle.add_argument(
-        "--mode", default="all", choices=["all", "sprint", "tokens", "defects", "coverage"]
+        "--mode", default="all", choices=["all", "cycle", "tokens", "defects", "coverage"]
     )
     cycle.add_argument("--since", default=None)
     cycle.add_argument("--project", default="workbench")
@@ -147,11 +147,10 @@ def resolve_project_paths(slug: str, root: Path) -> dict[str, Path | None]:
         raise ConfigError(f'Projeto "{slug}" não encontrado em project-mapping.json')
     repos = project.get("repos") or {}
     knowledge = project.get("knowledge")
+    api_repo = repos.get("api") or repos.get("root")
     return {
         "knowledgeBugsDir": (root / str(knowledge) / "backlog" / "bugs") if knowledge else None,
-        "apiCoverageLcov": (root / str(repos["api"]) / "coverage" / "lcov.info")
-        if repos.get("api")
-        else None,
+        "apiCoverageLcov": (root / str(api_repo) / "coverage" / "lcov.info") if api_repo else None,
         "appCoverageLcov": (root / str(repos["app"]) / "coverage" / "lcov.info")
         if repos.get("app")
         else None,
@@ -222,7 +221,7 @@ def cycle_time(
         "repository": repository,
         "branch": branch,
     }
-    if mode in {"all", "sprint"}:
+    if mode in {"all", "cycle"}:
         prs = collect_cycle_time(since)
         cycle_days = [pr["cycleDays"] for pr in prs if pr["cycleDays"]]
         result["cycleTime"] = {
