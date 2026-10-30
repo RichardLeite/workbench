@@ -48,9 +48,9 @@ workbench/
 
 ### Runtime Python (novo)
 
-Os scripts próprios do Workbench estão migrando para Python 3.11+ (stdlib,
-`.venv` local, `uv`). O bootstrap detecta o Python do sistema e, se necessário,
-instala um Python gerenciado via `uv`:
+Os scripts próprios do Workbench rodam em Python 3.11+ (stdlib, `.venv` local,
+`uv`). O bootstrap detecta o Python do sistema e, se necessário, instala um
+Python gerenciado via `uv`:
 
 ```bash
 # Linux/macOS
@@ -67,7 +67,8 @@ scripts\wb.cmd doctor        # Windows
 Variáveis úteis: `WB_PYTHON`, `WB_PYTHON_VERSION`, `WB_NO_INSTALL=1`,
 `WB_ASSUME_YES=1`. Detalhes em [`docs/python-migration.md`](docs/python-migration.md).
 
-> Os scripts Node legados continuam no repositório até a paridade ser concluída.
+> Node permanece apenas para adapters opcionais (Azure DevOps, Teams, MySQL),
+> o orquestrador TypeScript e ferramentas externas do `skill-creator`.
 
 ### 1. Dependências Node (adapters opcionais)
 

@@ -2,19 +2,13 @@
 
 from __future__ import annotations
 
-import base64
 import hashlib
 import ipaddress
 import json
 import os
 import re
-import socket
 import tempfile
 import time
-import urllib.error
-import urllib.parse
-import urllib.request
-from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
@@ -164,6 +158,8 @@ def _hostname_is_local(hostname: str) -> bool:
 
 
 def is_safe_url(url: str) -> dict[str, Any]:
+    import urllib.parse
+
     try:
         parsed = urllib.parse.urlparse(url)
     except ValueError:
@@ -184,6 +180,10 @@ def is_safe_url(url: str) -> dict[str, Any]:
 
 
 def is_safe_url_async(url: str, timeout: float = 5.0) -> dict[str, Any]:
+    import socket
+    import urllib.parse
+    from concurrent.futures import ThreadPoolExecutor
+
     sync = is_safe_url(url)
     if not sync["ok"]:
         return sync
@@ -212,6 +212,8 @@ def is_safe_url_async(url: str, timeout: float = 5.0) -> dict[str, Any]:
 
 
 def _ado_headers() -> dict[str, str] | None:
+    import base64
+
     load_env()
     token = os.environ.get("ADO_MCP_AUTH_TOKEN")
     if not token:
@@ -221,6 +223,9 @@ def _ado_headers() -> dict[str, str] | None:
 
 
 def ado_get(url: str) -> dict[str, Any]:
+    import urllib.error
+    import urllib.request
+
     headers = _ado_headers()
     if headers is None:
         raise ValueError("FETCH_FAILED: ADO_MCP_AUTH_TOKEN not set")
@@ -254,6 +259,8 @@ def _field_regexes(org: str) -> tuple[re.Pattern[str], re.Pattern[str]]:
 def extract_attachments_from_fields(
     work_item: dict[str, Any], org: str = ""
 ) -> list[dict[str, Any]]:
+    import urllib.parse
+
     org = org or os.environ.get("AZURE_DEVOPS_ORG", "")
     fields = (work_item or {}).get("fields") or {}
     texts = [
@@ -284,6 +291,8 @@ def extract_attachments_from_fields(
 
 
 def extract_attachments_from_comments(work_item_id: int, org: str = "") -> list[dict[str, Any]]:
+    import urllib.parse
+
     org = org or os.environ.get("AZURE_DEVOPS_ORG", "")
     attachments: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -369,6 +378,9 @@ def download_ado_attachment(
     org: str = "",
     max_bytes: int = DEFAULT_MAX_IMAGE_BYTES,
 ) -> bytes:
+    import urllib.error
+    import urllib.request
+
     if not attachment_id:
         raise ValueError("FETCH_FAILED: attachmentId is required")
     headers = _ado_headers()

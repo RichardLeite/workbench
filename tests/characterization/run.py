@@ -95,11 +95,21 @@ def golden_path(case_id: str) -> Path:
     return GOLDEN_DIR / f"{case_id}.json"
 
 
+def legacy_script_missing(case: dict[str, Any]) -> bool:
+    argv = case.get("argv") or []
+    if len(argv) < 2 or argv[0] != "node":
+        return False
+    return not (ROOT / argv[1]).is_file()
+
+
 def capture(cases: list[dict[str, Any]], only: set[str] | None) -> int:
     GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
     failures = 0
     for case in cases:
         if only and case["id"] not in only:
+            continue
+        if legacy_script_missing(case):
+            print(f"[SKIP] {case['id']} (script Node legado removido)")
             continue
         try:
             result = run_case(case, "node")
@@ -124,6 +134,10 @@ def check(cases: list[dict[str, Any]], impl: str, only: set[str] | None) -> int:
     skipped = 0
     for case in cases:
         if only and case["id"] not in only:
+            continue
+        if impl == "node" and legacy_script_missing(case):
+            skipped += 1
+            print(f"[SKIP] {case['id']} (script Node legado removido)")
             continue
         if argv_for(case, impl) is None:
             skipped += 1

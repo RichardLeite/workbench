@@ -101,7 +101,7 @@ uv run ruff format --check src tests
 uv run pytest --cov=workbench --cov-report=term-missing
 ```
 
-## Próximas fases
+## Status
 
-- Fase 5: remoção dos scripts Node migrados, port/remoção dos testes Node e
-  relatório final de paridade/benchmark.
+Migração concluída. Relatório de paridade, benchmarks e inventário final:
+[`python-migration-report.md`](python-migration-report.md).

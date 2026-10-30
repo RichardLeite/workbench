@@ -2,15 +2,11 @@
 
 from __future__ import annotations
 
-import base64
 import json
 import os
 import re
 import sys
 import time
-import urllib.error
-import urllib.parse
-import urllib.request
 from argparse import ArgumentParser, Namespace, _SubParsersAction
 from datetime import date
 from typing import Any
@@ -91,6 +87,11 @@ def _ado_token() -> str | None:
 
 
 def ado_request(api_path: str, method: str = "GET", body: Any = None) -> dict[str, Any]:
+    import base64
+    import urllib.error
+    import urllib.parse
+    import urllib.request
+
     config = _config()
     token = _ado_token()
     if not token:
@@ -221,6 +222,8 @@ def generate_release_notes(
     repo: str | None,
     child_tasks: list[dict[str, Any]],
 ) -> str:
+    from urllib.parse import quote
+
     config = _config()
     today = date.today().isoformat()
     grouped = group_work_items(work_items)
@@ -250,7 +253,7 @@ def generate_release_notes(
             task_id = extract_task_id_from_title(title)
             ado_url = (
                 f"https://dev.azure.com/{config['org']}/"
-                f"{urllib.parse.quote(config['project'], safe='')}/_workitems/edit/{item_id}"
+                f"{quote(config['project'], safe='')}/_workitems/edit/{item_id}"
             )
             notes += f"- **#{item_id}** — [{title}]({ado_url})"
             if task_id:
@@ -270,7 +273,7 @@ def generate_release_notes(
             parent_id = fields.get("System.Parent") or ""
             ado_url = (
                 f"https://dev.azure.com/{config['org']}/"
-                f"{urllib.parse.quote(config['project'], safe='')}/_workitems/edit/{task_id}"
+                f"{quote(config['project'], safe='')}/_workitems/edit/{task_id}"
             )
             notes += f"- **#{task_id}** — [{title}]({ado_url})"
             if parent_id:

@@ -1,12 +1,14 @@
 {
   "id": "docs.readme",
-  "implementation": "node",
+  "implementation": "python",
   "argv": [
-    "node",
-    ".opencode/scripts/auto-doc.js",
+    "C:\\Repositories\\workbench\\.venv\\Scripts\\python.exe",
+    "-m",
+    "workbench",
+    "docs",
     "readme"
   ],
   "returncode": 0,
-  "stdout": "{\n  \"tipo\": \"readme\",\n  \"arquivo\": \"README.md\",\n  \"conteudo\": \"# workbench\\n\\n\\n\\n## Stack\\n\\n- @azure/identity\\n- @azure/msal-node\\n\\n## Scripts\\n\\n| Comando | Descrição |\\n|---------|-----------|\\n| `validate:sprint-tasks` | `uv run --frozen python -m workbench sprint validate` |\\n| `validate:pipeline` | `uv run --frozen python -m workbench pipeline validate` |\\n| `validate:ado` | `uv run --frozen python -m workbench ado resolve --validate` |\\n| `validate:all` | `npm run validate:sprint-tasks && npm run validate:pipeline && npm run validate:ado` |\\n| `sync:claude` | `uv run --frozen python -m workbench sync claude` |\\n| `sync:codex` | `uv run --frozen python -m workbench sync codex` |\\n| `test` | `uv run pytest` |\\n| `lint` | `uv run ruff check src tests` |\\n| `format` | `uv run ruff format src tests` |\\n\\n## Estrutura\\n\\n- docs\\n- projects\\n- scripts\\n- src\\n- tests\\n\"\n}",
+  "stdout": "{\n  \"tipo\": \"readme\",\n  \"arquivo\": \"README.md\",\n  \"conteudo\": \"# workbench\\n\\n\\n\\n## Stack\\n\\n- @floriscornel/teams-mcp\\n\\n## Scripts\\n\\n| Comando | Descrição |\\n|---------|-----------|\\n| `validate:sprint-tasks` | `uv run --frozen python -m workbench sprint validate` |\\n| `validate:pipeline` | `uv run --frozen python -m workbench pipeline validate` |\\n| `validate:ado` | `uv run --frozen python -m workbench ado resolve --validate` |\\n| `validate:all` | `npm run validate:sprint-tasks && npm run validate:pipeline && npm run validate:ado` |\\n| `sync:claude` | `uv run --frozen python -m workbench sync claude` |\\n| `sync:codex` | `uv run --frozen python -m workbench sync codex` |\\n| `test` | `uv run pytest` |\\n| `lint` | `uv run ruff check src tests` |\\n| `format` | `uv run ruff format src tests` |\\n\\n## Estrutura\\n\\n- docs\\n- projects\\n- scripts\\n- src\\n- tests\\n\"\n}",
   "stderr": ""
 }
