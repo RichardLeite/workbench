@@ -760,7 +760,7 @@ describe("CLI — validate", () => {
 
 describe("CLI — validate-pipeline", () => {
   // Pipeline tests depend on PR #84 (pipelines SKILL.md files)
-  // TODO: restore when feat/pipelines-ado-flow is merged
+  // Pipeline validation tests
 
   it('nonexistent file -> exit 1', () => {
     try {
@@ -824,8 +824,9 @@ describe("orquestrador.md — image handling instructions", () => {
   });
 
   // ── Detecção de imagem ───────────────────────────────────
-  it("MUST document AB# as an optional adapter reference", () => {
-    assert.ok(content.includes("AB#") && /adapter/i.test(content), "orquestrador.md should document AB# as optional");
+  it("MUST NOT document tracker-specific prefixes", () => {
+    assert.ok(!content.includes("AB#"), "orquestrador.md should not reference AB#");
+    assert.ok(!/\b(TASK-|PBI-)\b/.test(content), "orquestrador.md should not use task/PBI prefixes");
   });
 
   it("MUST contain URL detection pattern", () => {
