@@ -23,7 +23,7 @@ Aceita com ou sem `@` na frente.
 1. Extraia o nome do repositório do argumento (remova `@` se presente)
 2. Verifique no `project-mapping.json` se o repo está catalogado
 3. Se não estiver catalogado → pergunte: "Qual projeto este repo pertence?"
-4. Execute `node .opencode/scripts/repository-resolver.js --project <slug> --repo <role>`
+4. Execute `uv run --frozen python -m workbench repo resolve --project <slug> --repo <role>`
 5. Respeite o estado retornado:
    - `available`: use o checkout existente; não clone
    - `missing`: peça confirmação explícita antes de clonar somente esse repo
@@ -63,7 +63,7 @@ Se o repo não estava catalogado:
 
 #### 3.4 Validar disponibilidade
 
-Execute novamente `node .opencode/scripts/repository-resolver.js --project <slug> --repo <role>` e exija estado `available`.
+Execute novamente `uv run --frozen python -m workbench repo resolve --project <slug> --repo <role>` e exija estado `available`.
 
 ### FASE 4 — Resumo
 

@@ -4,7 +4,7 @@ description: Analyze specs and update the project vault with permanent knowledge
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/project/vault-updater.md. Rode o sync após alterar a fonte. -->
 
 > **Purpose:** After creating a feature or bug spec, analyze whether it changes system knowledge (entities, endpoints, flows, business rules) and update the vault.

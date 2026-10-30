@@ -5,7 +5,7 @@ tools: Read, Grep, Glob
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/review/security-reviewer.md. Rode o sync após alterar a fonte. -->
 
 ## Role

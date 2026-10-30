@@ -4,7 +4,7 @@ description: Performance auditor — React rendering optimization, Redis caching
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/development/perf-auditor.md. Rode o sync após alterar a fonte. -->
 
 # perf-auditor

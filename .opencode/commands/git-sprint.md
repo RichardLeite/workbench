@@ -21,7 +21,7 @@ description: "SPRINT completo: quality gates → branch → commit → PR → Te
 | PRs | 1 (para `release`) |
 | Commit types | `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `perf`, `style` |
 
-**Validar branch:** `node .opencode/scripts/sprint.js validate-branch feat/TASK-1234`
+**Validar branch:** `uv run --frozen python -m workbench sprint validate-branch feat/TASK-1234`
 
 ---
 
@@ -57,10 +57,10 @@ git checkout release && git pull origin release && git checkout -B feat/TASK-XXX
 
 ### 🟢 FASE 3: Quality Gate
 
-> **Comandos por projeto:** `node .opencode/scripts/sprint.js quality-gates <project>`
-> **Árvore de decisão:** `node .opencode/scripts/sprint.js gate`
+> **Comandos por projeto:** `uv run --frozen python -m workbench sprint quality-gates <project>`
+> **Árvore de decisão:** `uv run --frozen python -m workbench sprint gate`
 
-1. **🔵 Lint** — não bloqueia (`node .opencode/scripts/sprint.js quality-gates <project>` → `.lint`)
+1. **🔵 Lint** — não bloqueia (`uv run --frozen python -m workbench sprint quality-gates <project>` → `.lint`)
 2. **🟡 SAST** — bloqueia se ERROR
 3. **🟠 Security** — não bloqueia (sprint)
 4. **🔴 AI Review** — delegar @revisor (git diff)

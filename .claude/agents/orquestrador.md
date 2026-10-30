@@ -4,7 +4,7 @@ description: Agente principal responsável por coordenar o fluxo entre backend, 
 model: opus
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/core/orquestrador.md. Rode o sync após alterar a fonte. -->
 
 Execute or explain why not. Receive a task, plan execution via GOAP,

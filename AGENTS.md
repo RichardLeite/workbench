@@ -25,7 +25,7 @@ Register each project repository in `opencode.json` → `reference` and in
 
 > **Regra:** use o nome do repositório como @reference para evitar ambiguidade.
 
-> **Regra local-first portátil:** Antes de clonar, execute `node .opencode/scripts/repository-resolver.js --project <slug> [--repo <role>]`. Para `available`, use o checkout local. Para `missing`, clone somente o repositório necessário após confirmação explícita. Para `invalid_git`, nunca clone nem sobrescreva o path; reporte o estado e peça uma decisão.
+> **Regra local-first portátil:** Antes de clonar, execute `uv run --frozen python -m workbench repo resolve --project <slug> [--repo <role>]`. Para `available`, use o checkout local. Para `missing`, clone somente o repositório necessário após confirmação explícita. Para `invalid_git`, nunca clone nem sobrescreva o path; reporte o estado e peça uma decisão.
 
 ## Mapa de Contextos (project-mapping.json)
 

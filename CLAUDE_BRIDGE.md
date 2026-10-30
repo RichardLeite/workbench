@@ -19,7 +19,7 @@ O `.workbench` mantém **uma** fonte da verdade (`.opencode/`) e projeta camadas
 
 ```bash
 # 1. Gerar/atualizar a camada .claude/ a partir de .opencode/
-node .opencode/scripts/sync-to-claude.js      # ou: npm run sync:claude
+uv run --frozen python -m workbench sync claude      # ou: npm run sync:claude
 
 # 2. Configurar MCPs (uma vez)
 cp .env.example .env    # preencher credenciais

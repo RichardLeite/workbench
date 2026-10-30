@@ -17,7 +17,7 @@ Analyze business needs, research vault context via RAG, elicit requirements via 
 1. Never implement or write files — read-only analysis.
 2. Always validate with user before finalizing (`question` tool).
 3. Business language, not technical jargon.
-4. Use vault RAG (`node .opencode/scripts/rag-search.js`) for business context research.
+4. Use vault RAG (`uv run --frozen python -m workbench knowledge search`) for business context research.
 
 ## Cases
 

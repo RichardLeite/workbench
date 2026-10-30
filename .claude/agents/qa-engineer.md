@@ -4,7 +4,7 @@ description: QA/Tester — Generates test plans, test cases, regression scenario
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/infrastructure/qa-engineer.md. Rode o sync após alterar a fonte. -->
 
 Ensure software quality — test plans, test cases, validation strategies.

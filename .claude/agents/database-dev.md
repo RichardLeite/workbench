@@ -4,7 +4,7 @@ description: Generic database developer — migrations, seeds, models, queries. 
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/development/database-dev.md. Rode o sync após alterar a fonte. -->
 
 # database-dev

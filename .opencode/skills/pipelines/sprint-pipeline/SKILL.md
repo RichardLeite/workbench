@@ -55,7 +55,7 @@ Consolidar → resumo final com links, totais, alertas
 
 ### Estrutura de tasks por PBI (4 fixas + até 3 condicionais)
 
-> **Dados completos:** `node .opencode/scripts/sprint.js definitions`
+> **Dados completos:** `uv run --frozen python -m workbench sprint definitions`
 > **Regras de negócio (R1-R6):** @.opencode/backlog/adr/ADR-004-sprint-tasks.md (R4)
 
 | # | Tipo | Tasks | OE | RW | WorkedTime |
@@ -108,14 +108,14 @@ Use a skill planning-analysis para analisar {{INPUT}}.
 
 Contexto:
 - Modo: {{MODE}} (work_item_id | sprint_name | free_form)
-- Projeto: {{PROJECT}} (resolvido via `node .opencode/scripts/ado.js resolve`)
-- Time: {{TEAM}} (resolvido via `node .opencode/scripts/ado.js resolve`)
+- Projeto: {{PROJECT}} (resolvido via `uv run --frozen python -m workbench ado resolve`)
+- Time: {{TEAM}} (resolvido via `uv run --frozen python -m workbench ado resolve`)
 
 Requisitos obrigatórios:
 1. **Guard-rail**: Antes de criar tasks, verificar se o PBI já tem child tasks. Se tiver 1+ → SKIP (não criar nada).
 2. @.opencode/backlog/adr/ADR-004-sprint-tasks.md (R4)
 3. Para cada PBI sem child tasks, gerar tasks conforme a estrutura **4 fixas + até 3 condicionais** (dados em `sprint.js`):
-   > `node .opencode/scripts/sprint.js definitions`
+   > `uv run --frozen python -m workbench sprint definitions`
    >
    > **Tasks fixas (4):** Code Review (OE=1h), Task Owner (OE=1h), PM Validation (OE=1h), Testing — {scope} (OE=2-6h)
    > **Tasks condicionais (até 3):** Frontend, Backend, Database — OE e RW vazios, apenas WorkedTime=0
@@ -170,7 +170,7 @@ Contexto:
 Requisitos obrigatórios:
 1. **Guard-rail**: Se o PBI já tem 1+ child tasks → SKIP completamente
 2. Criar tasks conforme a estrutura **4 fixas + até 3 condicionais** (dados em `sprint.js`):
-   > `node .opencode/scripts/sprint.js definitions`
+   > `uv run --frozen python -m workbench sprint definitions`
    >
    > **Tasks fixas (4):** Code Review, Task Owner, PM Validation, Testing — {scope}
    > **Tasks condicionais (até 3):** Frontend, Backend, Database

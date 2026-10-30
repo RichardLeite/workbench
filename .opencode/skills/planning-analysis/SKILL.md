@@ -13,7 +13,7 @@ Analyze work items (Product Backlog Item or Bug) from Azure DevOps, break down t
 
 > **Resolve project:** @.opencode/skills/ado-resolve-project
 
-> **⚠️ Importante:** Os exemplos de código abaixo usam `"Sprint Team"` como ilustração. **Sempre substitua** `{{PROJECT}}` e `{{TEAM}}` pelos valores obtidos via `ado.js resolve`. Para hotfix, use `Hotfix Team` (`node .opencode/scripts/ado.js resolve --type hotfix`).
+> **⚠️ Importante:** Os exemplos de código abaixo usam `"Sprint Team"` como ilustração. **Sempre substitua** `{{PROJECT}}` e `{{TEAM}}` pelos valores obtidos via `ado.js resolve`. Para hotfix, use `Hotfix Team` (`uv run --frozen python -m workbench ado resolve --type hotfix`).
 
 Use o `defaultProject` do config (`Sprint Team`) como padrão.
 
@@ -128,7 +128,7 @@ Analyze the `title` + `description` of the work item and classify:
 
 Generate **0 a 3 cards condicionais** (no contexto do sprint-pipeline): Frontend, Backend, Database. Cada um é condicional — criar APENAS se houver evidência.
 
-> **Definições das tasks condicionais:** `node .opencode/scripts/sprint.js definitions` (itens 1-3)
+> **Definições das tasks condicionais:** `uv run --frozen python -m workbench sprint definitions` (itens 1-3)
 > **Regras completas (R1-R6):** @.opencode/backlog/adr/ADR-004-sprint-tasks.md
 
 | Card | Condição | OE | RW | WorkedTime |
@@ -137,7 +137,7 @@ Generate **0 a 3 cards condicionais** (no contexto do sprint-pipeline): Frontend
 | `Backend — {scope}` | Há lógica/API/regra | — | — | 0 |
 | `Database — {scope}` | Há migração/índice/seed | — | — | 0 |
 
-> **Nota (sprint-pipeline):** Esta skill gera apenas as **condicionais** (FE/BE/DB). As **4 tasks fixas** (Code Review + Task Owner + PM Validation + `Testing — {scope}`) são responsabilidade da `planning-setup`. `node .opencode/scripts/sprint.js definitions` (itens 4-7) Tasks de development (FE/BE/DB) só existem se a PBI tiver evidência clara de que a camada é necessária.
+> **Nota (sprint-pipeline):** Esta skill gera apenas as **condicionais** (FE/BE/DB). As **4 tasks fixas** (Code Review + Task Owner + PM Validation + `Testing — {scope}`) são responsabilidade da `planning-setup`. `uv run --frozen python -m workbench sprint definitions` (itens 4-7) Tasks de development (FE/BE/DB) só existem se a PBI tiver evidência clara de que a camada é necessária.
 
 **Acceptance Criteria obrigatório nos 3 cards** (no contexto do sprint-pipeline), escritos como PO Senior:
 - Comportamento do sistema, não implementação

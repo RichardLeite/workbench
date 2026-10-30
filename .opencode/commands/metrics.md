@@ -111,7 +111,7 @@ Evolução da cobertura ao longo do tempo:
 
 ```bash
 # Coletar todas as métricas do sprint atual
-node .opencode/scripts/cycle-time.js
+uv run --frozen python -m workbench metrics cycle-time
 
 # Output: JSON com todas as métricas
 ```

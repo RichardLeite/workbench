@@ -5,7 +5,7 @@ tools: Read, Grep, Glob
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/decision/arbitro.md. Rode o sync após alterar a fonte. -->
 
 **Impartial decision-maker.** Resolve ambiguity, conflicts and uncertainty when regular workflow can't reach a clear conclusion. Escalation path when `nivel_confianca` is `baixa` or agents contradict.

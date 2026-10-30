@@ -30,6 +30,12 @@ Atalhos:
 scripts\wb.cmd doctor        # Windows
 ```
 
+Nos comandos e skills, a forma portátil é:
+
+```bash
+uv run --frozen python -m workbench <command>
+```
+
 ## Estrutura
 
 ```
@@ -67,6 +73,8 @@ tests/
 | `cycle-time.js` | `wb metrics cycle-time` |
 | `reviewer-sort.js` | `wb reviewers sort` |
 | `create-release.js` | `wb release` |
+| `sync-to-claude.js` | `wb sync claude` |
+| `sync-to-codex.js` | `wb sync codex` |
 | `vision-utils.js` | `wb vision probe` |
 | `mcp-image.js` | `uv run --frozen python -m workbench.mcp.image` |
 
@@ -95,5 +103,5 @@ uv run pytest --cov=workbench --cov-report=term-missing
 
 ## Próximas fases
 
-- Fase 4: `sync claude/codex`, atualização dos comandos/docs e CI final.
-- Fase 5: remoção dos scripts Node migrados e relatório final de paridade/benchmark.
+- Fase 5: remoção dos scripts Node migrados, port/remoção dos testes Node e
+  relatório final de paridade/benchmark.

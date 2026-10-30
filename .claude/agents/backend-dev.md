@@ -4,7 +4,7 @@ description: Generic backend developer — implements API, services, business lo
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/development/backend-dev.md. Rode o sync após alterar a fonte. -->
 
 # backend-dev

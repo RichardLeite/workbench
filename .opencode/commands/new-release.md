@@ -107,7 +107,7 @@ gh pr list --state merged --search "merged:>YYYY-MM-DD" --json number,title,url 
 > Delega para o wizard de `create-release.js` (criado no PR #99). 7 etapas com prompts amigáveis.
 
 ```bash
-node .opencode/scripts/create-release.js
+uv run --frozen python -m workbench release
 ```
 
 **Etapas do wizard:**
@@ -208,7 +208,7 @@ Após sucesso, perguntar:
 
 ## Observações
 
-- **Modo interativo (wizard)** só funciona em TTY. Em CI/pipes, use `node .opencode/scripts/create-release.js --sprint "..." --repo "..." --tag v...`
+- **Modo interativo (wizard)** só funciona em TTY. Em CI/pipes, use `uv run --frozen python -m workbench release --sprint "..." --repo "..." --tag v...`
 - **Detecção de projeto** via `git remote get-url origin` — se o remote não casar, wizard lista todos
 - **Conventional Commits** desde a última tag ajudam a sugerir minor vs patch
 - **Para `.workbench`**, o repo é sempre `/.workbench` (caso especial)

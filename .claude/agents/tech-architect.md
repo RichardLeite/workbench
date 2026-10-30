@@ -4,7 +4,7 @@ description: Architect/Tech Lead — reviews architecture, design decisions, ADR
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/review/tech-architect.md. Rode o sync após alterar a fonte. -->
 
 Ensure architectural integrity — review design decisions, analyze change impact, maintain coherence.

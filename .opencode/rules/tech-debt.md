@@ -37,7 +37,7 @@ Deseja abrir uma issue para corrigir posteriormente?
 2. Use the script to create the issue:
 
 ```bash
-node scripts/tech-debt-issue.js "<repo-name>" "<Título conciso>" "Arquivo: {caminho}:{linha}\n\n{descrição detalhada}\n\nDescoberto durante: {contexto da tarefa}"
+uv run --frozen python -m workbench issue tech-debt "<repo-name>" "<Título conciso>" "Arquivo: {caminho}:{linha}\n\n{descrição detalhada}\n\nDescoberto durante: {contexto da tarefa}"
 ```
 
 3. Report back the issue URL to the user.

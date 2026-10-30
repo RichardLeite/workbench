@@ -4,7 +4,7 @@ description: Azure DevOps task management (optional adapter) — refine PBIs, cr
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/process/task-refiner-ado.md. Rode o sync após alterar a fonte. -->
 
 ## Purpose
@@ -64,7 +64,7 @@ For a given PBI, create the missing child tasks:
 
 ### Mode 3 — Adicionar tarefas padrão (4 fixas + condicionais conforme escopo)
 
-> **Estrutura de tasks:** `node .opencode/scripts/sprint.js definitions`
+> **Estrutura de tasks:** `uv run --frozen python -m workbench sprint definitions`
 
 Check if they exist first. Create only if missing.
 

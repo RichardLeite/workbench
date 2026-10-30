@@ -20,9 +20,9 @@ Se nenhum argumento for fornecido, o pipeline perguntará interativamente.
 
 ## Pipeline State (Retomada)
 
-> **Gerenciamento de estado:** `node .opencode/scripts/pipeline.js state <create|load|resume> <slug>`
-> **Validação de schema:** `node .opencode/scripts/pipeline.js validate <file>`
-> **Schema do state:** `node .opencode/scripts/pipeline.js schema`
+> **Gerenciamento de estado:** `uv run --frozen python -m workbench pipeline state <create|load|resume> <slug>`
+> **Validação de schema:** `uv run --frozen python -m workbench pipeline validate <file>`
+> **Schema do state:** `uv run --frozen python -m workbench pipeline schema`
 
 O pipeline mantém um arquivo de estado em `<knowledge>/plans/pipeline-state-<slug>.json`.
 
@@ -76,7 +76,7 @@ task({
 | Entrada | Ação |
 |---------|------|
 | Texto descritivo | Usar como descrição inicial |
-| `AB#<id>` ou URL ADO | `node .opencode/scripts/ado.js resolve --url "<url>"` → extrai projeto; depois `ado.js resolve --project "<projeto>"` → git flow params |
+| `AB#<id>` ou URL ADO | `uv run --frozen python -m workbench ado resolve --url "<url>"` → extrai projeto; depois `ado.js resolve --project "<projeto>"` → git flow params |
 | Nenhum | Perguntar |
 
 Se entrada for insuficiente, entreviste via **business-analyst**:
@@ -96,7 +96,7 @@ const analise = await task({
   prompt: `Analise requisitos e retorne: { titulo, descricao, criterios_aceite, stakeholders, riscos, notas_tecnicas }`
 })
 // Persistir: write({ filePath: `${knowledge}/backlog/features/${slug}.md`, content: ... })
-// Ou usar: node .opencode/scripts/pipeline.js feature-gen '<json>' > feature.md
+// Ou usar: uv run --frozen python -m workbench pipeline feature-gen '<json>' > feature.md
 ```
 
 #### 1.3 Spec Técnica
@@ -139,7 +139,7 @@ task({
 })
 ```
 
-**Decisão:** `node .opencode/scripts/pipeline.js gate-eval <tl-status> <qa-ok>` → avalia matriz:
+**Decisão:** `uv run --frozen python -m workbench pipeline gate-eval <tl-status> <qa-ok>` → avalia matriz:
 - `approved` + sem bloqueios → ✅ Avança
 - `needs_changes` + issues leves → ⚠️ Avança com ressalva
 - `blocked` ou gate indeterminado → 🔴 **Pausa pipeline**. Máx 2 ciclos de correção.
@@ -150,7 +150,7 @@ task({
 
 #### 3.1 Agentes por Projeto + Camada
 
-> **Resolver agente:** `node .opencode/scripts/pipeline.js select-agent <projeto> <camada>`
+> **Resolver agente:** `uv run --frozen python -m workbench pipeline select-agent <projeto> <camada>`
 > **Config das fases:** @.opencode/config/pipeline-rules.json (agentes_por_projeto)
 
 1. Consultar `project-mapping.json#projects.<slug>.agents`
@@ -168,7 +168,7 @@ task({
 
 #### 3.2 Relatório
 
-Use `node .opencode/scripts/pipeline.js report success <state-path>` para gerar relatório formatado.
+Use `uv run --frozen python -m workbench pipeline report success <state-path>` para gerar relatório formatado.
 
 ---
 
@@ -197,8 +197,8 @@ task({
 
 #### 4.3 Relatório Final
 
-> **Relatório de sucesso:** `node .opencode/scripts/pipeline.js report success <state-path>`
-> **Relatório parcial:** `node .opencode/scripts/pipeline.js report partial <state-path> <motivo> <fase>`
+> **Relatório de sucesso:** `uv run --frozen python -m workbench pipeline report success <state-path>`
+> **Relatório parcial:** `uv run --frozen python -m workbench pipeline report partial <state-path> <motivo> <fase>`
 
 ---
 
@@ -216,4 +216,4 @@ task({
 10. **Timeouts** — @.opencode/config/pipeline-rules.json (fases[].timeout_min)
 11. **Limite de módulos** — >6 módulos = lotes de até 6. @.opencode/config/pipeline-rules.json (limites)
 12. **Resolução de paths** — consulte `project-mapping.json` para `<knowledge>`, `<vault>` etc.
-13. **Git flow routing** — `node .opencode/scripts/ado.js resolve --project "<project>"` → comando git
+13. **Git flow routing** — `uv run --frozen python -m workbench ado resolve --project "<project>"` → comando git

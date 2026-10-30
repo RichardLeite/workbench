@@ -13,7 +13,7 @@ description: "HOTFIX completo: quality gates → 2 branches → commit → 2 PRs
 ## Escopo
 
 > **Regras centralizadas em:** @.opencode/config/git-hotfix-flow-rules.json
-> **Validação de branches:** `node .opencode/scripts/hotfix.js validate-branch <branch>` / `validate-release <branch>` / `validate-cherry-pick <main> -- <release>` / `validate-pr-count <n>`
+> **Validação de branches:** `uv run --frozen python -m workbench hotfix validate-branch <branch>` / `validate-release <branch>` / `validate-cherry-pick <main> -- <release>` / `validate-pr-count <n>`
 
 | Parâmetro | Valor |
 |-----------|-------|
@@ -23,8 +23,8 @@ description: "HOTFIX completo: quality gates → 2 branches → commit → 2 PRs
 | Commit types | `fix`, `feat`, `chore`, `refactor`, `test`, `docs`, `perf` |
 
 **Validar branches:**
-- `node .opencode/scripts/hotfix.js validate-branch fix/TASK-1234`
-- `node .opencode/scripts/hotfix.js validate-release fix/TASK-1234-release`
+- `uv run --frozen python -m workbench hotfix validate-branch fix/TASK-1234`
+- `uv run --frozen python -m workbench hotfix validate-release fix/TASK-1234-release`
 
 ---
 
@@ -68,8 +68,8 @@ git checkout main && git pull origin main && git checkout -B fix/TASK-XXXX origi
 
 > **Foco em segurança.** Lint não bloqueia. Security CRITICAL bloqueia.
 
-> **Comandos:** `node .opencode/scripts/hotfix.js quality-gates <project>`
-> **Decisão:** `node .opencode/scripts/hotfix.js gate`
+> **Comandos:** `uv run --frozen python -m workbench hotfix quality-gates <project>`
+> **Decisão:** `uv run --frozen python -m workbench hotfix gate`
 
 ```bash
 # 🔵 Lint — não bloqueia
@@ -103,7 +103,7 @@ git checkout release && git pull origin release && git checkout -B fix/TASK-XXXX
 ```bash
 git cherry-pick <commit-hash-1> <commit-hash-2>
 ```
-**Validar:** `node .opencode/scripts/hotfix.js validate-cherry-pick <mainSHAs> -- <releaseSHAs>`
+**Validar:** `uv run --frozen python -m workbench hotfix validate-cherry-pick <mainSHAs> -- <releaseSHAs>`
 
 > ⚠️ CONFLITOS: nunca resolver automaticamente. Perguntar ao usuário.
 

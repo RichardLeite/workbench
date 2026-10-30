@@ -11,7 +11,7 @@ At the start of each sprint, automatically create the **4 FIXED standard tasks**
 
 > **Esta skill cria APENAS as 4 tasks fixas.** As tasks de development (Frontend, Backend, Database) são **condicionais** e são responsabilidade da `planning-analysis` (criadas quando há evidência no escopo da PBI).
 
-> **Dados das 4 tasks fixas:** `node .opencode/scripts/sprint.js definitions` (itens 4-7)
+> **Dados das 4 tasks fixas:** `uv run --frozen python -m workbench sprint definitions` (itens 4-7)
 > **Regras completas (R1-R6):** @.opencode/backlog/adr/ADR-004-sprint-tasks.md
 
 | Task                             | Activity    | OE/RW | Descrição do conteúdo da task                          |

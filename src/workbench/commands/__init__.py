@@ -19,6 +19,7 @@ from workbench.commands import (
     reviewers,
     spec,
     sprint,
+    sync,
     teams,
     validate,
     version,
@@ -41,6 +42,7 @@ def register_all(subparsers: _SubParsersAction) -> None:
     issue.register(subparsers)
     teams.register(subparsers)
     spec.register(subparsers)
+    sync.register(subparsers)
     knowledge.register(subparsers)
     docs.register(subparsers)
     metrics.register(subparsers)

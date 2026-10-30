@@ -150,25 +150,19 @@ jobs:
 
   # ── Job 9: Workbench Scripts ────────────────────────────
   workbench-scripts:
-    name: 🛠️ Workbench — script tests
+    name: 🛠️ Workbench — validators
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 20
-      - name: Run workbench script tests
-        run: |
-          node --test \
-            .opencode/scripts/tests/ado.test.js \
-             .opencode/scripts/tests/sprint.test.js \
-             .opencode/scripts/tests/hotfix.test.js \
-             .opencode/scripts/tests/pipeline.test.js \
-             .opencode/scripts/tests/refactor-screen.test.js
-      - name: Sprint validator check
-        run: node .opencode/scripts/sprint.js validate
-      - name: Pipeline state validator check
-        run: node .opencode/scripts/pipeline.js validate
+      - uses: astral-sh/setup-uv@v6
+      - name: Sync dependencies
+        run: uv sync --all-groups
+      - name: Sprint validator
+        run: uv run --frozen python -m workbench sprint validate
+      - name: Pipeline validator
+        run: uv run --frozen python -m workbench pipeline validate
+      - name: ADO config validator
+        run: uv run --frozen python -m workbench ado resolve --validate
 
   # ── Job 10: Audit ────────────────────────────────────────
   audit:

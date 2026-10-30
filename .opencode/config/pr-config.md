@@ -112,7 +112,7 @@ Campos por revisor:
 
 Regras:
 - Autor do PR nunca é revisor.
-- O sorteio é opcional e usa `node .opencode/scripts/reviewer-sort.js`.
+- O sorteio é opcional e usa `uv run --frozen python -m workbench reviewers sort`.
 - Se um revisor não tiver `github`, apenas exiba um aviso.
 - Se falhar em um PR, continue com os demais.
 
@@ -126,7 +126,7 @@ duplique tabelas de repositório neste arquivo.
 Exemplo de resolução:
 
 ```bash
-node .opencode/scripts/repository-resolver.js --project <slug>
+uv run --frozen python -m workbench repo resolve --project <slug>
 ```
 
 ---
@@ -135,9 +135,9 @@ node .opencode/scripts/repository-resolver.js --project <slug>
 
 - Validar título e corpo do PR antes de abrir/atualizar.
 - Scripts disponíveis:
-  - `node scripts/validate-branch-name.js <branch>`
-  - `node scripts/validate-pr-body.js <pr-number> --owner <org> --repo <repo>`
-  - `node scripts/validate-spec-format.js <spec.md>`
+  - `uv run --frozen python -m workbench validate branch <branch>`
+  - `uv run --frozen python -m workbench validate pr <pr-number> --owner <org> --repo <repo>`
+  - `uv run --frozen python -m workbench validate spec <spec.md>`
 - Falha de validação = corrigir antes de prosseguir; nunca bypass.
 
 ---

@@ -20,7 +20,7 @@ current conversation (meu-projeto, fiscal, outro-projeto, etc.).
 ## Mechanism
 
 1. Extract key terms from the user's message
-2. Run: `node .opencode/scripts/rag-search.js "<terms>" --limit 5 [--project <project>]`
+2. Run: `uv run --frozen python -m workbench knowledge search "<terms>" --limit 5 [--project <project>]`
 3. The script returns JSON with notes ordered by relevance (score)
 4. Read the 2 most relevant notes (FULL) from the file
 5. Read excerpts from the next 3 notes

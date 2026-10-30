@@ -321,7 +321,7 @@ Como referenciar scripts, skills, configs e ADRs no workbench:
 
 | Tipo | Formato | Exemplo | O agente deve... |
 |------|---------|---------|------------------|
-| **Script (CLI)** | `` `node .opencode/scripts/<script>.js <args>` `` | `` `node .opencode/scripts/pipeline.js validate <file>` `` | Executar o comando no terminal |
+| **Script (CLI)** | `` `uv run --frozen python -m workbench <command> <args>` `` | `` `uv run --frozen python -m workbench pipeline validate <file>` `` | Executar o comando no terminal |
 | **Skill (path)** | `` `@.opencode/skills/<nome>` `` | `` `@.opencode/skills/ado-preflight` `` | Ler o documento com `Read` tool |
 | **Skill (delegação)** | `` `skill("<nome>")` `` | `` `skill("ado-preflight")` `` | Carregar e executar a skill |
 | **Config (JSON)** | `` `@.opencode/config/<arquivo>.json (<campo>)` `` | `` `@.opencode/config/pipeline-rules.json (fases)` `` | Ler o arquivo com `Read` tool |

@@ -4,7 +4,7 @@ description: Business Analyst / PO — Refines requirements, writes specs, valid
 model: haiku
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/process/business-analyst.md. Rode o sync após alterar a fonte. -->
 
 Analyze business needs, research vault context via RAG, elicit requirements via structured interview, validate with stakeholders.
@@ -13,7 +13,7 @@ Analyze business needs, research vault context via RAG, elicit requirements via 
 1. Never implement or write files — read-only analysis.
 2. Always validate with user before finalizing (`question` tool).
 3. Business language, not technical jargon.
-4. Use vault RAG (`node .opencode/scripts/rag-search.js`) for business context research.
+4. Use vault RAG (`uv run --frozen python -m workbench knowledge search`) for business context research.
 
 ## Cases
 

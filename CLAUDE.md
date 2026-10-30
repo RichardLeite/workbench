@@ -6,7 +6,7 @@ Ambiente multi-projeto: cada projeto é um repo independente clonado dentro do
 trabalho (`.workbench` | `projects/<name>`) **antes** de agir.
 
 > A camada `.claude/` (agents, `.mcp.json`, `settings.json`) é **gerada** de `.opencode/`
-> por `node .opencode/scripts/sync-to-claude.js`. Fonte da verdade = `.opencode/`.
+> por `uv run --frozen python -m workbench sync claude`. Fonte da verdade = `.opencode/`.
 > `skills/` e `commands/` são symlinks p/ `.opencode/` (recriados pelo sync após clone).
 > Ponte e detalhes: @CLAUDE_BRIDGE.md
 
