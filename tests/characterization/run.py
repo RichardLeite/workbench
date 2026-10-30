@@ -39,6 +39,7 @@ def load_manifest() -> dict[str, Any]:
 
 ISO_TIMESTAMP = re.compile(r"\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\b")
 ISO_DATE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
+BRANCH_FIELD = re.compile(r'"branch":\s*"[^"]*"')
 
 
 def normalize(text: str, case: dict[str, Any] | None = None) -> str:
@@ -47,6 +48,7 @@ def normalize(text: str, case: dict[str, Any] | None = None) -> str:
     text = text.replace(root.replace("\\", "/"), "<ROOT>")
     text = text.replace("\r\n", "\n").replace("\r", "\n")
     text = ISO_TIMESTAMP.sub("<TIMESTAMP>", text)
+    text = BRANCH_FIELD.sub('"branch": "<BRANCH>"', text)
     if case and "dates" in case.get("normalize", []):
         text = ISO_DATE.sub("<DATE>", text)
     lines = [line.rstrip() for line in text.splitlines()]

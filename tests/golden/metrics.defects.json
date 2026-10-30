@@ -7,6 +7,6 @@
     "--mode=defects"
   ],
   "returncode": 0,
-  "stdout": "{\n  \"timestamp\": \"<TIMESTAMP>\",\n  \"mode\": \"defects\",\n  \"project\": \"workbench\",\n  \"repository\": \"git@github.com:RichardLeite/workbench.git\",\n  \"branch\": \"main\",\n  \"defects\": {\n    \"open\": 0,\n    \"closed\": 0,\n    \"byPriority\": {\n      \"P0\": 0,\n      \"P1\": 0,\n      \"P2\": 0\n    },\n    \"total\": 0,\n    \"project\": \"workbench\"\n  }\n}",
+  "stdout": "{\n  \"timestamp\": \"<TIMESTAMP>\",\n  \"mode\": \"defects\",\n  \"project\": \"workbench\",\n  \"repository\": \"git@github.com:RichardLeite/workbench.git\",\n  \"branch\": \"<BRANCH>\",\n  \"defects\": {\n    \"open\": 0,\n    \"closed\": 0,\n    \"byPriority\": {\n      \"P0\": 0,\n      \"P1\": 0,\n      \"P2\": 0\n    },\n    \"total\": 0,\n    \"project\": \"workbench\"\n  }\n}",
   "stderr": ""
 }

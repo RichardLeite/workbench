@@ -21,3 +21,7 @@ def test_argv_for_python_expands_interpreter() -> None:
 def test_argv_for_python_without_definition() -> None:
     case = {"id": "x", "argv": ["node", "x.js"]}
     assert run.argv_for(case, "python") is None
+
+
+def test_normalize_replaces_branch() -> None:
+    assert run.normalize('{"branch": "feat/project-discovery"}') == '{"branch": "<BRANCH>"}'
