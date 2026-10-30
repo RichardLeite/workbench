@@ -66,6 +66,7 @@ tests/
 | `auto-doc.js` | `wb docs …` |
 | `cycle-time.js` | `wb metrics cycle-time` |
 | `reviewer-sort.js` | `wb reviewers sort` |
+| `create-release.js` | `wb release` |
 | `vision-utils.js` | `wb vision probe` |
 | `mcp-image.js` | `uv run --frozen python -m workbench.mcp.image` |
 
@@ -94,6 +95,5 @@ uv run pytest --cov=workbench --cov-report=term-missing
 
 ## Próximas fases
 
-- Fase 2: `create-release` e fluxos de release.
 - Fase 4: `sync claude/codex`, atualização dos comandos/docs e CI final.
 - Fase 5: remoção dos scripts Node migrados e relatório final de paridade/benchmark.

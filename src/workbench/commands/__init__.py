@@ -14,6 +14,7 @@ from workbench.commands import (
     knowledge,
     metrics,
     pipeline,
+    release,
     repo,
     reviewers,
     spec,
@@ -36,6 +37,7 @@ def register_all(subparsers: _SubParsersAction) -> None:
     pipeline.register(subparsers)
     ado.register(subparsers)
     hotfix.register(subparsers)
+    release.register(subparsers)
     issue.register(subparsers)
     teams.register(subparsers)
     spec.register(subparsers)
