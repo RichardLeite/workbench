@@ -1,0 +1,24 @@
+{
+  "$comment": "Pipeline state template — copy to pipeline-state-<slug>.json. Fields with null are placeholders.",
+  "tipo": "pipeline_state",
+  "slug": null,
+  "descricao": null,
+  "task_id": null,
+  "projeto": null,
+  "fase_atual": null,
+  "status": null,
+  "artefatos": {
+    "entrevista": { "path": null, "status": null },
+    "feature": { "path": null, "status": null },
+    "spec": { "path": null, "status": null },
+    "gate_tech_lead": { "status": null },
+    "gate_qa": { "status": null },
+    "execucao": { "path": null, "status": null },
+    "vault": { "status": null }
+  },
+  "modulos": [],
+  "created_at": null,
+  "updated_at": null,
+  "$valid_statuses": "in_progress | completed | aborted",
+  "$valid_artefact_statuses": "pending | done | failed | skipped | approved | needs_changes | blocked | success | partial | interrupted"
+}

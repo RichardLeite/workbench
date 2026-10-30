@@ -1,0 +1,91 @@
+{
+  "description": "Definições de tasks de sprint (4 fixas + 3 condicionais). Fonte única de verdade — sprint.js consome este JSON.",
+  "version": 1,
+  "rules": {
+    "R1": "Tasks condicionais (FE, BE, DB) NUNCA têm OE/RW preenchidos",
+    "R2": "Tasks fixas têm OE=RW padronizados: CR=1h, TO=1h, PM=1h, Testing=2h",
+    "R3": "Database é SEMPRE 1 task única (nunca quebrar migration + seed)",
+    "R4": "Story Points NÃO são usados — métrica removida do fluxo",
+    "R5": "WorkedTime=0 em TODAS as tasks na criação",
+    "R6": "Activity obrigatório: Development | Testing"
+  },
+  "tasks": [
+    {
+      "title": "Frontend — {scope}",
+      "activity": "Development",
+      "oe": null,
+      "rw": null,
+      "workedTime": 0,
+      "tipo": "condicional",
+      "condicao": "criar APENAS se há UI",
+      "ordem": 1,
+      "descricaoCurta": "Implementação de interface de usuário"
+    },
+    {
+      "title": "Backend — {scope}",
+      "activity": "Development",
+      "oe": null,
+      "rw": null,
+      "workedTime": 0,
+      "tipo": "condicional",
+      "condicao": "criar APENAS se há lógica/API",
+      "ordem": 2,
+      "descricaoCurta": "Implementação de lógica de negócio e/ou API"
+    },
+    {
+      "title": "Database — {scope}",
+      "activity": "Development",
+      "oe": null,
+      "rw": null,
+      "workedTime": 0,
+      "tipo": "condicional",
+      "condicao": "criar APENAS se há migração/seed; sempre 1 task única, NUNCA quebrar em 2",
+      "ordem": 3,
+      "descricaoCurta": "Migração, seed ou alteração de banco de dados"
+    },
+    {
+      "title": "Code Review",
+      "activity": "Development",
+      "oe": 1,
+      "rw": 1,
+      "workedTime": 0,
+      "tipo": "fixa",
+      "condicao": "sempre criada",
+      "ordem": 4,
+      "descricaoCurta": "Revisão de código do PR"
+    },
+    {
+      "title": "Task Owner (Task Definitions)",
+      "activity": "Development",
+      "oe": 1,
+      "rw": 1,
+      "workedTime": 0,
+      "tipo": "fixa",
+      "condicao": "sempre criada",
+      "ordem": 5,
+      "descricaoCurta": "Definição e acompanhamento da task"
+    },
+    {
+      "title": "PM Validation",
+      "activity": "Testing",
+      "oe": 1,
+      "rw": 1,
+      "workedTime": 0,
+      "tipo": "fixa",
+      "condicao": "sempre criada",
+      "ordem": 6,
+      "descricaoCurta": "Validação do Product Manager"
+    },
+    {
+      "title": "Testing — {scope}",
+      "activity": "Testing",
+      "oe": 2,
+      "rw": 2,
+      "workedTime": 0,
+      "tipo": "fixa",
+      "condicao": "sempre criada",
+      "ordem": 7,
+      "descricaoCurta": "Testes manuais e/ou automatizados"
+    }
+  ]
+}

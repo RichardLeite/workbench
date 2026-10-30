@@ -1,0 +1,564 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "Orquestrador",
+  "plugin": [
+    ".opencode/plugins/metrics.ts"
+  ],
+  "reference": {
+    ".workbench": {
+      "path": "."
+    }
+  },
+  "agent": {
+    "Orquestrador": {
+      "description": "Agente principal responsável por coordenar o fluxo entre backend, frontend, banco, revisão de PR e demais tarefas.",
+      "mode": "primary",
+      "skills": [
+        "caveman"
+      ],
+      "temperature": 0.1,
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "question": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/core/orquestrador.md}"
+    },
+    "backend-dev": {
+      "description": "Generic backend developer — implements API, services, business logic. Reads project AGENTS.md for stack context.",
+      "mode": "subagent",
+      "temperature": 0.15,
+      "skills": [
+        "feature",
+        "bugfix"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/development/backend-dev.md}"
+    },
+    "frontend-dev": {
+      "description": "Generic frontend developer — implements UI, components, hooks, forms. Reads project AGENTS.md for stack context.",
+      "mode": "subagent",
+      "temperature": 0.15,
+      "skills": [
+        "feature",
+        "bugfix"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/development/frontend-dev.md}"
+    },
+    "code-reviewer": {
+      "description": "Multi-language code review specialist — line-by-line review, quality checks, patterns, anti-patterns. Covers JS/TS, C#, Python, SQL. Never implements code.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "code-review"
+      ],
+      "permission": {
+        "write": "deny",
+        "edit": "deny",
+        "bash": "deny"
+      },
+      "prompt": "{file:./.opencode/agents/review/code-reviewer.md}"
+    },
+    "database-dev": {
+      "description": "Generic database developer — migrations, seeds, models, queries. Reads project AGENTS.md for DB stack context.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "db-migrations"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/development/database-dev.md}"
+    },
+    "security-reviewer": {
+      "description": "Security-focused code review — OWASP Top 10, secrets exposure, injection, auth flaws, SSRF, dependency CVEs. Never implements code.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "security-lgpd",
+        "security-audit-api",
+        "security-audit-database"
+      ],
+      "permission": {
+        "write": "deny",
+        "edit": "deny",
+        "bash": "deny"
+      },
+      "prompt": "{file:./.opencode/agents/review/security-reviewer.md}"
+    },
+    "task-refiner-ado": {
+      "description": "Azure DevOps task management (optional adapter) — refine PBIs, create/update tasks, add comments, process sprint backlogs",
+      "mode": "subagent",
+      "temperature": 0.2,
+      "skills": [
+        "planning-analysis",
+        "planning-setup",
+        "task-refiner"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "azure-devops_wit_add_work_item_comment": "allow",
+        "azure-devops_wit_add_child_work_items": "allow",
+        "azure-devops_wit_create_work_item": "allow",
+        "azure-devops_wit_update_work_item": "allow",
+        "azure-devops_wit_update_work_items_batch": "allow",
+        "azure-devops_wit_get_work_item": "allow",
+        "azure-devops_wit_get_work_items_batch_by_ids": "allow",
+        "azure-devops_wit_get_work_items_for_iteration": "allow",
+        "azure-devops_wit_query_by_wiql": "allow",
+        "azure-devops_wit_list_work_item_comments": "allow",
+        "azure-devops_core_list_projects": "allow",
+        "azure-devops_core_list_project_teams": "allow",
+        "azure-devops_work_list_iterations": "allow",
+        "azure-devops_work_list_team_iterations": "allow",
+        "azure-devops_wit_work_items_link": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/process/task-refiner-ado.md}"
+    },
+    "planner": {
+      "description": "Expert planning specialist — decomposes features, refactors and complex tasks into implementable plans with phases, dependencies and risk analysis.",
+      "mode": "subagent",
+      "temperature": 0.2,
+      "skills": [],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/decision/planner.md}"
+    },
+    "pr-insight": {
+      "description": "PR Insight — Complete PR analysis: diff review, task validation, review comments, approve/request changes and optional private notification.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "code-review",
+        "security-lgpd",
+        "performance"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow",
+        "question": "allow",
+        "teams-graph_send_channel_message": "allow",
+        "teams-graph_send_chat_message": "allow",
+        "teams-graph_search_users_for_mentions": "allow",
+        "teams-graph_list_teams": "allow",
+        "teams-graph_list_channels": "allow",
+        "azure-devops_wit_get_work_item": "allow",
+        "azure-devops_core_list_projects": "allow",
+        "azure-devops_core_list_project_teams": "allow",
+        "azure-devops_wit_list_work_item_comments": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/review/pr-insight.md}"
+    },
+    "business-analyst": {
+      "description": "Business Analyst / PO — Refines requirements, writes specs, validates with stakeholders. Never implements code — requirements and specs only.",
+      "mode": "subagent",
+      "temperature": 0.3,
+      "skills": [
+        "task-refiner",
+        "issue"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/process/business-analyst.md}"
+    },
+    "tdd-guide": {
+      "description": "Test-First Development guide — TDD Red-Green-Refactor cycle, test strategy, coverage planning. Never implements code — test guidance only.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/development/tdd-guide.md}"
+    },
+    "tech-architect": {
+      "description": "Architect/Tech Lead — reviews architecture, design decisions, ADRs and cross-layer impact analysis. Never implements — focuses on design integrity.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "architecture-review",
+        "performance"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/review/tech-architect.md}"
+    },
+    "tech-lead": {
+      "description": "Tech Lead — Implementation plan review and code quality gate. Reviews plans BEFORE execution, blocks pattern violations, ensures decisions align with architecture.",
+      "mode": "subagent",
+      "temperature": 0.15,
+      "skills": [
+        "code-review",
+        "architecture-review",
+        "performance",
+        "bugfix"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow",
+        "question": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/review/tech-lead.md}"
+    },
+    "qa-engineer": {
+      "description": "QA/Tester — Generates test plans, test cases, regression scenarios and test strategies. Never modifies production code — test plans and validation only.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "qa-test",
+        "playwright-cli"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/infrastructure/qa-engineer.md}"
+    },
+    "vault-updater": {
+      "description": "Analyze specs and update the project vault with permanent knowledge. Classifies changes and updates vault files accordingly. Never implements code or searches codebase — vault documentation only.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "deny"
+      },
+      "prompt": "{file:./.opencode/agents/project/vault-updater.md}"
+    },
+    "explorador": {
+      "description": "Read-only codebase search and navigation — finds files, patterns, definitions without editing.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "repo-scan"
+      ],
+      "permission": {
+        "write": "deny",
+        "edit": "deny",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/analysis/explorador.md}"
+    },
+    "revisor": {
+      "description": "Code review, architecture analysis and complex debugging — analyzes code and architecture, never implements.",
+      "mode": "subagent",
+      "temperature": 0.2,
+      "skills": [
+        "code-review",
+        "architecture-review",
+        "security-lgpd",
+        "performance"
+      ],
+      "permission": {
+        "write": "deny",
+        "edit": "deny",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/review/revisor.md}"
+    },
+    "Integracoes-Power": {
+      "description": "Especialista em análise de integrações — APIs de terceiros, documentações, Swagger, mapeamento com codebase e documentação no vault.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "repo-scan"
+      ],
+      "permission": {
+        "write": "ask",
+        "edit": "ask",
+        "bash": "deny",
+        "question": "allow",
+        "azure-devops_wit_add_work_item_comment": "allow",
+        "azure-devops_wit_add_child_work_items": "allow",
+        "azure-devops_wit_create_work_item": "allow",
+        "azure-devops_wit_get_work_item": "allow",
+        "azure-devops_wit_get_work_items_batch_by_ids": "allow",
+        "azure-devops_wit_query_by_wiql": "allow",
+        "azure-devops_core_list_projects": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/analysis/integracoes-power.md}"
+    },
+    "explore": {
+      "description": "Fast codebase exploration specialist — quick searches, file discovery, pattern matching. Lighter than explorador.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [],
+      "permission": {
+        "write": "deny",
+        "edit": "deny",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/analysis/explore.md}"
+    },
+    "image-analyzer": {
+      "description": "UI image analysis — extracts lean visual specs (layout, colors, visual order, sizes) from screenshots and wireframes. Never implements code.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "image-pipeline"
+      ],
+      "permission": {
+        "write": "deny",
+        "edit": "deny",
+        "bash": "allow",
+        "mcp-image__image_save": "allow",
+        "mcp-image__image_get_dir": "allow",
+        "mcp-image__image_validate": "allow",
+        "mcp-image__check_vision_error": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/analysis/image-analyzer.md}"
+    },
+    "ux-analyzer": {
+      "description": "UX Analyst — Nielsen heuristic evaluation and WCAG accessibility audit. Analyzes code and screenshots for usability issues; never implements UI.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "image-pipeline"
+      ],
+      "permission": {
+        "write": "deny",
+        "edit": "deny",
+        "bash": "allow",
+        "mcp-image__image_save": "allow",
+        "mcp-image__image_get_dir": "allow",
+        "mcp-image__image_validate": "allow",
+        "mcp-image__check_vision_error": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/analysis/ux-analyzer.md}"
+    },
+    "architect": {
+      "description": "Software architecture specialist — system design, scalability, technical decisions, ADRs, trade-off analysis. Never implements — architecture and design only.",
+      "mode": "subagent",
+      "temperature": 0.2,
+      "skills": [
+        "architecture-review"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/decision/architect.md}"
+    },
+    "arbitro": {
+      "description": "Decision Arbiter — Resolve conflicts between agents, handle ambiguity, make final calls when confidence is low. Never implements or reviews code.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [],
+      "permission": {
+        "write": "deny",
+        "edit": "deny",
+        "bash": "deny",
+        "question": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/decision/arbitro.md}"
+    },
+    "gestor-tokens": {
+      "description": "Token Cost Manager — Audit agent selection, model routing, context engineering and cost control. Never implements code.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "planning-analysis"
+      ],
+      "permission": {
+        "write": "deny",
+        "edit": "deny",
+        "bash": "deny"
+      },
+      "prompt": "{file:./.opencode/agents/decision/gestor-tokens.md}"
+    },
+    "devops-engineer": {
+      "description": "DevOps Engineer — CI/CD pipeline design, deploy automation, Docker optimization, rollback procedures. Handles release management and infrastructure as code.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "deployment",
+        "release-management"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/infrastructure/devops-engineer.md}"
+    },
+    "general": {
+      "description": "Multi-step research and general-purpose agent — combines tools, fetches web data, handles tasks no other agent fits.",
+      "mode": "subagent",
+      "temperature": 0.2,
+      "skills": [],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/infrastructure/general.md}"
+    },
+    "pedreiro": {
+      "description": "Fast implementation of well-defined tasks — executes plans verbatim without research or architecture decisions.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "bugfix",
+        "feature",
+        "commit"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/infrastructure/pedreiro.md}"
+    },
+    "scrum-master": {
+      "description": "Scrum Master — Sprint metrics, retrospective facilitation, impediment tracking. Never implements code or reviews PRs.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "planning-analysis",
+        "planning-setup",
+        "retrospective"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow",
+        "azure-devops_wit_get_work_item": "allow",
+        "azure-devops_wit_get_work_items_batch_by_ids": "allow",
+        "azure-devops_wit_query_by_wiql": "allow",
+        "azure-devops_wit_list_work_item_comments": "allow",
+        "azure-devops_core_list_projects": "allow",
+        "azure-devops_core_list_project_teams": "allow",
+        "azure-devops_work_list_iterations": "allow",
+        "azure-devops_work_list_team_iterations": "allow",
+        "azure-devops_work_get_team_capacity": "allow",
+        "azure-devops_work_get_team_settings": "allow",
+        "azure-devops_work_get_iteration_capacities": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/process/scrum-master.md}"
+    },
+    "product-manager": {
+      "description": "Product Manager — Strategic product vision, roadmap, prioritization, stakeholder alignment. Never implements or writes specs directly.",
+      "mode": "subagent",
+      "temperature": 0.3,
+      "skills": [
+        "task-refiner",
+        "issue"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "deny"
+      },
+      "prompt": "{file:./.opencode/agents/process/product-manager.md}"
+    },
+    "perf-auditor": {
+      "description": "Performance auditor — React rendering optimization, Redis caching strategy, bundle size analysis. For database performance, delegate to database-dev. For token budget, delegate to gestor-tokens.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "performance"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/development/perf-auditor.md}"
+    }
+  },
+  "mcp": {
+    "azure-devops": {
+      "type": "local",
+      "command": [
+        "node",
+        "scripts/start-azure-devops-mcp.js"
+      ],
+      "enabled": false
+    },
+    "teams-graph": {
+      "type": "local",
+      "command": [
+        "node",
+        "scripts/start-teams-graph-mcp.js"
+      ],
+      "env": {
+        "TEAMS_MCP_CLIENT_ID": "${TEAMS_MCP_CLIENT_ID}"
+      },
+      "enabled": false
+    },
+    "mysql": {
+      "type": "local",
+      "command": [
+        "node",
+        "scripts/start-mysql-mcp.js"
+      ],
+      "env": {
+        "MCP_PROJECT": "${MCP_PROJECT}"
+      },
+      "enabled": false
+    },
+    "mcp-image": {
+      "type": "local",
+      "command": [
+        "node",
+        "scripts/mcp-image.js"
+      ],
+      "enabled": true
+    }
+  },
+  "permission": {
+    "question": "allow",
+    "bash": {
+      "*": "allow",
+      "*git push --force *": "ask",
+      "*git push -f *": "ask",
+      "*git push --force-with-lease *": "ask",
+      "*git push * main": "ask",
+      "*git push * release": "ask",
+      "*git push * develop": "ask",
+      "*git push --delete *": "ask",
+      "*git push -d *": "ask",
+      "*git merge *": "ask",
+      "*git rebase *": "ask",
+      "*git revert *": "ask",
+      "*git reset *": "ask",
+      "*git branch -D *": "ask"
+    }
+  },
+  "instructions": [
+    ".opencode/rules/constitution.md",
+    "AGENTS.md",
+    "CONVENTIONS.md",
+    ".opencode/rules/rag-retrieval.md",
+    ".opencode/rules/tech-debt.md"
+  ]
+}

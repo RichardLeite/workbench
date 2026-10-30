@@ -1,0 +1,214 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Job 0: Python foundation ───────────────────────────────
+  python:
+    name: 🐍 Python — ${{ matrix.os }} / ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+      - name: Sync dependencies
+        run: uv sync --all-groups
+      - name: Ruff lint
+        run: uv run ruff check src tests
+      - name: Ruff format
+        run: uv run ruff format --check src tests
+      - name: Pytest + coverage
+        run: uv run pytest --cov=workbench --cov-report=term-missing
+      - name: CLI smoke
+        run: uv run python -m workbench version --json
+
+  # ── Job 1: Lint ────────────────────────────────────────────
+  lint:
+    name: 🔍 Lint — JS syntax + YAML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: JS syntax check
+        run: node --test scripts/tests/lint.test.js
+
+      - name: YAML syntax
+        run: |
+          find .github -name "*.yml" -exec sh -c 'node -e "
+            const fs = require(\"fs\");
+            try { JSON.parse(JSON.stringify(require(\"js-yaml\").load(fs.readFileSync(\"$1\", \"utf8\")))); }
+            catch(e) { console.error(\"YAML error in $1:\", e.message); process.exit(1); }
+          "' {} \; 2>/dev/null || echo "⚠️  js-yaml not available, skipping YAML lint"
+
+  # ── Job 2: JSON validation ────────────────────────────────
+  json-validate:
+    name: 📋 JSON — config files structure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Validate all JSON configs
+        run: node --test scripts/tests/json-validate.test.js
+
+  # ── Job 3: Integrity ─────────────────────────────────────
+  integrity:
+    name: 🔗 Integrity — cross-refs agents × skills × files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Cross-reference integrity
+        run: node --test scripts/tests/integrity.test.js
+
+  # ── Job 4: Env vars documentation ────────────────────────
+  env-docs:
+    name: 🌿 Env vars — all documented in .env.example
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Check env vars documentation
+        run: node --test scripts/tests/env-docs.test.js
+
+  # ── Job 5: Validator unit tests ──────────────────────────
+  validators:
+    name: 🧪 Validators — branch, PR body, spec format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Validator unit tests
+        run: |
+          node --test \
+            scripts/tests/validators.test.js \
+            scripts/tests/teams-message-shapes.test.js
+
+  # ── Job 6: Quality checks ────────────────────────────────
+  quality:
+    name: ✨ Quality — UTF-8, whitespace, TODOs, naming
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Quality checks
+        run: node --test scripts/tests/quality.test.js
+
+  # ── Job 7: Orchestrator ──────────────────────────────────
+  orchestrator:
+    name: ⚙️ Orchestrator — TypeScript compile + contract tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .opencode/orchestrator
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Compile TypeScript
+        run: npx -p typescript tsc
+      - name: Run orchestrator tests
+        run: node --test tests/validate.test.js
+
+  # ── Job 8: Agent smoke test ──────────────────────────────
+  agent-smoke:
+    name: 🧪 Agent Smoke — frontmatter × cross-ref × catalog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Run agent smoke test
+        run: node --test scripts/tests/agent-smoke.test.js
+
+  # ── Job 9: Workbench Scripts ────────────────────────────
+  workbench-scripts:
+    name: 🛠️ Workbench — script tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Run workbench script tests
+        run: |
+          node --test \
+            .opencode/scripts/tests/ado.test.js \
+             .opencode/scripts/tests/sprint.test.js \
+             .opencode/scripts/tests/hotfix.test.js \
+             .opencode/scripts/tests/pipeline.test.js \
+             .opencode/scripts/tests/refactor-screen.test.js
+      - name: Sprint validator check
+        run: node .opencode/scripts/sprint.js validate
+      - name: Pipeline state validator check
+        run: node .opencode/scripts/pipeline.js validate
+
+  # ── Job 10: Audit ────────────────────────────────────────
+  audit:
+    name: 🔒 Audit — npm dependencies security
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Audit root dependencies
+        run: |
+          if [ -f "package.json" ]; then
+            npm audit --audit-level=high || echo "⚠️  npm audit found issues (review manually)"
+          fi
+      - name: Audit orchestrator dependencies
+        working-directory: .opencode/orchestrator
+        run: |
+          if [ -f "package.json" ]; then
+            npm audit --audit-level=high || echo "⚠️  npm audit found issues (review manually)"
+          fi
+
+  # ── Job 11: Image pipeline ──────────────────────────────
+  image-pipeline:
+    name: 🖼️ Image pipeline — core + security
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+      - name: Core unit tests (M1)
+        run: node --test scripts/tests/vision-utils.test.js
+      - name: MCP integration tests (M2)
+        run: node --test scripts/tests/mcp-image.test.js
+      - name: Skill static validation (M3)
+        run: node --test scripts/tests/image-pipeline-skill.test.js
+      - name: Agent files validation (M4)
+        run: node --test scripts/tests/agent-files.test.js
+      - name: Config permissions (M5)
+        run: node --test scripts/tests/opencode-config.test.js

@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+# Atalho para o Workbench: usa o venv existente ou roda o bootstrap.
+set -eu
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+if [ -x "$ROOT/.venv/bin/python" ]; then
+  export PYTHONUTF8=1
+  export PYTHONIOENCODING=utf-8
+  exec "$ROOT/.venv/bin/python" -m workbench "$@"
+fi
+exec "$SCRIPT_DIR/bootstrap.sh" "$@"

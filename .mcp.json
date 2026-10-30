@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "mcp-image": {
+      "command": "node",
+      "args": [
+        "scripts/mcp-image.js"
+      ]
+    }
+  }
+}

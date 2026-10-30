@@ -1,0 +1,16 @@
+{
+  "id": "pipeline.select-agent",
+  "implementation": "node",
+  "argv": [
+    "node",
+    ".opencode/scripts/pipeline.js",
+    "select-agent",
+    "meu-projeto",
+    "backend"
+  ],
+  "returncode": 0,
+  "stdout": "{\n  \"project\": \"meu-projeto\",\n  \"layer\": \"backend\",\n  \"agent\": \"backend-dev\"\n}",
+  "stderr": "",
+  "duration_ms": 51.81,
+  "captured_at": "2026-10-30T02:16:07+00:00"
+}

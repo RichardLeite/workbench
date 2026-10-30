@@ -1,0 +1,14 @@
+{
+  "id": "ado.fallback",
+  "implementation": "node",
+  "argv": [
+    "node",
+    ".opencode/scripts/ado.js",
+    "fallback"
+  ],
+  "returncode": 0,
+  "stdout": "{\n  \"defaultProject\": \"Sprint Team\",\n  \"projects\": [\n    {\n      \"project\": \"Sprint Team\",\n      \"team\": \"Sprint Team\",\n      \"projectId\": \"00000000-0000-0000-0000-000000000000\",\n      \"type\": \"sprint\"\n    },\n    {\n      \"project\": \"Hotfix Team\",\n      \"team\": \"Hotfix Team\",\n      \"projectId\": \"00000000-0000-0000-0000-000000000001\",\n      \"type\": \"hotfix\"\n    }\n  ]\n}",
+  "stderr": "",
+  "duration_ms": 48.71,
+  "captured_at": "2026-10-30T02:16:08+00:00"
+}

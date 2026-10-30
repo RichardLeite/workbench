@@ -1,0 +1,14 @@
+{
+  "description": "Catálogo central de projetos do workbench. Usado para resolução de contexto, paths de knowledge e seleção de agentes. Adicione um projeto novo aqui para que scripts, orquestrador e templates o reconheçam.",
+  "version": "3.0",
+  "projects": {
+    "workbench": {
+      "name": "Workbench",
+      "description": "Infraestrutura do workbench — regras, agentes, skills, comandos",
+      "repos": {},
+      "knowledge": ".opencode/knowledge",
+      "agents": [],
+      "vault": ".opencode/knowledge"
+    }
+  }
+}

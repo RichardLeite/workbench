@@ -1,0 +1,13 @@
+{
+  "id": "repo.all",
+  "implementation": "node",
+  "argv": [
+    "node",
+    ".opencode/scripts/repository-resolver.js"
+  ],
+  "returncode": 0,
+  "stdout": "[\n  {\n    \"project\": \"workbench\",\n    \"status\": \"complete\",\n    \"repositories\": [\n      {\n        \"project\": \"workbench\",\n        \"role\": \"root\",\n        \"catalogPath\": \".\",\n        \"path\": \"C:\\\\Repositories\\\\workbench\",\n        \"status\": \"available\",\n        \"gitRoot\": \"C:\\\\Repositories\\\\workbench\"\n      }\n    ]\n  }\n]",
+  "stderr": "",
+  "duration_ms": 51.33,
+  "captured_at": "2026-10-30T02:16:07+00:00"
+}

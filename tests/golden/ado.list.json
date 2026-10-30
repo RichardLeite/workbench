@@ -1,0 +1,15 @@
+{
+  "id": "ado.list",
+  "implementation": "node",
+  "argv": [
+    "node",
+    ".opencode/scripts/ado.js",
+    "resolve",
+    "--list"
+  ],
+  "returncode": 0,
+  "stdout": "[\n  {\n    \"project\": \"Sprint Team\",\n    \"type\": \"sprint\",\n    \"team\": \"Sprint Team\",\n    \"gitFlow\": \"/git-sprint\"\n  },\n  {\n    \"project\": \"Hotfix Team\",\n    \"type\": \"hotfix\",\n    \"team\": \"Hotfix Team\",\n    \"gitFlow\": \"/git-hotfix\"\n  }\n]",
+  "stderr": "",
+  "duration_ms": 52.67,
+  "captured_at": "2026-10-30T02:16:07+00:00"
+}

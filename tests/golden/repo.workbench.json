@@ -1,0 +1,15 @@
+{
+  "id": "repo.workbench",
+  "implementation": "node",
+  "argv": [
+    "node",
+    ".opencode/scripts/repository-resolver.js",
+    "--project",
+    "workbench"
+  ],
+  "returncode": 0,
+  "stdout": "{\n  \"project\": \"workbench\",\n  \"status\": \"complete\",\n  \"repositories\": [\n    {\n      \"project\": \"workbench\",\n      \"role\": \"root\",\n      \"catalogPath\": \".\",\n      \"path\": \"C:\\\\Repositories\\\\workbench\",\n      \"status\": \"available\",\n      \"gitRoot\": \"C:\\\\Repositories\\\\workbench\"\n    }\n  ]\n}",
+  "stderr": "",
+  "duration_ms": 49.65,
+  "captured_at": "2026-10-30T02:16:07+00:00"
+}

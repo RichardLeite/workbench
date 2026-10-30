@@ -1,0 +1,35 @@
+{
+  "description": "Convenções de commit — Conventional Commits 1.0.0. Fonte única extraída de pr-config.md Seção 10.",
+  "version": 1,
+  "format": "type(scope): description",
+  "bodyOptional": true,
+  "footerOptional": true,
+  "language": "en",
+  "rules": [
+    "Idioma: SEMPRE em INGLÊS",
+    "Scope: identificador do tracker no projeto, workbench para .workbench",
+    "Imperativo: add, fix, remove — nunca added, fixing, removes",
+    "Minúsculo: primeira letra da descrição em minúsculo",
+    "Sem ponto final na descrição",
+    "Atomicidade: 1 commit = 1 mudança lógica",
+    "Co-authored-by proibido",
+    "--no-verify ou -n proibidos"
+  ],
+  "types": [
+    { "type": "feat", "usage": "Nova funcionalidade", "example": "feat(#1234): add invoice retry endpoint" },
+    { "type": "fix", "usage": "Correção de bug", "example": "fix(#1234): validate email before save" },
+    { "type": "chore", "usage": "Manutenção (dep, config, build)", "example": "chore(workbench): update eslint rules" },
+    { "type": "refactor", "usage": "Refatoração sem mudança funcional", "example": "refactor(#1234): extract payment service" },
+    { "type": "test", "usage": "Adição/correção de testes", "example": "test(#1234): add coverage for login" },
+    { "type": "docs", "usage": "Documentação", "example": "docs(workbench): update README" },
+    { "type": "perf", "usage": "Performance", "example": "perf(#1234): optimize n+1 query" },
+    { "type": "style", "usage": "Formatação (sem mudança lógica)", "example": "style(#1234): fix indent in controller" }
+  ],
+  "scopes": {
+    ".workbench": "workbench"
+  },
+  "breakingChange": {
+    "format": "type!(scope): description",
+    "footer": "BREAKING CHANGE: <descrição>"
+  }
+}

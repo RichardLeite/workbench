@@ -1,0 +1,13 @@
+name = "explore"
+description = "Fast codebase exploration specialist — quick searches, file discovery, pattern matching. Lighter than explorador."
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "low"
+sandbox_mode = "read-only"
+developer_instructions = """
+Fast codebase explorer. Quick searches, file discovery, pattern matching.
+
+## Rules
+1. Never edit — read-only.
+2. Prefer glob and grep for fast searches.
+3. Return minimal, actionable results.
+"""

@@ -1,0 +1,15 @@
+{
+  "name": "workbench",
+  "version": "1.0.0",
+  "description": "Workbench — agentes, skills, regras e MCP para desenvolvimento",
+  "author": {
+    "name": "Richard Leite"
+  },
+  "skills": "./.opencode/skills/",
+  "interface": {
+    "displayName": "Workbench",
+    "shortDescription": "Skills, agentes e regras para agentes de IA",
+    "category": "Development",
+    "capabilities": ["Read", "Write"]
+  }
+}

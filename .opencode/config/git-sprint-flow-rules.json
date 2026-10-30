@@ -1,0 +1,29 @@
+{
+  "description": "Regras do fluxo de sprint (/git-sprint). Branch patterns, quality gates, commit types.",
+  "version": 1,
+  "branchPattern": "feat/TASK-XXXX",
+  "base": "main",
+  "prTarget": "main",
+  "prCount": 1,
+  "commitTypes": ["feat", "fix", "chore", "refactor", "test", "docs", "perf", "style"],
+  "qualityGates": {
+    "lint": { "required": true, "blocking": false },
+    "sast": { "required": true, "blocking": true },
+    "security": { "required": true, "blocking": false },
+    "aiReview": { "required": true, "blocking": true }
+  },
+  "qualityGateCommands": {
+    "default": {
+      "lint": null,
+      "sast": "semgrep --config=auto .",
+      "security": "trivy fs --scanners vuln,secret ."
+    },
+    ".workbench": {
+      "lint": null,
+      "sast": "semgrep --config=auto .opencode/",
+      "security": "trivy fs --scanners vuln,secret ."
+    }
+  },
+  "vaultRequired": false,
+  "notifications": false
+}

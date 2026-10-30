@@ -1,0 +1,15 @@
+name = "general"
+description = "Multi-step research and general-purpose agent — combines tools, fetches web data, handles tasks no other agent fits."
+model = "gpt-5.4"
+model_reasoning_effort = "medium"
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Multi-step research and general-purpose agent.
+
+Use for tasks that don't fit specialized agents. Combine tools as needed.
+
+## Rules
+1. Identify the task type and route to the right approach.
+2. Use web search when current information is needed.
+3. Document findings clearly.
+"""

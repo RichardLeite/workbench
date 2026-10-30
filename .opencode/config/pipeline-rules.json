@@ -1,0 +1,86 @@
+{
+  "description": "Regras do SDD Pipeline (/pipeline). Define fases, timeouts, seleção de agentes e limites operacionais.",
+  "version": 1,
+  "fases": [
+    {
+      "id": "0",
+      "nome": "Descoberta",
+      "agente": "explorador",
+      "timeout_min": 5,
+      "paralelo": false,
+      "opcional": true
+    },
+    {
+      "id": "1.1",
+      "nome": "Entrevista",
+      "agente": "business-analyst",
+      "timeout_min": 5,
+      "paralelo": false,
+      "opcional": false
+    },
+    {
+      "id": "1.2",
+      "nome": "Feature",
+      "agente": "business-analyst",
+      "timeout_min": 5,
+      "paralelo": false,
+      "opcional": false
+    },
+    {
+      "id": "1.3",
+      "nome": "Spec",
+      "agente": "tech-architect",
+      "timeout_min": 10,
+      "paralelo": false,
+      "opcional": false
+    },
+    {
+      "id": "2.1",
+      "nome": "Gate tech-lead",
+      "agente": "tech-lead",
+      "timeout_min": 10,
+      "paralelo": true,
+      "opcional": false,
+      "paralelo_com": "2.2"
+    },
+    {
+      "id": "2.2",
+      "nome": "Gate qa",
+      "agente": "qa-engineer",
+      "timeout_min": 10,
+      "paralelo": true,
+      "opcional": false,
+      "paralelo_com": "2.1"
+    },
+    {
+      "id": "3.1",
+      "nome": "Execução (por módulo)",
+      "agente": null,
+      "timeout_min": 15,
+      "paralelo": true,
+      "opcional": false,
+      "agente_por_camada": true
+    },
+    {
+      "id": "4.1",
+      "nome": "Vault",
+      "agente": "vault-updater",
+      "timeout_min": 3,
+      "paralelo": false,
+      "opcional": true
+    }
+  ],
+  "agentes_por_projeto": {
+    "default": {
+      "banco": "database-dev",
+      "backend": "backend-dev",
+      "frontend": "frontend-dev"
+    }
+  },
+  "limites": {
+    "modulos_por_lote": 6,
+    "ciclos_validacao": 2,
+    "tentativas_por_modulo": 3,
+    "tamanho_maximo_pr_linhas": 400
+  }
+}

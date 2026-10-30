@@ -1,0 +1,327 @@
+{
+  "version": "3.0",
+  "updated": "2026-10-29",
+  "total_agents": 31,
+  "changelog": "v3.0: Base genérica e independente de empresa. Removidos agentes específicos de projeto e domínio fiscal; projetos passam a ser definidos em project-mapping.json.",
+  "categories": {
+    "core": {
+      "description": "Orchestration and coordination — the central routing layer",
+      "agents": [
+        {
+          "name": "orquestrador",
+          "description": "Specialized agent orchestrator — LLM-driven delegation, parallelism, skill routing across all agents",
+          "mode": "primary",
+          "skills": ["*"],
+          "projects": ["workbench"],
+          "tier": 5,
+          "file": ".opencode/agents/core/orquestrador.md"
+        }
+      ]
+    },
+    "development": {
+      "description": "Generic implementation agents that can work across any project stack",
+      "agents": [
+        {
+          "name": "backend-dev",
+          "description": "Generic backend developer — implements API, services, business logic, routes. Reads project AGENTS.md for stack context.",
+          "mode": "subagent",
+          "skills": ["feature", "bugfix"],
+          "projects": ["workbench"],
+          "tier": 3,
+          "file": ".opencode/agents/development/backend-dev.md"
+        },
+        {
+          "name": "frontend-dev",
+          "description": "Generic frontend developer — implements UI components, screens, hooks, forms. Reads project AGENTS.md for stack context.",
+          "mode": "subagent",
+          "skills": ["feature", "bugfix"],
+          "projects": ["workbench"],
+          "tier": 3,
+          "file": ".opencode/agents/development/frontend-dev.md"
+        },
+        {
+          "name": "database-dev",
+          "description": "Generic database developer — migrations, seeds, models, queries. Reads project AGENTS.md for stack context.",
+          "mode": "subagent",
+          "skills": ["db-migrations"],
+          "projects": ["workbench"],
+          "tier": 3,
+          "file": ".opencode/agents/development/database-dev.md"
+        },
+        {
+          "name": "perf-auditor",
+          "description": "Performance auditor — React rendering optimization, Redis caching strategy, database query performance, context budget analysis, bundle size optimization",
+          "mode": "subagent",
+          "skills": ["performance"],
+          "projects": ["workbench"],
+          "tier": 3,
+          "file": ".opencode/agents/development/perf-auditor.md"
+        },
+        {
+          "name": "tdd-guide",
+          "description": "Test-First Development guide — TDD Red-Green-Refactor cycle, test strategy, coverage planning",
+          "mode": "subagent",
+          "skills": [],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/development/tdd-guide.md"
+        },
+        {
+          "name": "pedreiro",
+          "description": "Fast implementation of well-defined tasks — executes plans verbatim without research or architecture decisions",
+          "mode": "subagent",
+          "skills": ["bugfix", "feature", "commit"],
+          "projects": ["workbench"],
+          "tier": 3,
+          "file": ".opencode/agents/infrastructure/pedreiro.md"
+        }
+      ]
+    },
+    "project": {
+      "description": "Vault and knowledge maintenance agents",
+      "agents": [
+        {
+          "name": "vault-updater",
+          "description": "Analyze specs and update the project vault with permanent knowledge. Classifies changes and updates vault files accordingly.",
+          "mode": "subagent",
+          "skills": [],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/project/vault-updater.md"
+        }
+      ]
+    },
+    "review": {
+      "description": "Code review, architecture analysis, and quality gate agents",
+      "agents": [
+        {
+          "name": "revisor",
+          "description": "Code review, architecture analysis and complex debugging — analyzes code and architecture, never implements",
+          "mode": "subagent",
+          "skills": ["code-review", "architecture-review", "security-lgpd", "performance"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/review/revisor.md"
+        },
+        {
+          "name": "tech-architect",
+          "description": "Architect/Tech Lead — reviews architecture, design decisions, ADRs and cross-layer impact analysis",
+          "mode": "subagent",
+          "skills": ["architecture-review", "performance"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/review/tech-architect.md"
+        },
+        {
+          "name": "tech-lead",
+          "description": "Tech Lead — Technical guidance, implementation oversight, bridge between architecture and execution",
+          "mode": "subagent",
+          "skills": ["code-review", "architecture-review", "performance", "bugfix"],
+          "projects": ["workbench"],
+          "tier": 4,
+          "file": ".opencode/agents/review/tech-lead.md"
+        },
+        {
+          "name": "pr-insight",
+          "description": "PR Insight — Complete PR analysis with Azure integration, mandatory GitHub review comments, and private Teams notification",
+          "mode": "subagent",
+          "skills": ["code-review", "security-lgpd", "performance"],
+          "projects": ["workbench"],
+          "tier": 5,
+          "file": ".opencode/agents/review/pr-insight.md"
+        },
+        {
+          "name": "sec-arch",
+          "description": "Security Architect — design-level threat modeling (STRIDE), ADR security validation, LGPD compliance gate, pre-code security review",
+          "mode": "subagent",
+          "skills": ["security-lgpd", "security-audit-api", "security-audit-database", "architecture-review"],
+          "projects": ["workbench"],
+          "tier": 4,
+          "file": ".opencode/agents/review/sec-arch.md"
+        },
+        {
+          "name": "code-reviewer",
+          "description": "Multi-language code review specialist — line-by-line review, quality checks, patterns, anti-patterns. Covers JS/TS, C#, Python, SQL.",
+          "mode": "subagent",
+          "skills": ["code-review"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/review/code-reviewer.md"
+        },
+        {
+          "name": "security-reviewer",
+          "description": "Security-focused code review — OWASP Top 10, secrets exposure, injection, auth flaws, SSRF, dependency CVEs.",
+          "mode": "subagent",
+          "skills": ["security-lgpd", "security-audit-api", "security-audit-database"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/review/security-reviewer.md"
+        }
+      ]
+    },
+    "process": {
+      "description": "Process facilitation, requirements, and project management agents",
+      "agents": [
+        {
+          "name": "scrum-master",
+          "description": "Scrum Master — Manages sprints, impediments, team metrics and retrospectives",
+          "mode": "subagent",
+          "skills": ["planning-analysis", "planning-setup", "retrospective"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/process/scrum-master.md"
+        },
+        {
+          "name": "business-analyst",
+          "description": "Business Analyst / PO — Refines requirements, writes specs, validates with stakeholders",
+          "mode": "subagent",
+          "skills": ["task-refiner", "issue"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/process/business-analyst.md"
+        },
+        {
+          "name": "product-manager",
+          "description": "Product Manager — Strategic product vision, roadmap, prioritization, stakeholder alignment",
+          "mode": "subagent",
+          "skills": ["task-refiner", "issue"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/process/product-manager.md"
+        },
+        {
+          "name": "task-refiner-ado",
+          "description": "Azure DevOps task management — refine PBIs, create/update tasks, add comments, process sprint backlogs",
+          "mode": "subagent",
+          "skills": ["planning-analysis", "planning-setup", "task-refiner"],
+          "projects": ["workbench"],
+          "tier": 4,
+          "file": ".opencode/agents/process/task-refiner-ado.md"
+        }
+      ]
+    },
+    "infrastructure": {
+      "description": "Infrastructure, CI/CD, DevOps, testing infrastructure, and general-purpose agents",
+      "agents": [
+        {
+          "name": "devops-engineer",
+          "description": "DevOps Engineer — CI/CD, deploy monitoring, infra as code, rollback automation",
+          "mode": "subagent",
+          "skills": ["deployment", "release-management"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/infrastructure/devops-engineer.md"
+        },
+        {
+          "name": "qa-engineer",
+          "description": "QA/Tester — Generates test plans, test cases, regression scenarios and test strategies",
+          "mode": "subagent",
+          "skills": ["qa-test", "playwright-cli"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/infrastructure/qa-engineer.md"
+        },
+        {
+          "name": "general",
+          "description": "Multi-step research and general-purpose agent — combines tools, fetches web data, handles tasks no other agent fits",
+          "mode": "subagent",
+          "skills": [],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/infrastructure/general.md"
+        }
+      ]
+    },
+    "analysis": {
+      "description": "Codebase discovery, UI/UX analysis, integration study agents",
+      "agents": [
+        {
+          "name": "explorador",
+          "description": "Read-only codebase search and navigation — finds files, patterns, definitions without editing",
+          "mode": "subagent",
+          "skills": ["repo-scan"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/analysis/explorador.md"
+        },
+        {
+          "name": "explore",
+          "description": "Fast codebase exploration specialist — quick searches, file discovery, pattern matching. Lighter than explorador.",
+          "mode": "subagent",
+          "skills": [],
+          "projects": ["workbench"],
+          "tier": 1,
+          "file": ".opencode/agents/analysis/explore.md"
+        },
+        {
+          "name": "image-analyzer",
+          "description": "UI image analysis — extracts lean visual specs (layout, colors, visual order, sizes) from screenshots and wireframes",
+          "mode": "subagent",
+          "skills": [],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/analysis/image-analyzer.md"
+        },
+        {
+          "name": "ux-analyzer",
+          "description": "UX Analyst — Usability, heuristics, accessibility and user experience analysis",
+          "mode": "subagent",
+          "skills": [],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/analysis/ux-analyzer.md"
+        },
+        {
+          "name": "integracoes-power",
+          "description": "Especialista consultivo em análise de integrações — APIs de terceiros, Swagger, mapeamento com codebase, documentação no vault e propostas de tasks no Azure DevOps",
+          "mode": "subagent",
+          "skills": ["repo-scan"],
+          "projects": ["workbench"],
+          "tier": 4,
+          "file": ".opencode/agents/analysis/integracoes-power.md"
+        }
+      ]
+    },
+    "decision": {
+      "description": "Decision-making, conflict resolution, and cost optimization agents",
+      "agents": [
+        {
+          "name": "arbitro",
+          "description": "Decision Arbiter — Resolve conflicts between agents, handle ambiguity, make final calls when confidence is low",
+          "mode": "subagent",
+          "skills": [],
+          "projects": ["workbench"],
+          "tier": 4,
+          "file": ".opencode/agents/decision/arbitro.md"
+        },
+        {
+          "name": "gestor-tokens",
+          "description": "Token Cost Manager — Audit agent selection, model routing, context engineering and cost control",
+          "mode": "subagent",
+          "skills": ["planning-analysis"],
+          "projects": ["workbench"],
+          "tier": 4,
+          "file": ".opencode/agents/decision/gestor-tokens.md"
+        },
+        {
+          "name": "planner",
+          "description": "Expert planning specialist — decomposes features, refactors and complex tasks into implementable plans with phases, dependencies and risk analysis",
+          "mode": "subagent",
+          "skills": [],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/decision/planner.md"
+        },
+        {
+          "name": "architect",
+          "description": "Software architecture specialist — system design, scalability, technical decisions, ADRs, trade-off analysis",
+          "mode": "subagent",
+          "skills": ["architecture-review"],
+          "projects": ["workbench"],
+          "tier": 2,
+          "file": ".opencode/agents/decision/architect.md"
+        }
+      ]
+    }
+  }
+}

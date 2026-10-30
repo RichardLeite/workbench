@@ -1,0 +1,40 @@
+suite: TASK-XXXX Nome do Fluxo
+type: guia-de-execucao
+language: pt-BR
+safe_for_pr: true
+
+baseUrl: http://localhost:3000
+
+arquivos:
+  script: src/__tests__/e2e/<nome-do-teste>/run-test.js
+
+variaveis_de_ambiente_obrigatorias:
+  - E2E_BASE_URL
+  # - E2E_USER_EMAIL
+  # - E2E_USER_PASSWORD
+
+pre_condicoes:
+  - 'Aplicacao rodando em {{baseUrl}}'
+  - 'Usuario com dados pre-configurados para o cenario'
+
+comandos:
+  install:
+    - 'playwright-cli previamente instalado (npm install -g @playwright/cli@latest)'
+  run:
+    - node src/__tests__/e2e/<nome-do-teste>/run-test.js
+  run_headed:
+    - node src/__tests__/e2e/<nome-do-teste>/run-test.js
+
+capitulos_do_fluxo:
+  - '1) <Primeira etapa do fluxo>'
+  - '2) <Segunda etapa>'
+  - '3) <Terceira etapa>'
+
+artefatos_gerados:
+  - videos: true
+  - snapshots_cli: true
+
+seguranca:
+  - 'Nao salvar credenciais no repositorio'
+  - 'Nao registrar tokens/cookies em arquivos versionados'
+  - 'Nao usar dados pessoais no codigo do teste'

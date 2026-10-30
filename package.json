@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "validate:sprint-tasks": "node .opencode/scripts/sprint.js validate",
+    "validate:pipeline": "node .opencode/scripts/pipeline.js validate",
+    "validate:ado": "node .opencode/scripts/ado.js resolve --validate",
+    "validate:all": "npm run validate:sprint-tasks && npm run validate:pipeline && npm run validate:ado",
+    "sync:claude": "node .opencode/scripts/sync-to-claude.js",
+    "sync:codex": "node .opencode/scripts/sync-to-codex.js"
+  },
+  "dependencies": {
+    "@azure/identity": "^4.13.1",
+    "@azure/msal-node": "^5.3.1"
+  },
+  "devDependencies": {
+    "@floriscornel/teams-mcp": "^0.9.0",
+    "nock": "^14.0.16"
+  }
+}

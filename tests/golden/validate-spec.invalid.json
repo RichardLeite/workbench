@@ -1,0 +1,14 @@
+{
+  "id": "validate-spec.invalid",
+  "implementation": "node",
+  "argv": [
+    "node",
+    "scripts/validate-spec-format.js",
+    "tests/fixtures/spec-invalid.md"
+  ],
+  "returncode": 1,
+  "stdout": "\n📋 Validação de Spec: spec-invalid.md\n   Módulos encontrados: 0\n   Total de linhas: 4\n\n❌ 4 erro(s):\n   • Falta título '## Spec:'\n   • Nenhum módulo encontrado (padrão: '### Módulo N:')\n   • Falta seção '#### Implementação'\n   • Falta seção '#### Validação'",
+  "stderr": "",
+  "duration_ms": 49.29,
+  "captured_at": "2026-10-30T02:16:07+00:00"
+}

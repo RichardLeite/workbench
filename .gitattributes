@@ -1,0 +1,45 @@
+# Normalização de fim de linha — .workbench
+#
+# Por que existe:
+#   A camada `.claude/` é gerada por `.opencode/scripts/sync-to-claude.js`, que
+#   concatena um header escrito com `\n` literal ao corpo lido de
+#   `.opencode/agents/**/*.md`. Num checkout Windows com `core.autocrlf=true` o
+#   corpo chega CRLF e a saída fica com fim de linha misto — foi assim que os 34
+#   arquivos de `.claude/agents/` entraram no repositório.
+#
+#   Consequência: rodar `npm run sync:claude` em Linux/WSL reescrevia os 34
+#   arquivos só com LF, produzindo um diff de 2715+/2715- indistinguível de
+#   mudança real. Quem revisasse não tinha como saber se o gerador havia mudado
+#   algo de fato.
+#
+# Regra: LF no repositório e no working tree, em todas as plataformas. Assim o
+# gerador produz bytes idênticos em qualquer máquina e o sync é reproduzível —
+# `npm run sync:claude` num checkout limpo deve dar diff zero.
+#
+# Ver: CLAUDE_BRIDGE.md (seção Manutenção), .opencode/scripts/sync-to-claude.js
+
+# Padrão: detecta arquivos texto e normaliza para LF no repo e no checkout.
+* text=auto eol=lf
+
+# Scripts do Windows precisam de CRLF no disco para o interpretador (labels e
+# `goto` do cmd.exe quebram com LF). Armazenados LF, entregues CRLF no checkout.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Binários — nunca normalizar. `text=auto` já detecta a maioria, mas os formatos
+# que podem aparecer nos vaults Obsidian ficam explícitos.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.avif binary
+*.ico  binary
+*.pdf  binary
+*.woff binary
+*.woff2 binary
+
+# Saída gerada — colapsa o diff na review do GitHub. Editar a fonte em
+# `.opencode/`, nunca estes arquivos. Ver CLAUDE_BRIDGE.md.
+.claude/agents/*.md linguist-generated=true
