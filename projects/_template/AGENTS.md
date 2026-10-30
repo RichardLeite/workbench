@@ -60,6 +60,6 @@ apontando para estes arquivos.
 
 ## Vault (opcional)
 
-Se este projeto tiver vault configurado em `.opencode/config/project-mapping.json`
+Se este projeto tiver vault configurado no catálogo mesclado
 (campo `vault`), consulte `projects/<slug>/obsidian-vault/` para documentação
 detalhada de domínios, fluxos e regras de negócio.

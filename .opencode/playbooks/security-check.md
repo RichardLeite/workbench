@@ -20,14 +20,14 @@ Verificar segurança de código antes de deploy ou PR.
 3. **Injection check**: SQL parametrizado? XSS prevention?
 4. **Dependencies**: `npm audit` ou equivalente
 5. **API security**: CORS, rate limit, headers
-6. **LGPD**: Dados pessoais? Base legal?
+6. **Privacidade**: Dados pessoais? Base legal?
 
 ## Gatilhos de Segurança
 
 Toda task que envolver **DEVE** acionar security-reviewer ou sec-arch:
 - Auth, login, cadastro
 - Pagamento, financeiro, fiscal
-- Dados pessoais (LGPD)
+- Dados pessoais (LGPD/GDPR)
 - Integração externa com tokens
 - Secrets, chaves de API
 - Permissões, RBAC

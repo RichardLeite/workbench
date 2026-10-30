@@ -1,8 +1,8 @@
 # Migração para Python
 
 > Runtime Python 3.11+ para os scripts próprios do Workbench. Node permanece
-> apenas para o OpenCode, adapters externos (Azure DevOps, Teams, MySQL) e o
-> plugin `metrics.ts`.
+> apenas no adapter MySQL, no orquestrador TypeScript e em ferramentas externas
+> do `skill-creator`.
 
 ## Bootstrap
 
@@ -12,7 +12,7 @@ O Workbench detecta Python de forma cross-platform (Linux, macOS, Windows):
 2. `python3`, `python`, `py -3.11`, `py -3`, `python3.11`…;
 3. validação real com `sys.version_info >= (3, 11)`;
 4. rejeição de aliases da Microsoft Store (`WindowsApps`);
-5. fallback para `uv` (instalação oficial) e Python gerenciado;
+5. fallback para `uv` e Python gerenciado;
 6. criação de `.venv` e `uv sync`.
 
 ```bash
@@ -30,7 +30,7 @@ Atalhos:
 scripts\wb.cmd doctor        # Windows
 ```
 
-Nos comandos e skills, a forma portátil é:
+Forma portátil nos comandos:
 
 ```bash
 uv run --frozen python -m workbench <command>
@@ -40,68 +40,50 @@ uv run --frozen python -m workbench <command>
 
 ```
 src/workbench/
-  cli.py            # dispatcher argparse, --json, logs
-  config.py         # opencode.json / project-mapping.json
-  paths.py          # raiz e diretórios
-  process.py        # subprocess sem shell
-  logging.py        # logs estruturados e timing
-  commands/         # comandos por domínio
+  cli.py               # dispatcher argparse, --json, logs
+  config.py            # opencode.json / project-mapping.json
+  paths.py             # raiz e diretórios
+  process.py           # execução de subprocessos
+  process_engine.py    # motor de processos composáveis
+  logging.py           # logs estruturados e timing
+  commands/            # comandos por domínio
 tests/
-  unit/             # testes unitários
-  integration/      # CLI via subprocess
-  characterization/ # harness de paridade Node -> Python
-  golden/           # saídas congeladas
+  unit/
+  integration/
+  characterization/    # golden/regressão
+  golden/
 ```
 
-## Comandos migrados (paridade validada)
+## Comandos
 
 | Legado | Novo |
 |---|---|
 | `validate-branch-name.js` | `wb validate branch` |
 | `validate-spec-format.js` | `wb validate spec` |
+| `validate-pr-body.js` | `wb validate pr` |
 | `repository-resolver.js` | `wb repo resolve` |
-| `sprint.js` (definitions/validate/…) | `wb sprint …` |
-| `pipeline.js` (state/select-agent/phase/report/…) | `wb pipeline …` |
-| `ado.js` (resolve/parse/fallback) | `wb ado …` |
-| `hotfix.js` (config/validators/gates) | `wb hotfix …` |
 | `tech-debt-issue.js` | `wb issue tech-debt` |
-| `teams-mentions.js` | `wb teams mentions` |
-| `teams-message-shapes.js` | `wb teams shapes validate` |
 | `migrate-spec-to-modular.js` | `wb spec migrate` |
 | `rag-search.js` | `wb knowledge search` |
 | `auto-doc.js` | `wb docs …` |
 | `cycle-time.js` | `wb metrics cycle-time` |
 | `reviewer-sort.js` | `wb reviewers sort` |
-| `create-release.js` | `wb release` |
-| `sync-to-claude.js` | `wb sync claude` |
-| `sync-to-codex.js` | `wb sync codex` |
+| `create-release.js` | `wb release --from-tag` |
+| `sync-to-claude.js` / `sync-to-codex.js` | `wb sync …` |
 | `vision-utils.js` | `wb vision probe` |
-| `mcp-image.js` | `uv run --frozen python -m workbench.mcp.image` |
-
-> O MCP `mcp-image` agora é Python por padrão (`opencode.json` e `.mcp.json`).
-
-## Harness de paridade
-
-O harness executa os scripts Node legados e o novo CLI Python com as mesmas
-entradas, normaliza caminhos/datas e compara `stdout`, `stderr` e exit code.
-
-```bash
-# capturar golden dos scripts Node atuais
-python tests/characterization/run.py capture
-
-# comparar implementação Python
-python tests/characterization/run.py check --impl python
-```
+| `mcp-image.js` | `python -m workbench.mcp.image` |
+| `pipeline.js` | `wb process …` |
 
 ## Qualidade
 
 ```bash
+uv run pytest
 uv run ruff check src tests
 uv run ruff format --check src tests
-uv run pytest --cov=workbench --cov-report=term-missing
+npm run validate
 ```
 
-## Status
+## Relatório
 
-Migração concluída. Relatório de paridade, benchmarks e inventário final:
+Paridade, benchmarks e inventário final:
 [`python-migration-report.md`](python-migration-report.md).

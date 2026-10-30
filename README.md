@@ -1,62 +1,66 @@
 # Workbench
 
-> Mesa de trabalho para agentes de IA (OpenCode, Claude Code, Codex CLI): agentes,
-> skills, comandos, regras e templates prontos para usar em qualquer projeto.
+> Mesa de trabalho para agentes de IA em qualquer projeto — pessoal, open-source,
+> acadêmico ou comercial.
 
 ## Visão geral
 
 O Workbench é uma **base operacional reutilizável**. Ele não contém código de
-aplicação: contém o ambiente que faz agentes de IA trabalharem com consistência —
-roteamento, contratos de output, convenções, automações e conhecimento.
+aplicação: contém agentes, skills, comandos, templates, regras e um motor de
+**processos composáveis**.
 
-O núcleo é genérico e independente de empresa. Integrações corporativas
-(Azure DevOps, Teams, MySQL) são **adapters opcionais**, desativados por padrão.
+O núcleo é neutro e independente de empresa. Cada usuário ou time define o
+processo que quer seguir em `.opencode/processes/<nome>/process.json`.
 
 ## Como funciona
 
-1. Clone este repositório onde preferir (ele não precisa ficar dentro do projeto).
+1. Clone este repositório onde preferir.
 2. Abra o agente na raiz do Workbench.
-3. O **Orquestrador** identifica o contexto e delega para o agente especializado.
-4. Cada agente retorna output validado por contrato.
-5. O conhecimento gerado pode ser registrado no vault do projeto.
+3. O Orquestrador lê o processo do projeto no catálogo mesclado.
+4. Cada stage do processo é delegado ao agente definido.
+5. Gates são executados via `wb process gate`.
+6. O conhecimento gerado pode ser registrado no vault do projeto.
 
 ## Estrutura
 
 ```
 workbench/
 ├── opencode.json              # Configuração principal do OpenCode
-├── AGENTS.md                  # Roteamento multi-projeto
+├── AGENTS.md                  # Roteamento e regras gerais
 ├── CLAUDE.md                  # Bootstrap do Claude Code
-├── CONVENTIONS.md             # Padrões de código, teste, API e DoD
+├── CONVENTIONS.md             # Padrões de código, teste e API
 ├── .opencode/
-│   ├── agents/                # Agentes (core, development, review, ...)
-│   ├── skills/                # Playbooks automatizados
-│   ├── commands/              # Comandos personalizados
-│   ├── config/                # Catálogos, convenções e regras de fluxo
-│   ├── rules/                 # Regras carregadas por todos os agentes
-│   ├── templates/             # Templates de PR, spec, bug, feature, ADR
-│   ├── orchestrator/          # Motor de validação de contratos
-│   ├── playbooks/             # Fluxos operacionais
-│   └── scripts/               # Automações (sprint, release, métricas, RAG)
-├── projects/                  # Conhecimento por projeto (começa com _template)
-├── scripts/                   # Wrappers de MCP e validadores
+│   ├── agents/                # Agentes genéricos
+│   ├── skills/                # Playbooks técnicos
+│   ├── commands/              # Comandos base
+│   ├── processes/             # Processos definidos pelo usuário
+│   │   ├── schema.json
+│   │   ├── _template/
+│   │   └── default/
+│   ├── config/                # Catálogos e convenções
+│   ├── rules/                 # Regras universais
+│   ├── templates/             # Templates de spec, bug, feature, ADR, PR
+│   ├── orchestrator/          # Validação de contratos
+│   └── scripts/               # Automações auxiliares
+├── projects/                  # Conhecimento por projeto
+├── scripts/                   # Bootstrap e wrappers
 ├── docs/                      # Documentação complementar
-└── .github/workflows/ci.yml   # CI (lint, JSON, integridade, testes)
+└── .github/workflows/ci.yml   # CI
 ```
 
 ## Configuração
 
-### Runtime Python (novo)
+### Runtime Python
 
-Os scripts próprios do Workbench rodam em Python 3.11+ (stdlib, `.venv` local,
-`uv`). O bootstrap detecta o Python do sistema e, se necessário, instala um
-Python gerenciado via `uv`:
+Os scripts próprios do Workbench rodam em Python 3.11+ (stdlib, `.venv`, `uv`).
+O bootstrap detecta o Python do sistema e, se necessário, instala um Python
+gerenciado via `uv`:
 
 ```bash
 # Linux/macOS
 ./scripts/bootstrap.sh doctor
 
-# Windows (PowerShell)
+# Windows
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/bootstrap.ps1 doctor
 
 # Atalho
@@ -64,64 +68,90 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/bootstrap.ps1 doctor
 scripts\wb.cmd doctor        # Windows
 ```
 
-Variáveis úteis: `WB_PYTHON`, `WB_PYTHON_VERSION`, `WB_NO_INSTALL=1`,
-`WB_ASSUME_YES=1`. Detalhes em [`docs/python-migration.md`](docs/python-migration.md).
+Variáveis úteis: `WB_PYTHON`, `WB_PYTHON_VERSION`, `WB_NO_INSTALL=1`.
 
-> Node permanece apenas para adapters opcionais (Azure DevOps, Teams, MySQL),
-> o orquestrador TypeScript e ferramentas externas do `skill-creator`.
+### Adicionar um projeto
 
-### 1. Dependências Node (adapters opcionais)
-
-```bash
-npm install
-cd .opencode/orchestrator && npm install
-```
-
-### 2. Adapters opcionais
-
-Azure DevOps, Teams e MySQL vêm **desativados**. Para usar, preencha o `.env`
-(`cp .env.example .env`) e habilite o MCP correspondente em `opencode.json`.
-
-### 3. Adicionar um projeto
-
-Edite `.opencode/config/project-mapping.json`:
+Crie os metadados em `projects/<slug>/project.json`:
 
 ```json
 {
-  "projects": {
-    "meu-projeto": {
-      "name": "Meu Projeto",
-      "description": "Descrição curta",
-      "repos": { "api": "meu-projeto-api", "app": "meu-projeto-app" },
-      "knowledge": "projects/meu-projeto/knowledge",
-      "agents": ["backend-dev", "frontend-dev"],
-      "vault": "projects/meu-projeto/obsidian-vault"
-    }
-  }
+  "slug": "meu-projeto",
+  "name": "Meu Projeto",
+  "description": "Descrição curta",
+  "repos": { "api": "meu-projeto-api" },
+  "knowledge": "projects/meu-projeto/knowledge",
+  "agents": ["backend-dev"],
+  "vault": "projects/meu-projeto/obsidian-vault",
+  "process": "default",
+  "license": "MIT",
+  "tracker": "none"
 }
 ```
 
-O comando `/new-project` cria a estrutura do zero.
-
-### 4. Claude Code / Codex (opcional)
-
-`.opencode/` é a fonte única da verdade. As camadas por ferramenta são derivadas:
+O Workbench descobre automaticamente os repositórios com `.git` na raiz do
+workspace e em `discovery.roots` (ou `WB_PROJECT_ROOTS`), sempre dentro do
+workspace. Se `repos` for omitido e houver apenas um repositório cujo nome seja o slug ou comece com
+`<slug>-`, ele é associado automaticamente; para vários repositórios, declare os papéis no manifesto.
 
 ```bash
-npm run sync:claude
-npm run sync:codex
+uv run --frozen python -m workbench projects scan   # inspeção sem escrita
+uv run --frozen python -m workbench projects sync   # grava o catálogo local
+uv run --frozen python -m workbench projects list   # catálogo mesclado
 ```
+
+Use `/new-project` para criar a estrutura do zero. O catálogo descoberto fica em
+`.opencode/config/project-mapping.local.json` (ignorado pelo git); o
+`project-mapping.json` base serve apenas para o workbench e overrides explícitos.
+
+### Criar um processo
+
+```bash
+uv run --frozen python -m workbench process init meu-fluxo
+```
+
+Edite `.opencode/processes/meu-fluxo/process.json` e aponte no projeto:
+
+```json
+{ "process": "meu-fluxo" }
+```
+
+Processos podem ser globais (`.opencode/processes/`) ou específicos do projeto
+(`projects/<slug>/processes/`).
+
+## Catálogo de projetos
+
+| Comando | Função |
+|---|---|
+| `wb projects scan` | Descobre projetos/repos sem gravar |
+| `wb projects sync` | Atualiza `.opencode/config/project-mapping.local.json` |
+| `wb projects list` | Lista o catálogo mesclado |
+
+## Motor de processos
+
+| Comando | Função |
+|---|---|
+| `wb process list` | Lista processos |
+| `wb process show <name>` | Mostra stages, gates e artefatos |
+| `wb process validate [name]` | Valida schema e referências |
+| `wb process init <name>` | Cria processo a partir do template |
+| `wb process plan <name>` | Gera o plano para o orquestrador |
+| `wb process state create/load/resume` | Gerencia estado |
+| `wb process gate <name> <gate>` | Executa ou registra gate |
+| `wb process status <name> <slug>` | Status resumido |
+| `wb process report <name> <slug> success\|partial` | Relatório |
 
 ## Agentes
 
-Consulte `.opencode/config/agent-catalog.json` e `.opencode/config/agent-registry.md`.
+Consulte `.opencode/config/agent-catalog.json` e
+`.opencode/config/agent-registry.md`.
 
 | Categoria | Agentes |
 |-----------|---------|
 | **Core** | orquestrador |
 | **Development** | backend-dev, frontend-dev, database-dev, pedreiro, perf-auditor, tdd-guide |
-| **Review** | revisor, code-reviewer, security-reviewer, tech-architect, tech-lead, pr-insight, sec-arch |
-| **Process** | scrum-master, business-analyst, product-manager, task-refiner-ado (opcional) |
+| **Review** | revisor, code-reviewer, security-reviewer, tech-architect, tech-lead, sec-arch |
+| **Process** | scrum-master, business-analyst, product-manager |
 | **Infrastructure** | devops-engineer, qa-engineer, general |
 | **Analysis** | explorador, explore, image-analyzer, ux-analyzer, integracoes-power |
 | **Project** | vault-updater |
@@ -131,13 +161,19 @@ Consulte `.opencode/config/agent-catalog.json` e `.opencode/config/agent-registr
 
 Catálogo: `.opencode/config/skills-catalog.md` e `.opencode/commands/`.
 
-Destaques: `/pipeline`, `/execute-spec`, `/review-all`, `/git-sprint`,
-`/git-hotfix`, `/new-feature`, `/new-bug`, `/new-project`, `/metrics`, `/wiki`.
+Destaques: `/process`, `/execute-spec`, `/review-all`, `/git-pr`,
+`/new-feature`, `/new-bug`, `/new-project`, `/metrics`, `/wiki`.
 
 ### Caveman — compressão de tokens
 
 Ativo por padrão em modo `lite`, reduzindo filler sem perder precisão.
 `/caveman lite|full|ultra` alterna; `stop caveman` desativa.
+
+## Licença
+
+MIT — veja [LICENSE](LICENSE). O código gerado em cada projeto segue a licença
+do próprio projeto. Skills externas mantêm suas licenças; veja
+`THIRD_PARTY_NOTICES.md`.
 
 ## Segurança
 
@@ -150,7 +186,3 @@ Ativo por padrão em modo `lite`, reduzindo filler sem perder precisão.
 | Nunca pular hooks | `--no-verify` não é usado |
 | Nunca resolver conflitos | Conflito reportado ao humano |
 | Nunca expor secrets | `.env` está no `.gitignore` |
-
-## Licença
-
-MIT — veja [LICENSE](LICENSE).

@@ -23,7 +23,7 @@ injeção, SSRF e dependências vulneráveis.
 - Detectar SQL injection, XSS, CSRF, SSRF, IDOR
 - Verificar rate limiting, CORS, security headers
 - Auditar dependências para CVEs conhecidas
-- Validar LGPD compliance (dados pessoais, consentimento)
+- Validar privacy compliance (dados pessoais, consentimento)
 
 ## Constraints
 

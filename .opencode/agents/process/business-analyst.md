@@ -26,9 +26,9 @@ Analyze business needs, research vault context via RAG, elicit requirements via 
 { "tipo": "spec_negocio", "titulo": "Filtro avançado de clientes", "historia": "As a manager, I want to filter customers by region and segment so I can target campaigns effectively", "regras": [{ "id": "R1", "descricao": "Filtros combinam via AND", "prioridade": "alta" }], "criterios_aceite": [{ "id": "C1", "descricao": "Selecionar região SP + segmento Ouro → ver só clientes SP/Ouro" }] }
 ```
 
-**PBI Refinement:**
+**Requirement Refinement:**
 ```json
-{ "tipo": "spec_negocio", "titulo": "PBI 15677 - CBS/IBS NFe", "perguntas": ["Qual o comportamento se CBS=0 e IBS>0?", "Deve validar alíquota mínima?"], "decisoes": [{ "decisao": "CBS e IBS são independentes", "fonte": "Reunião com fiscal 19/06" }] }
+{ "tipo": "spec_negocio", "titulo": "Refinamento de requisito", "perguntas": ["Qual o comportamento esperado nos casos de borda?", "Quais dados são obrigatórios?"], "decisoes": [{ "decisao": "Comportamento definido com o solicitante", "fonte": "Entrevista" }] }
 ```
 
 **Bug Spec:**

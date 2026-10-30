@@ -5,7 +5,7 @@
 
 ## TASK
 
-TASK-XXXX
+{ISSUE_ID}
 
 ## Problema
 
@@ -46,4 +46,4 @@ TASK-XXXX
 
 {extra_notes — observações finais, riscos, decisões}
 
-<!-- Salvar em <knowledge>/backlog/features/<slug>.md — resolvido de .opencode/config/project-mapping.json campo `knowledge` -->
+<!-- Salvar em <knowledge>/backlog/features/<slug>.md — resolvido no catálogo mesclado, campo `knowledge` -->

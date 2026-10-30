@@ -24,7 +24,7 @@ Classifique a tarefa antes de rotear:
 ### High Risk (planner → implementer → review + security)
 - Financial, fiscal, payment logic
 - Auth/permissions/RBAC overhaul
-- PII, LGPD, multi-tenant isolation
+- PII, privacy, multi-tenant isolation
 - Production deploy
 - Destructive migrations (DROP)
 - Security audit
@@ -37,7 +37,6 @@ Classifique a tarefa antes de rotear:
 | DISCOVERY | explorador | explore (quick) |
 | CODE REVIEW (genérico) | code-reviewer | security-reviewer (se security) |
 | CODE REVIEW (profundo) | revisor | tech-architect (se arquitetura) |
-| CODE REVIEW (PR) | pr-insight | code-reviewer (se complexo) |
 | SECURITY CODE REVIEW | security-reviewer | sec-arch (se design) |
 | SECURITY DESIGN | sec-arch | tech-architect |
 | SECURITY AUDIT (API/DB) | skills: security-audit-api/database | sec-arch |
@@ -46,9 +45,8 @@ Classifique a tarefa antes de rotear:
 | BUILD (genérico) | backend-dev / frontend-dev | database-dev (se DB) |
 | DATABASE (genérico) | database-dev | — |
 | TEST PLAN | qa-engineer | — |
-| PROCESS/SPRINT | scrum-master | business-analyst |
+| PROCESS | scrum-master | business-analyst |
 | REQUIREMENTS | business-analyst | product-manager |
-| ADO TASKS | task-refiner-ado | gestor-tokens (se caro) |
 | DEPLOY | devops-engineer | — |
 | UX/VISUAL | ux-analyzer | image-analyzer |
 | KNOWLEDGE VAULT | vault-updater | — |
@@ -71,7 +69,6 @@ Classifique a tarefa antes de rotear:
 - qa-engineer + revisor (test plan + code review)
 - sec-arch + tech-architect (security + architecture design)
 - integracoes-power + explorador (integration + discovery)
-- task-refiner-ado + gestor-tokens (tasks + cost audit)
 
 ### Must be sequential (dependent)
 - explorador → revisor (findings before review)
@@ -93,24 +90,18 @@ FAIL → re-delegate with more context → escalar para revisor → escalar para
 ### BUILD task
 1. explorador (discover existing code)
 2. revisor (review plan if complex)
-3. Agent from `project-mapping.json#projects.<slug>.agents`
+3. Agent from the merged catalog (`wb projects list`)
 4. qa-engineer (test if requested)
 5. vault-updater (update vault if spec changed)
 
-### ADO task
-1. task-refiner-ado
-2. gestor-tokens (if high-cost sprint)
-3. revisor (escalate if MCP/logic error)
-
 ### SECURITY task
-1. sec-arch (design-level STRIDE + LGPD)
+1. sec-arch (design-level STRIDE + privacy)
 2. If P0 → block, escalate tech-architect + arbitro
 3. revisor (post-implementation code check)
 
 ### INTEGRATION task
 1. integracoes-power (analysis)
 2. vault-updater (document)
-3. task-refiner-ado (create ADO tasks)
 4. revisor (complex logic)
 
 ## 5. Quality Gates by Risk

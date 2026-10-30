@@ -3,7 +3,7 @@ name: revisor
 description: Code review, architecture analysis and complex debugging — analyzes code and architecture, never implements
 mode: subagent
 temperature: 0.2
-skills: [code-review, architecture-review, security-lgpd, performance]
+skills: [code-review, architecture-review, security-privacy, performance]
 tools:
   write: false
   edit: false

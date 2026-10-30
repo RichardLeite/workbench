@@ -24,11 +24,10 @@ Received from the `/refinar` command:
 | `source_type`        | string   | `wi` \| `file` \| `description`                   |
 | `source_title`       | string?  | Original title (if available)                     |
 | `source_description` | string   | Full text extracted from source                   |
-| `source_id`          | number?  | Azure WI ID (if `source_type = wi`)               |
+| `source_id`          | number?  | Issue/URL ID (opcional)               |
 
 ---
 
-> **🔴 Pre-flight (if `source_type = wi`):** @.opencode/skills/ado-preflight
 
 ---
 
@@ -142,7 +141,7 @@ Questions whose answers can be found by exploring the codebase:
 
 - **API change** → `@explorador` to map existing endpoints
 - **New screen** → `@explorador` to map similar components
-- **Migration** → `@explorador` or `mysql-meu-projeto_describe_table` for current schema
+- **Migration** → `@explorador` or `mysql_describe_table` for current schema
 - **Integration** → `@explorador` to map existing contracts
 
 If the user mentions something technical and the agent can investigate on its own → investigate without asking.
@@ -186,7 +185,7 @@ After the blocks, return **only** the structured JSON below to the `/refinar` co
     "repro_steps": "1. Add a promotional product 2. Go to cart 3. Check subtotal",
     "severity": "blocking",
     "evidence": "Screenshot attached to WI #20531",
-    "deadline": "Today — hotfix",
+    "deadline": "Today",
     "approval_needed": "Tech lead",
     "extra_notes": "May be related to price caching"
   },
@@ -210,7 +209,7 @@ After the blocks, return **only** the structured JSON below to the `/refinar` co
 
 ## Examples
 
-### Example 1: Azure WI → Bug spec
+### Example 1: Issue — Bug spec
 
 **Input:** `/refinar 20531` → skill receives `{ source_type: "wi", source_title: "Bug: Price not updating in cart", source_description: "..." }`
 
@@ -262,4 +261,4 @@ After the blocks, return **only** the structured JSON below to the `/refinar` co
 5. **Keep a collaborative interview tone**, not an interrogation.
 6. **If the user interrupts the flow**, record and adapt subsequent questions.
 7. **Do NOT generate the artifact. Do NOT save a file.** The skill is only the interview engine.
-8. **Never alter work items in Azure —** `/refinar` is read-only on ADO.
+8. **Never alter external issues/trackers ?** `/refinar` is read-only.

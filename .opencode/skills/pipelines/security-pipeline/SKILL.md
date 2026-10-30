@@ -1,10 +1,10 @@
 ---
 name: security-pipeline
-description: Security audit pipeline — audit REST API security, audit database access controls, and verify LGPD compliance. Compõe security-audit-api + security-audit-database + security-lgpd.
+description: Security audit pipeline — audit REST API security, audit database access controls, and verify LGPD compliance. Compõe security-audit-api + security-audit-database + security-privacy.
 composes:
   - security-audit-api
   - security-audit-database
-  - security-lgpd
+  - security-privacy
 ---
 
 # Security Pipeline
@@ -20,7 +20,7 @@ Fase 1 (security-audit-api)
 Fase 2 (security-audit-database)
   └→ Auditar schemas, RLS policies, padrões de query → riscos de banco
       ↓
-Fase 3 (security-lgpd)
+Fase 3 (security-privacy)
   └→ Verificar campos PII, fluxos de dados, consentimento → conformidade LGPD
       ↓
   Consolidar → resumo final com severidade, riscos, recomendações priorizadas
@@ -115,7 +115,7 @@ O JSON retornado DEVE conter:
 
 | Propriedade | Valor |
 |---|---|
-| **Skill** | `security-lgpd` |
+| **Skill** | `security-privacy` |
 | **Entrada** | PII fields, data retention, consent flows |
 | **Saída** | JSON com conformidade LGPD, gap analysis |
 | **on_failure** | `continue` (reportar o que encontrar) |
@@ -125,7 +125,7 @@ O JSON retornado DEVE conter:
 #### Prompt para Delegar
 
 ```
-Use skill security-lgpd para verificar conformidade LGPD.
+Use skill security-privacy para verificar conformidade LGPD.
 
 Contexto:
 - Campos PII: {{PII_FIELDS}}

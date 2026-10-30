@@ -25,10 +25,10 @@ Use `$ARGUMENTS` como título ou identificador do bug. Se nenhum argumento for f
 
 ## 2. Salvar
 
-O caminho é resolvido do contexto do projeto atual via `project-mapping.json`:
+O caminho é resolvido do contexto do projeto atual via catálogo mesclado:
 
 - **Projeto registrado** (ex: `meu-projeto`, `fiscal`): `<knowledge>/backlog/bugs/<arquivo>.md`
-  onde `<knowledge>` é o campo `knowledge` do projeto em `project-mapping.json`
+  onde `<knowledge>` é o campo `knowledge` do projeto no catálogo mesclado
 - **`.workbench`**: `.opencode/knowledge/bugs/<arquivo>.md`
 - **Projeto sem knowledge**: perguntar ao usuário onde salvar
 

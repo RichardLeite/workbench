@@ -158,7 +158,7 @@ describe('CustomerController', () => {
 | **Hook** | Retorno, mudança de estado, cleanup | Renderização |
 
 ### Cobertura Mínima
-- **Criticais** (financeiro, fiscal, login): ≥ 90%
+- **Críticas** (financeiro, login, dados sensíveis): ≥ 90%
 - **Features novas**: ≥ 70%
 - **Bugs**: teste reproduz o bug antes da correção
 - **Legado sem testes**: não exigir cobertura, mas não reduzir
@@ -208,7 +208,7 @@ describe('CustomerController', () => {
 2. **Sugira, não exija** (exceto P0): "Sugiro extrair para um service"
 3. **Explique o porquê**: "P1 porque afeta query chamada 10k vezes/dia"
 4. **Limite de PR**: máximo **400 linhas**. Acima, quebrar em PRs menores
-5. **Tempo**: 4h úteis para hotfix, 24h para sprint | Um revisor padrão, dois para banking/fiscal
+5. **Tempo**: prazos definidos no processo | Um revisor padrão; dois para mudanças de alto risco
 
 ### 7.3 Sorteio e Atribuição Automática de Revisor
 
@@ -272,7 +272,7 @@ Lista vazia: `{ "data": [], "pagination": { "page": 1, "limit": 20, "total": 0, 
 ## 9. Padrões de Comunicação
 
 ### 9.1 Pull Requests
-- **Título**: `tipo(escopo): descrição em inglês` — ex: `feat(AB#1234): add invoice retry endpoint`
+- **Título**: `tipo(escopo): descrição em inglês` — ex: `feat(#1234): add retry endpoint`
 - **Corpo**: **SEMPRE em português** (template obrigatório) — o quê, por quê, como testar, riscos, evidências
 
 ### 9.2 Code Review Comments
@@ -281,7 +281,7 @@ Lista vazia: `{ "data": [], "pagination": { "page": 1, "limit": 20, "total": 0, 
 
 ### 9.3 Trackers (opcional)
 - **Título**: Verbo no infinitivo em português. ✅ "Corrigir cálculo de juros" ❌ "Juros errado"
-- **Tags**: `frontend`, `backend`, `banco`, `hotfix`, `sprint`
+- **Tags**: `frontend`, `backend`, `banco`, `docs`, `infra`
 
 ### 9.4 Notificações externas (opcional)
 - **Nunca sem aprovação explícita do usuário** (guard-rail)
@@ -322,10 +322,10 @@ Como referenciar scripts, skills, configs e ADRs no workbench:
 | Tipo | Formato | Exemplo | O agente deve... |
 |------|---------|---------|------------------|
 | **Script (CLI)** | `` `uv run --frozen python -m workbench <command> <args>` `` | `` `uv run --frozen python -m workbench pipeline validate <file>` `` | Executar o comando no terminal |
-| **Skill (path)** | `` `@.opencode/skills/<nome>` `` | `` `@.opencode/skills/ado-preflight` `` | Ler o documento com `Read` tool |
-| **Skill (delegação)** | `` `skill("<nome>")` `` | `` `skill("ado-preflight")` `` | Carregar e executar a skill |
+| **Skill (path)** | `` `@.opencode/skills/<nome>` `` | `` `@.opencode/skills/code-review` `` | Ler o documento com `Read` tool |
+| **Skill (delegação)** | `` `skill("<nome>")` `` | `` `skill("code-review")` `` | Carregar e executar a skill |
 | **Config (JSON)** | `` `@.opencode/config/<arquivo>.json (<campo>)` `` | `` `@.opencode/config/pipeline-rules.json (fases)` `` | Ler o arquivo com `Read` tool |
-| **ADR** | `` `@.opencode/backlog/adr/<arquivo>.md (R#)` `` | `` `@.opencode/backlog/adr/ADR-004-sprint-tasks.md (R4)` `` | Ler a regra de negócio no ADR |
+| **ADR** | `` `@.opencode/backlog/adr/<arquivo>.md (R#)` `` | `` `@.opencode/backlog/adr/ADR-XXX-decisao.md (R4)` `` | Ler a regra de negócio no ADR |
 
 **Regras:**
 1. **Scripts** são referenciados como CLI (comando executável) — `` `uv run --frozen python -m workbench <command>` ``.
@@ -336,4 +336,4 @@ Como referenciar scripts, skills, configs e ADRs no workbench:
 ## Evolução deste Documento
 
 Documento **vivo**. Propostas via PR: branch `feat/update-conventions`, editar, abrir PR para `main`, **2 aprovações** mínimas.
-> Mudanças que afetam convenções existentes devem ser comunicadas à equipe com período de transição de 1 sprint.
+> Mudanças que afetam convenções existentes devem ser comunicadas à equipe com período de transição de 1 ciclo.

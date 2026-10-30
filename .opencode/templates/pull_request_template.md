@@ -4,7 +4,6 @@
 > Este template é mantido como fallback. Skills/agentes DEVEM usar o template do pr-config.md.
 
 # Título do PR
-Ver pr-config.md Seção 2 (`[TASK-XXXX] Descrição em inglês`)
 
 ## O que mudou?
 -

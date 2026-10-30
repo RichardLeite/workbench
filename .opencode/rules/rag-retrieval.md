@@ -10,7 +10,7 @@ Every user message with ≥5 words that is NOT just a greeting
 ## Project Context
 
 The vault is project-specific. Determine the project context from your
-current conversation (meu-projeto, fiscal, outro-projeto, etc.).
+current conversation (meu-projeto, outro-projeto, etc.).
 
 - **Project context is clear** (e.g. meu-projeto, fiscal):
   Pass `--project <name>` to search only that project's vault.
@@ -39,5 +39,5 @@ If the user explicitly requests search, accept `/wiki <term>`.
 
 ## Vault Discovery
 
-The vault path is resolved from `.opencode/config/project-mapping.json`
+The vault path is resolved from catálogo mesclado
 (`vault` field). Projects without `vault` set return no results.

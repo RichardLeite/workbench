@@ -6,7 +6,7 @@ Search the project vault(s) for "$ARGUMENTS".
 
 > **Contexto define escopo:**
 > - Se o contexto da conversa for um projeto específico (ex: `meu-projeto`,
->   `fiscal`), busca APENAS no vault desse projeto.
+>   `meu-projeto`), busca APENAS no vault desse projeto.
 > - Se não houver contexto claro, busca em **TODOS os vaults** disponíveis
 >   (resultados são prefixados com `[projeto]`).
 

@@ -1,9 +1,9 @@
 ---
 name: sec-arch
-description: Security Architect — design-level threat modeling, STRIDE per endpoint, ADR security validation, LGPD compliance gate. Fuses architecture review with embedded security review pre-code.
+description: Security Architect — design-level threat modeling, STRIDE per endpoint, ADR security validation, privacy gate. Fuses architecture review with embedded security review pre-code.
 mode: subagent
 temperature: 0.1
-skills: [security-lgpd, security-audit-api, security-audit-database, architecture-review]
+skills: [security-privacy, security-audit-api, security-audit-database, architecture-review]
 tools:
   read: true
   grep: true
@@ -18,7 +18,7 @@ projects: [workbench]
 
 Gate de segurança entre design e implementação. Revisa ADRs, planos técnicos e
 especificações com lente de segurança antes de qualquer linha de código ser escrita.
-Aplica threat modeling STRIDE por endpoint/serviço, valida conformidade LGPD,
+Aplica threat modeling STRIDE por endpoint/serviço, valida conformidade de privacidade,
 e unifica requisitos de segurança num veredito único.
 
 Arquitetura insegura é arquitetura errada. Seu trabalho é impedir que o
@@ -27,7 +27,7 @@ custo do erro exista — não apontar depois que já foi pago.
 ## Integration with Existing Security Stack
 
 ```
-security-lgpd (skill)  →  LGPD compliance, PII inventory, data retention
+security-privacy (skill)  →  privacy compliance, PII inventory, data retention
 security-audit-api     →  OWASP API audit, auth bypass, rate limiting
 security-audit-database→  RLS policies, SQL injection, encryption
          ↓
@@ -44,7 +44,7 @@ security-audit-database→  RLS policies, SQL injection, encryption
 - Revisar ADRs com lente de segurança antes da aprovação.
 - Aplicar threat modeling STRIDE por endpoint/serviço no momento do design.
 - Validar que o design trata autenticação, autorização e auditoria.
-- Identificar dados pessoais (PII) e verificar base legal LGPD.
+- Identificar dados pessoais (PII) e verificar base legal aplicável.
 - Sugerir alternativas de design com trade-offs explícitos de segurança.
 
 ### STRIDE Threat Modeling
@@ -65,7 +65,7 @@ Para cada endpoint/serviço no design, avaliar:
 - Vincular ao OWASP Top 10 quando aplicável.
 - Especificar mitigação recomendada no nível de design.
 
-### LGPD Compliance Check
+### Privacy Compliance Check
 - Inventariar campos PII tocados pelo design.
 - Verificar base legal (consentimento, contrato, obrigação legal).
 - Validar retention/deletion policy.
@@ -138,9 +138,9 @@ tech-architect (design) → sec-arch (security gate) → revisor (code review)
       }
     ]
   },
-  "lgpd": {
+  "privacy": {
     "pii_fields": ["nome", "email", "cpf"],
-    "base_legal": "contrato (art. 7º, V LGPD)",
+    "base_legal": "contrato/base legal aplicável",
     "retention_days": 1825,
     "direitos_titular": {
       "exportacao": true,
@@ -167,7 +167,7 @@ tech-architect (design) → sec-arch (security gate) → revisor (code review)
   ],
   "proximos_passos": [
     "Criar ADR para strategy de rate limiting",
-    "Adicionar PBI de criptografia de PII no backlog"
+    "Adicionar item de criptografia de PII no backlog"
   ]
 }
 ```

@@ -1,91 +1,96 @@
 # AGENTS.md
 
 You are a specialist software engineer working in a multi-project environment.
-Each project has its own stack, conventions and rules defined in the
-`projects/` directory. Always identify the work context first and consult the
-project-specific `AGENTS.md` when the context is `projects/<name>`.
+Each project has its own stack, license, conventions and process defined in the
+`projects/` directory. Always identify the work context first.
 
 ## Multi-Project Structure
 
-- **Shared (`.opencode/`)**: Rules, skills, commands, templates and generic agents
-- **Project-specific (`projects/<name>/`)**: Knowledge (backlog, specs, bugs) and project agents. Code repos are at workbench root.
-- **Project catalog (`.opencode/config/project-mapping.json`)**: Central registry of all projects, their repos, knowledge paths, and compatible agents.
+- **Shared (`.opencode/`)**: Rules, skills, commands, templates, agents and process engine.
+- **Project-specific (`projects/<name>/`)**: `project.json`, knowledge, agents and optional project processes.
+- **Project catalog (`.opencode/config/project-mapping.json`)**: Base catalog and explicit overrides.
+- **Generated catalog (`.opencode/config/project-mapping.local.json`)**: Local discovery output; never edit by hand.
+- **Processes (`.opencode/processes/`)**: User-defined flows with stages, gates, artifacts and agents.
 
-## @ References (Project Discovery)
+## Project Discovery
 
-Register each project repository in `opencode.json` → `reference` and in
-`project-mapping.json`. Then reference it by name:
+Projects are discovered automatically from git checkouts in the workspace root
+and in configured roots inside the workspace (`project-mapping.json#discovery.roots`
+or `WB_PROJECT_ROOTS`). Metadata lives in `projects/<slug>/project.json`; if it is
+absent, the name comes from `AGENTS.md` or the directory name. Multi-repo
+projects declare `repos` roles in the manifest.
 
-```json
-"reference": {
-  ".workbench": { "path": "." },
-  "my-api": { "path": "my-api" }
-}
+```bash
+uv run --frozen python -m workbench projects scan
+uv run --frozen python -m workbench projects sync
+uv run --frozen python -m workbench projects list
 ```
 
-> **Regra:** use o nome do repositório como @reference para evitar ambiguidade.
+The OpenCode plugin, the `wb` CLI and the Claude Code `SessionStart` hook refresh
+the local catalog automatically. `opencode.json` references are generated in
+memory, so do not register each repository manually. Use the repository name as
+the `@reference` alias to avoid ambiguity.
 
 > **Regra local-first portátil:** Antes de clonar, execute `uv run --frozen python -m workbench repo resolve --project <slug> [--repo <role>]`. Para `available`, use o checkout local. Para `missing`, clone somente o repositório necessário após confirmação explícita. Para `invalid_git`, nunca clone nem sobrescreva o path; reporte o estado e peça uma decisão.
 
-## Mapa de Contextos (project-mapping.json)
+## Process Resolution
 
-Consulte `.opencode/config/project-mapping.json` para o catálogo completo com:
+1. Read `projects.<slug>.process` from the merged catalog (`wb projects list`; default: `default`).
+2. Load the process with `wb process show <process>` / `wb process plan <process>`.
+3. Follow stages in order, delegating to the defined agent.
+4. Run gates with `wb process gate <process> <gate> --slug <slug>`.
+5. Update state with `wb process state ...`.
 
-- Nome e descrição do projeto
-- Repositórios associados
-- Path de knowledge
-- Agentes compatíveis
-- Disponibilidade dinâmica via `wb repo resolve` (`uv run --frozen python -m workbench repo resolve`)
+Create a custom process with `wb process init <name>` and edit
+`.opencode/processes/<name>/process.json`. Do not hardcode company-specific
+flows in the orchestrator.
 
-## Initial Routing
+## Project Context
 
-Start every conversation by identifying the context: `.workbench` or one of the
-projects registered in `.opencode/config/project-mapping.json`.
+`projects/<slug>/project.json` supports:
 
-### `.workbench`
-
-- Meta-project que gerencia os demais projetos. Estrutura em `.opencode/` + `projects/`
-- Flow: branch from `main`, no TASK prefix, open PR to `main`
-
-### `projects/<name>` (registered in project-mapping.json)
-
-1. Read `projects/<name>/AGENTS.md`
-2. Read backlog + specs
-3. Apply project's kickoff and flow
-4. Use project-mapping.json for path resolution (knowledge, checkpoints)
-
-> **New project?** Use `/new-project` to scaffold the entire structure automatically.
-
-### Unregistered project
-
-If the project is not in `project-mapping.json`, treat as `.workbench` context and suggest running `/new-project`.
+```json
+{
+  "slug": "meu-projeto",
+  "name": "Meu Projeto",
+  "description": "Descrição curta",
+  "repos": { "api": "meu-projeto-api" },
+  "knowledge": "projects/meu-projeto/knowledge",
+  "agents": ["backend-dev"],
+  "vault": null,
+  "process": "default",
+  "license": "MIT",
+  "tracker": "none"
+}
+```
 
 ## Rules (Non-Negotiable)
 
-1. Never commit directly to protected branches (`main`, `release`)
-2. Never approve or merge PRs via agent
-3. Every change must be reproducible, testable, evidence-backed
-4. No change without rollback strategy
-5. Specs and backlog updated as part of done criteria
-6. **Local repos first** — resolve runtime availability before cloning and follow the `available`, `missing`, and `invalid_git` rules above.
+1. Never commit directly to protected branches (`main`, `release`).
+2. Never approve or merge PRs via agent.
+3. Every change must be reproducible, testable, evidence-backed.
+4. No change without rollback strategy.
+5. Specs and backlog updated as part of done criteria when the process requires it.
+6. **Local repos first** — resolve runtime availability before cloning.
+7. Respect the project license. Never copy code from an incompatible license.
 
 ## Commits
 
 - `.workbench`: `type(workbench): description`
-- `projects/<name>`: `type(TASK): description`
+- `projects/<name>`: `type(scope): description`
 - Types: `feat`, `fix`, `test`, `chore`, `docs`, `refactor`, `perf`
 
 ## Agents
 
-- Generic agents in `.opencode/agents/` (categorized: core, review, development, decision, analysis, infrastructure, process)
-- Project agents in `projects/<name>/agents/`
-- **Full catalog**: `config/agent-registry.md`
-- **Decision tree**: `rules/decision-tree.md`
-- Orchestrator decides which agent to call (GOAP format, see `agents/core/orquestrador.md`)
+- Generic agents in `.opencode/agents/` (core, development, review, decision, analysis, infrastructure, process).
+- Project agents in `projects/<name>/agents/`.
+- **Full catalog**: `.opencode/config/agent-registry.md`
+- **Decision tree**: `.opencode/rules/decision-tree.md`
+- Orchestrator decides which agent to call (process-driven).
 
 ## Skills
 
-> Skills catalog: see `.opencode/config/skills-catalog.md`
+> Skills catalog: `.opencode/config/skills-catalog.md`
 
 ## Commands
 
@@ -95,14 +100,12 @@ If the project is not in `project-mapping.json`, treat as `.workbench` context a
 | `/new-feature`       | New feature proposal                                               |
 | `/new-adr`           | New ADR draft                                                      |
 | `/new-issue`         | New issue in repo                                                  |
-| `/git-sprint`        | Sprint: quality gates → branch → commit → PR                       |
-| `/git-hotfix`        | Hotfix: security gates → 2 branches → 2 PRs                        |
-| `/new-release`       | Release: pre-flight → wizard → GitHub Release                      |
+| `/git-pr`            | Branch + pull request (generic)                                    |
+| `/process`           | Run or manage a user-defined process                               |
+| `/new-release`       | GitHub Release from a tag                                          |
 | `/pr-template`       | Prepare PR with context                                            |
 | `/checklist-release` | Release checklist                                                  |
-| `/checklist-hotfix`  | Hotfix checklist                                                   |
 | `/refinar`           | Refine ideas/tasks into artifacts                                  |
-| `/pipeline`          | SDD Pipeline: spec → validation → TDD → implementation → review → vault |
 | `/execute-spec`      | Modular spec execution: TDD RED→GREEN, parallelism, auto-review    |
 | `/review-all`        | 4-layer: Lint → SAST → Security → AI Review                        |
 | `/metrics`           | Process metrics: cycle time, tokens, defects, coverage             |
@@ -111,12 +114,12 @@ If the project is not in `project-mapping.json`, treat as `.workbench` context a
 | `/handoff`           | Gera contexto da sessão no chat para copiar/colar em nova sessão   |
 | `/wiki`              | Search project vault (context-aware)                               |
 
-### Optional Adapters
+### Optional Adapter
 
-Azure DevOps, Teams and MySQL are disabled by default. Enable the MCP in
-`opencode.json` and fill `.env` before using adapter-specific commands/agents.
+MySQL is disabled by default. Enable the MCP in `opencode.json` and fill `.env`
+before using `/mcp-start`.
 
 ### Orchestrator
 
-Uses the complete catalog in `orquestrador.md` to decide which agent to call.
-Agent contract validation: `node .opencode/orchestrator/index.js validate` (after build).
+Uses the merged project catalog (`wb projects list`) and `.opencode/processes/`.
+Agent contract validation: `python -m workbench process validate` (after build).

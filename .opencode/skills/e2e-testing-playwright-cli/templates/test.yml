@@ -1,4 +1,4 @@
-suite: TASK-XXXX Nome do Fluxo
+suite: issue-XXXX Nome do Fluxo
 type: guia-de-execucao
 language: pt-BR
 safe_for_pr: true

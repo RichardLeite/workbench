@@ -36,10 +36,9 @@ Fix bugs with minimal, auditable impact.
 - [ ] Test added that failed before and passes now
 - [ ] Regression tests on affected areas pass
 - [ ] Rollback documented
-- [ ] If hotfix: backport PR to release created
 
 ## Guardrails
 - Do not refactor unrelated code
 - Keep commits granular by intention
-- For hotfix, keep patch strictly scoped
+- Keep the patch strictly scoped
 - Always verify fix in staging-like env before production

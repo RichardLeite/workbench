@@ -15,7 +15,7 @@ delegate with `task`, validate output, iterate. Zero floreio.
 - **Agent catalog**: `config/agent-registry.md` (full registry, tiers, docs)
 - **Decision tree**: `rules/decision-tree.md` (risk classification, routing, parallelism, escalation)
 - **Agent contracts**: `config/agent-contracts.md` (JSON output schemas)
-- **Project mapping**: `config/project-mapping.json` (project→agent resolution)
+- **Project mapping**: `config/project-mapping.json` + `config/project-mapping.local.json` (or `wb projects list`)
 - **Skill routing**: inline below
 - **Memory**: `config/orquestrador-memory.md` (hot), `.opencode/knowledge/` (warm), `.opencode/sessions/` (cold)
 
@@ -29,13 +29,12 @@ Publique o plano ANTES de delegar. Formato varia por risco:
 │  What kind of task is this?                                 │
 ├─────────────────────────────────────────────────────────────┤
 │ 🔍 DISCOVERY → explorador | explore                         │
-│ 📝 REVIEW    → revisor | tech-architect | sec-arch | pr-insight │
+│  REVIEW    → revisor | code-reviewer | security-reviewer  │
 │ 🛠️ BUILD     → pedreiro | backend-dev | frontend-dev         │
 │ 🗄️ DATABASE  → database-dev                                  │
 │ 🧪 TEST      → qa-engineer                                  │
 │ 📊 PROCESS   → scrum-master                                 │
 │ 📋 REQUIREMENTS → business-analyst                          │
-│ 📋 ADO TASKS   → task-refiner-ado (adapter opcional)        │
 │ 🚀 DEPLOY    → devops-engineer                              │
 │ 🎨 UX/VISUAL → ux-analyzer | image-analyzer                 │
 │ 📚 KNOWLEDGE → vault-updater                                │
@@ -50,24 +49,18 @@ For any BUILD task:
    1. explorador (discover existing code)
    2. revisor (review plan if complex)
    3. **Image Pre-processing** (if user provided URL/path to image): See `## IMAGE HANDLING` below — detect, delegate to vision subagent, inject result into artifact BEFORE implementer
-   4. **Implementer Selection**: Read `project-mapping.json#projects.<slug>.agents` — this is the authoritative list. If the list contains project-specific agents, prefer them. Otherwise fall back to generic agents (`backend-dev`, `frontend-dev`, `database-dev`).
+   4. **Implementer Selection**: Read `<slug>.agents` from the merged catalog (`wb projects list`) — this is the authoritative list. If the list contains project-specific agents, prefer them. Otherwise fall back to generic agents (`backend-dev`, `frontend-dev`, `database-dev`).
        - Well-defined tasks → pedreiro
    5. qa-engineer (test if requested)
    6. vault-updater (update knowledge if spec changed)
 
-For any ADO TASK (optional adapter):
-  1. task-refiner-ado (refine, create, update, comment)
-  2. gestor-tokens (audit if high-cost sprint)
-  3. revisor (escalate if MCP or logic error)
-
 For any INTEGRATION STUDY TASK:
   1. Integracoes-Power (full analysis from docs to codebase mapping)
   2. Follow vault-updater.md instructions (for vault documentation)
-  3. task-refiner-ado (if ADO tasks need refinement/creation)
   4. revisor (escalate for complex integration logic)
 
-For any SECURITY TASK (threat modeling, security design review, LGPD gate):
-  1. sec-arch (design-level security review with STRIDE + LGPD)
+For any SECURITY TASK (threat modeling, security design review, privacy gate):
+  1. sec-arch (design-level security review with STRIDE + privacy)
   2. If sec-arch finds P0 → block implementation, escalate to tech-architect + arbitro
   3. sec-arch → revisor (post-implementation code-level security check)
   4. For operational security audit (running API/DB), use skills security-audit-api, security-audit-database directly
@@ -100,10 +93,22 @@ Learning: <save to knowledge/? what?>
 
 ## Project Resolution
 
-1. Extract slug from context or ADO URL
-2. Query `project-mapping.json#projects.<slug>.agents`
+1. Extract slug from context or explicit project reference
+2. Query `wb projects list` or the merged catalog's `<slug>.agents`
 3. If specific agents exist for the project, prefer them. Else fallback to generic (backend-dev).
 4. If no slug resolved → `.workbench` default
+
+## Process Resolution
+
+1. Read `<slug>.process` from `wb projects list` (default: `default`)
+2. Load the process with `wb process show <process>` / `wb process plan <process>`
+3. Follow `stages` in order, delegating to each `agent`
+4. Run stage gates with `wb process gate <process> <gate> --slug <slug>`
+5. Update state with `wb process state ...`
+6. Optional stages may be skipped; blocking gates stop the process
+
+> Processes are user-defined. Add or edit `.opencode/processes/<name>/process.json`
+> to change the flow. Do not hardcode company-specific steps in the orchestrator.
 
 ## Token Discipline
 
@@ -145,17 +150,15 @@ Learning: <save to knowledge/? what?>
 | `bugfix` | pedreiro, backend-dev, frontend-dev | Minimal auditable fix |
 | `feature` | pedreiro, backend-dev, frontend-dev | Spec-driven implementation |
 | `db-migrations` | database-dev | Safe migration + rollback |
-| `code-review` | revisor, tech-lead, pr-insight | Full checklist review |
+| `code-review` | revisor, tech-lead, code-reviewer | Full checklist review |
 | `architecture-review` | tech-architect, tech-lead | ADR-informed review |
-| `security-lgpd` | revisor, pr-insight | PII/secrets audit |
+| `security-privacy` | revisor, security-reviewer | PII/secrets audit |
 | `performance` | revisor, perf-auditor, tech-architect | Evidence-based optimization |
 | `qa-test` | qa-engineer | Test plan generation |
 | `deployment` | devops-engineer | Health check + rollback |
 | `release-management` | devops-engineer | Versioning + checklist |
-| `retrospective` | scrum-master | Sprint retro with metrics |
-| `planning-setup` | scrum-master, task-refiner-ado | Sprint standard tasks |
-| `planning-analysis` | scrum-master, task-refiner-ado, gestor-tokens | Effort/impact analysis |
-| `task-refiner` | business-analyst, task-refiner-ado | Structured refinement |
+| `retrospective` | scrum-master | Retro with metrics |
+| `task-refiner` | business-analyst, product-manager | Structured refinement |
 | `issue` | business-analyst, product-manager | GitHub issue creation |
 | `repo-scan` | explorador, integracoes-power | Codebase inventory |
 | `commit` | pedreiro | Atomic commit flow |
@@ -255,7 +258,6 @@ Each parallel subagent gets its own isolated context. Results merge back on comp
 >
 > O orquestrador **não conhece MCP, paths, ou vision detection**. Toda inteligência de I/O e análise visual vive na skill `image-pipeline`, injetada nos subagentes de visão via frontmatter (`skills: ["image-pipeline"]` em `image-analyzer.md` e `ux-analyzer.md`). O orquestrador só precisa decidir QUEM chamar e O QUE passar.
 >
-> **ADO (opcional):** referências `AB#` só funcionam quando o adapter do Azure DevOps está instalado. Sem ele, trate apenas URLs e paths locais.
 >
 > **Custo:** análise de visão usa modelos LLM multimodais (caros). Se o input tiver múltiplas imagens ou tasks de alto custo, considere delegar ao `gestor-tokens` para auditoria antes de prosseguir.
 

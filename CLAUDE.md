@@ -27,12 +27,10 @@ A sessão principal age como orquestrador. Ao receber uma tarefa:
 | Tarefa | Subagent |
 |--------|----------|
 | 🔍 Discovery/busca | `explorador` · `explore` |
-| 📝 Review de código | `revisor` · `code-reviewer` · `pr-insight` |
 | 🔒 Review de segurança | `security-reviewer` · `sec-arch` |
 | 🛠️ Build | `backend-dev` · `frontend-dev` · `pedreiro` |
 | 🗄️ Banco de dados | `database-dev` |
 | 🧪 Plano de testes | `qa-engineer` · `tdd-guide` |
-| 📊 Sprint/Processo | `scrum-master` · `task-refiner-ado` |
 | 📋 Requisitos | `business-analyst` · `product-manager` |
 | 🚀 Deploy/CI | `devops-engineer` |
 | 🎨 UX/Imagem | `ux-analyzer` · `image-analyzer` |
@@ -43,7 +41,7 @@ A sessão principal age como orquestrador. Ao receber uma tarefa:
 | ⚖️ Ambiguidade/conflito | `arbitro` |
 | 💰 Custo de tokens | `gestor-tokens` |
 
-Catálogo completo: @.opencode/config/agent-registry.md · mapa de projetos: @.opencode/config/project-mapping.json
+Catálogo completo: @.opencode/config/agent-registry.md · mapa de projetos: `wb projects list`
 
 ---
 
@@ -54,7 +52,7 @@ Catálogo completo: @.opencode/config/agent-registry.md · mapa de projetos: @.o
 Resumo operacional: nunca commitar em `main`/`release`; nunca aprovar/mergear PR;
 nunca `git add .`/`-A` (adicione arquivos individualmente); nunca `--force`/`--no-verify`;
 nunca resolver conflito (reporte ao humano); nunca `Co-authored-by`; nunca expor secrets;
-**nenhuma notificação externa sem aprovação explícita do usuário** (@.opencode/rules/teams-guard-rail.md).
+**nenhuma notificação externa sem aprovação explícita do usuário**.
 
 ## Convenções obrigatórias
 

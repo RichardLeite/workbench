@@ -3,8 +3,8 @@
 > Documentação centralizada de onde cada artefato é salvo, por contexto.
 > Todo comando que cria ou lê specs/features/bugs deve seguir este mapa.
 >
-> **Multi-Project:** o workbench suporta qualquer projeto registrado em
-> `project-mapping.json`. Veja [multi-project-architecture.md](multi-project-architecture.md).
+> **Multi-Project:** o workbench descobre projetos automaticamente e
+> mescla o catálogo base com o local. Veja [multi-project-architecture.md](multi-project-architecture.md).
 
 ## Estrutura
 
@@ -32,7 +32,7 @@ projects/<slug>/knowledge/      ← Contexto de cada projeto
 
 > **Nota:** O workbench é o meta-projeto e seu conhecimento fica em `.opencode/knowledge/`.
 > Para projetos específicos, o conhecimento fica em `projects/<slug>/knowledge/`.
-> Todos os paths são resolvidos dinamicamente via `project-mapping.json`.
+> Todos os paths são resolvidos dinamicamente via catálogo mesclado.
 
 ## Mapa por tipo de artefato
 
@@ -61,12 +61,12 @@ projects/<slug>/knowledge/      ← Contexto de cada projeto
 | `/new-feature` | Feature + Spec técnica | Mapa acima |
 | `/new-bug` | Bug spec | Mapa acima |
 | `/new-adr` | ADR | `decisions/` ou `.opencode/knowledge/adr/` |
-| `/pipeline` | Feature + Spec + Execução + Vault | Mapa acima + checkpoints |
+| `/process` | Processo + artefatos do projeto | Mapa acima + checkpoints |
 | `/execute-spec` | Executa spec → checkpoints | Spec em `<spec_path>`, checkpoints em `<project_checkpoint_path>` |
 
 ## Regras
 
-1. **Contexto primeiro** — identificar se é um projeto registrado ou `.workbench` antes de decidir o path
+1. **Contexto primeiro** — identificar se é um projeto descoberto ou `.workbench` antes de decidir o path
 2. **Checkpoints são efêmeros** — o diretório `plans/` está no `.gitignore`
 3. **Consistência** — todo novo comando de spec deve seguir este mapa
 4. **Atualização** — se um novo contexto de projeto for adicionado, este mapa deve ser atualizado

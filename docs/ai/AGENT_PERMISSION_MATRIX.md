@@ -75,17 +75,14 @@ Deploy e operações sensíveis.
 
 | Projeto | Nível | Observação |
 |---------|:-----:|-----------|
-| projeto com repo local | 3 | PR permitido via flow /git-sprint |
+| projeto com repo local | 3 | PR permitido via /git-pr |
 | projeto sem repo local | 3 | somente knowledge/specs |
-| outro-projeto | 1 | Sem repositório local |
-| legado | 1 | Sem repositório local |
-| invoice-emission-api | 2 | Local, sem push automático |
 | workbench | 3 | Meta-projeto, PR para main |
 | Demais projetos | 1 | Repositórios remotos sem clone local |
 
 ## Regras
 
-1. Consultar `project-mapping.json` para verificar se `local: true`
+1. Consultar `wb projects list` para verificar se `local: true`
 2. Se `local: false` → nível 1 (leitura de docs apenas)
 3. Cada task deve respeitar o nível do projeto alvo
 4. NUNCA fazer push sem autorização explícita do usuário

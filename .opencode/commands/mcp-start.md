@@ -15,7 +15,7 @@ description: "Inicia MCP MySQL para um projeto específico"
 
 ## Funcionamento
 
-1. Consulta `project-mapping.json` para descobrir o diretório do repositório
+1. Consulta o catálogo mesclado para descobrir o diretório do repositório
 2. Executa: `node scripts/start-mysql-mcp.js <project>`
 3. O MCP fica rodando em foreground (stdin/stdout)
 
@@ -37,4 +37,4 @@ Quando um projeto é usado com frequência, registre o MCP no `opencode.json`:
 
 O projeto precisa ter um arquivo `.env` com as credenciais MySQL no diretório
 do repositório. O MCP usa `mysql-mcp-server` via npx. Repositórios são
-resolvidos via `project-mapping.json`.
+resolvidos via catálogo mesclado.

@@ -5,7 +5,7 @@
 
 ## TASK
 
-TASK-XXXX
+{ISSUE_ID}
 
 ## Ambiente
 
@@ -48,7 +48,7 @@ TASK-XXXX
 
 ## Rollback
 
-- **Estratégia:** {reverter commit / desabilitar feature flag / hotfix reverso}
+- **Estratégia:** {reverter commit / desabilitar feature flag / corrigir}
 - **Risco:** {baixo / médio / alto — justificativa}
 
 ## Evidências

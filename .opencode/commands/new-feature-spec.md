@@ -27,10 +27,10 @@ O template `feature-template.md` é focado em **negócio** — problema, valor, 
 
 ### Salvar feature
 
-O caminho é resolvido do contexto do projeto atual via `project-mapping.json`:
+O caminho é resolvido do contexto do projeto atual via catálogo mesclado:
 
 - **Projeto registrado** (ex: `meu-projeto`, `fiscal`): `<knowledge>/backlog/features/<slug>.md`
-  onde `<knowledge>` é o campo `knowledge` do projeto em `project-mapping.json`
+  onde `<knowledge>` é o campo `knowledge` do projeto no catálogo mesclado
 - **`.workbench`**: `.opencode/knowledge/features/<slug>.md`
 - **Projeto sem knowledge**: perguntar ao usuário onde salvar
 
@@ -79,10 +79,10 @@ O template `spec-template.md` é focado em **execução** — módulos atômicos
 
 ### Salvar spec técnica
 
-O caminho é resolvido do contexto do projeto atual via `project-mapping.json`:
+O caminho é resolvido do contexto do projeto atual via catálogo mesclado:
 
 - **Projeto registrado** (ex: `meu-projeto`, `fiscal`): `<knowledge>/specs/spec-<slug>.md`
-  onde `<knowledge>` é o campo `knowledge` do projeto em `project-mapping.json`
+  onde `<knowledge>` é o campo `knowledge` do projeto no catálogo mesclado
 - **`.workbench`**: `.opencode/knowledge/specs/spec-<slug>.md`
 - **Projeto sem knowledge**: perguntar ao usuário onde salvar
 

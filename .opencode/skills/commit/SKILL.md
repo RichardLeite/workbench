@@ -11,7 +11,7 @@ Executar o fluxo de commit com seguranca: verificar arquivos modificados, agrupa
 
 A skill recebe do comando/agente chamador:
 
-- `task`: numero da task (ex: `TASK-1234`) — opcional para `.workbench`
+- `task`: numero da task (ex: `add-feature`) — opcional para `.workbench`
 - `branch`: nome da branch atual
 - `type`: tipo de commit padrao (`feat`, `fix`, `chore`, etc.)
 - `context`: `.workbench` ou `meu-projeto`
@@ -38,12 +38,12 @@ Antes de criar a `question`, **listar os commits previstos em uma mensagem de te
 Formato da listagem:
 
 ```
-📋 Commit 1 — {{TYPE}}(AB#{{TASK}}): {{MESSAGE}}
+📋 Commit 1 — {{TYPE}}({{ISSUE}}): {{MESSAGE}}
    Arquivos:
    - path/do/arquivo1.js
    - path/do/arquivo2.js
 
-📋 Commit 2 — {{TYPE}}(AB#{{TASK}}): {{MESSAGE}}
+📋 Commit 2 — {{TYPE}}({{ISSUE}}): {{MESSAGE}}
    Arquivos:
    - path/do/arquivo3.js
 ```
@@ -62,12 +62,12 @@ Usar `question` para apresentar os commits como itens com status `pending`. Isso
 {
   "todos": [
     {
-      "content": "📋 COMMIT 1: {{TYPE}}(AB#{{TASK}}): {{MESSAGE}} → {{FILES}}",
+      "content": "📋 COMMIT 1: {{TYPE}}({{ISSUE}}): {{MESSAGE}} → {{FILES}}",
       "status": "pending",
       "priority": "high"
     },
     {
-      "content": "📋 COMMIT 2 (se houver): {{TYPE}}(AB#{{TASK}}): {{MESSAGE}} → {{FILES}}",
+      "content": "📋 COMMIT 2 (se houver): {{TYPE}}({{ISSUE}}): {{MESSAGE}} → {{FILES}}",
       "status": "pending",
       "priority": "high"
     },
@@ -106,7 +106,7 @@ Usar `question` para apresentar os commits como itens com status `pending`. Isso
 
 ```bash
 git add <arquivo1> <arquivo2>
-git commit -m "{{TYPE}}(AB#{{TASK}}): {{MESSAGE}}"
+git commit -m "{{TYPE}}({{ISSUE}}): {{MESSAGE}}"
 ```
 
 ### STEP 6: Push
@@ -125,7 +125,7 @@ git push -u origin {{BRANCH}}
 
 - **Idioma**: SEMPRE em **INGLÊS**. Nunca em português.
 - **Formato**: `{{TYPE}}({{SCOPE}}): {{MESSAGE}}`
-- **Scope**: `AB#{{TASK}}` para projetos projeto, `workbench` para `.workbench`
+- **Scope**: `{{ISSUE}}` para projetos projeto, `workbench` para `.workbench`
 - **Tipos** (ver pr-config.md 10.2): `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `perf`, `style`
 - **Nunca** adicionar `Co-authored-by` ou qualquer atribuição no commit.
 
@@ -163,7 +163,7 @@ Apresentar via `question`:
 {
   "todos": [
     {
-      "content": "📋 AMEND: {{TYPE}}(AB#{{TASK}}): {{MESSAGE}} + missing file",
+      "content": "📋 AMEND: {{TYPE}}({{ISSUE}}): {{MESSAGE}} + missing file",
       "status": "pending",
       "priority": "high"
     },
@@ -196,10 +196,10 @@ A skill retorna ao comando/agente chamador:
 {
   "tipo": "completed",
   "commits_realizados": [
-    { "message": "feat(AB#1234): add user avatar upload", "arquivos": ["..."] }
+    { "message": "feat(#1234): add user avatar upload", "arquivos": ["..."] }
   ],
   "push_ok": true,
-  "branch": "feat/TASK-1234"
+  "branch": "feat/add-feature"
 }
 ```
 
@@ -209,7 +209,7 @@ Em caso de erro:
 {
   "tipo": "error",
   "erro": "Falha ao fazer push",
-  "comando": "git push -u origin feat/TASK-1234",
-  "sugestao": "Fazer git pull origin feat/TASK-1234 --rebase"
+  "comando": "git push -u origin feat/add-feature",
+  "sugestao": "Fazer git pull origin feat/add-feature --rebase"
 }
 ```

@@ -1,4 +1,4 @@
-# Checklist - Security/LGPD
+# Checklist - Security/Privacy
 
 - [ ] No secret hardcoded
 - [ ] No cert/key file committed
