@@ -9,9 +9,10 @@ description: "Executa o processo definido pelo projeto"
 ## Uso
 
 ```bash
-uv run --frozen python -m workbench process list
-uv run --frozen python -m workbench process show default
-uv run --frozen python -m workbench process plan default
+uv run --frozen python -m workbench process list --project <slug>
+uv run --frozen python -m workbench process validate --project <slug>
+uv run --frozen python -m workbench process show default --project <slug>
+uv run --frozen python -m workbench process plan default --project <slug>
 ```
 
 ## Fluxo
@@ -20,7 +21,7 @@ uv run --frozen python -m workbench process plan default
 2. Carregue o processo com `wb process show <name>`.
 3. Gere o plano com `wb process plan <name>`.
 4. Siga os `stages` na ordem, delegando ao `agent` de cada stage.
-5. Execute gates bloqueantes com `wb process gate <name> <gate> --slug <slug>`.
+5. Execute gates bloqueantes com `wb process gate <name> <gate> --slug <slug> --project <projeto>`.
 6. Atualize o estado com `wb process state create/load/resume`.
 7. Ao final, gere o relatório com `wb process report`.
 

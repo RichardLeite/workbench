@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from argparse import Namespace
 from pathlib import Path
 
 from workbench import process_engine as engine
@@ -59,3 +60,68 @@ def test_run_command_gate(tmp_path: Path) -> None:
     result = engine.run_gate(definition, state, "ok", root=tmp_path)
     assert result["status"] == "passed"
     assert result["exit_code"] == 0
+
+
+def write_process(root: Path, processes_dir: Path, name: str, gate: str = "manual") -> None:
+    directory = processes_dir / name
+    directory.mkdir(parents=True)
+    data = {
+        "name": name,
+        "description": name,
+        "version": 1,
+        "stages": [{"id": "build", "name": "Build", "agent": None, "gate": gate}],
+        "gates": [{"id": gate, "agent": "revisor", "blocking": True}],
+    }
+    (directory / "process.json").write_text(json.dumps(data), encoding="utf-8")
+
+
+def test_list_processes_includes_project_processes(tmp_path: Path) -> None:
+    write_process(tmp_path, tmp_path / ".opencode" / "processes", "global")
+    write_process(tmp_path, tmp_path / "projects" / "demo" / "processes", "custom")
+    items = engine.list_processes(tmp_path, project="demo")
+    by_name = {item["name"]: item for item in items}
+    assert by_name["global"]["source"] == "global"
+    assert by_name["custom"]["source"] == "project"
+
+
+def test_project_process_overrides_global_with_same_name(tmp_path: Path) -> None:
+    write_process(tmp_path, tmp_path / ".opencode" / "processes", "custom")
+    project_dir = tmp_path / "projects" / "demo" / "processes"
+    write_process(tmp_path, project_dir, "custom")
+    (project_dir / "custom" / "process.json").write_text(
+        json.dumps(
+            {
+                "name": "custom",
+                "description": "project version",
+                "version": 1,
+                "stages": [{"id": "build", "name": "Build"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    definition = engine.load_process("custom", "demo", tmp_path)
+    assert definition.path == project_dir / "custom" / "process.json"
+
+
+def test_validate_project_processes(tmp_path: Path, monkeypatch, capsys) -> None:
+    write_process(tmp_path, tmp_path / "projects" / "demo" / "processes", "custom")
+    monkeypatch.setenv("WB_ROOT", str(tmp_path))
+    assert engine._run_validate(Namespace(name=None, project="demo")) == 0
+    assert "custom" in capsys.readouterr().out
+
+
+def test_gate_uses_project_process(tmp_path: Path, monkeypatch, capsys) -> None:
+    write_process(tmp_path, tmp_path / "projects" / "demo" / "processes", "custom")
+    monkeypatch.setenv("WB_ROOT", str(tmp_path))
+    definition = engine.load_process("custom", "demo", tmp_path)
+    state = engine.create_state(definition, "demo-state", "demo")
+    engine.save_state(state, tmp_path)
+    args = Namespace(
+        name="custom",
+        gate="manual",
+        slug="demo-state",
+        status="approved",
+        project="demo",
+    )
+    assert engine._run_gate(args) == 0
+    assert '"status": "passed"' in capsys.readouterr().out

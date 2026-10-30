@@ -15,9 +15,9 @@ def register(subparsers: _SubParsersAction) -> None:
     parser.add_argument("--json", action="store_true", help="Reservado para saÃ­da JSON.")
     process_sub = parser.add_subparsers(dest="process_command", required=True)
 
-    process_sub.add_parser("list", help="Lista processos disponÃ­veis.").set_defaults(
-        handler=engine._run_list
-    )
+    list_command = process_sub.add_parser("list", help="Lista processos disponíveis.")
+    list_command.add_argument("--project", default=None)
+    list_command.set_defaults(handler=engine._run_list)
     process_sub.add_parser("schema", help="Mostra o JSON Schema de processo.").set_defaults(
         handler=engine._run_schema
     )
@@ -29,6 +29,7 @@ def register(subparsers: _SubParsersAction) -> None:
 
     validate = process_sub.add_parser("validate", help="Valida um ou todos os processos.")
     validate.add_argument("name", nargs="?", default=None)
+    validate.add_argument("--project", default=None)
     validate.set_defaults(handler=engine._run_validate)
 
     init = process_sub.add_parser("init", help="Cria um processo a partir do template.")
@@ -68,6 +69,7 @@ def register(subparsers: _SubParsersAction) -> None:
     gate.add_argument("gate")
     gate.add_argument("--slug", required=True)
     gate.add_argument("--status", choices=["approved", "blocked"], default=None)
+    gate.add_argument("--project", default=None)
     gate.set_defaults(handler=engine._run_gate)
 
     report = process_sub.add_parser("report", help="Gera relatÃ³rio do processo.")
