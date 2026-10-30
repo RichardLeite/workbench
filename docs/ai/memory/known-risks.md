@@ -11,5 +11,5 @@ status: ativa
 ## Geral
 - **Push no Windows**: Env vars GITHUB_TOKEN/GH_TOKEN podem conflitar com credential manager
 - **CI/CD**: Health check polling necessário após deploy
-- **Adapters opcionais**: Azure DevOps, Teams e MySQL exigem configuração explícita; sem ela, os fluxos correspondentes ficam indisponíveis
-- **Dados sensíveis**: qualquer projeto pode lidar com PII — aplique `security-lgpd`
+- **Adapter opcional**: MySQL exige configuração explícita; sem ela, o MCP correspondente fica indisponível
+- **Dados sensíveis**: qualquer projeto pode lidar com PII — aplique `security-privacy`

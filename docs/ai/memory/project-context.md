@@ -6,7 +6,7 @@ status: ativa
 
 # Project Context
 
-> Memória de contexto do workbench. Consulte `project-mapping.json` para a lista completa de projetos.
+> Memória de contexto do workbench. Consulte `wb projects list` para a lista completa de projetos.
 
 ## Workbench (meta-projeto)
 - **Propósito**: Infraestrutura de orquestração, agentes, skills, vault
@@ -15,5 +15,5 @@ status: ativa
 - **Flow**: branch from `main`, open PR to `main`
 
 ## Projetos
-Cada projeto registrado em `project-mapping.json` mantém seu contexto em
+Cada projeto no catálogo mesclado mantém seu contexto em
 `projects/<slug>/AGENTS.md` e `projects/<slug>/knowledge/`.

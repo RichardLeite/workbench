@@ -4,7 +4,7 @@ description: Multi-step research and general-purpose agent — combines tools, f
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/infrastructure/general.md. Rode o sync após alterar a fonte. -->
 
 General-purpose agent for research, multi-step analysis, and tasks that don't fit any specialized agent.

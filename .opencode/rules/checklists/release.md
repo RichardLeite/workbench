@@ -1,7 +1,7 @@
 # Checklist - Release
 
 - [ ] Mandatory kickoff questions answered
-- [ ] Branch created from release
+- [ ] Branch created from the correct base
 - [ ] Commits are granular and conventional
 - [ ] Tests updated and executed
 - [ ] Evidence attached in PR

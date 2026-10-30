@@ -1,0 +1,12 @@
+{
+  "id": "vision.probe.invalid",
+  "implementation": "node",
+  "argv": [
+    "node",
+    "scripts/vision-utils.js",
+    "tests/fixtures/too-short.bin"
+  ],
+  "returncode": 2,
+  "stdout": "",
+  "stderr": "MIME_INVALID: buffer too short or not a Buffer"
+}

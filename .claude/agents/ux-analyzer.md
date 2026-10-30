@@ -5,7 +5,7 @@ tools: Read, Grep, Glob, Bash, mcp__mcp-image
 model: haiku
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/analysis/ux-analyzer.md. Rode o sync após alterar a fonte. -->
 
 Evaluate usability and accessibility — Nielsen heuristics, contrast, focus, navigation, consistency.

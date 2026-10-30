@@ -1,0 +1,19 @@
+{
+  "id": "knowledge.search",
+  "implementation": "python",
+  "argv": [
+    "C:\\Repositories\\workbench\\.venv\\Scripts\\python.exe",
+    "-m",
+    "workbench",
+    "knowledge",
+    "search",
+    "Workbench",
+    "--project",
+    "workbench",
+    "--limit",
+    "2"
+  ],
+  "returncode": 0,
+  "stdout": "[\n  {\n    \"file\": \"image-pipeline.md\",\n    \"title\": \"image-pipeline\",\n    \"score\": 1,\n    \"snippet\": \"> **Status:** ativo > **Implementação:** `src/workbench/mcp/image.py` + `src/workbench/vision.py`\",\n    \"matchedFields\": [\n      \"content\"\n    ]\n  },\n  {\n    \"file\": \"multi-project-architecture.md\",\n    \"title\": \"multi-project-architecture\",\n    \"score\": 1,\n    \"snippet\": \"O workbench é uma plataforma multi-project. Os projetos são descobertos a partir dos checkouts git no workspace e em roots configuráveis; o catálogo local é mesclado com o catálogo base. Workbench é o...\",\n    \"matchedFields\": [\n      \"content\"\n    ]\n  }\n]",
+  "stderr": "{\"event\":\"search.start\",\"project\":\"workbench\",\"vaults\":1,\"terms\":[\"Workbench\"]}"
+}

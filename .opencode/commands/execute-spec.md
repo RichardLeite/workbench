@@ -55,7 +55,7 @@ A spec DEVE seguir o formato modular (template `spec-template.md`):
    - **Infraestrutura de teste:** procure `jest.config`, `vitest.config` ou script `"test"` no `package.json` do projeto alvo
    - **Checkpoint:** veja se existe `.<project_checkpoint_path>/checkpoint-<slug>.json`
 
-> **Resolução de paths por projeto:** Consulte `.opencode/config/project-mapping.json`.
+> **Resolução de paths por projeto:** Consulte o catálogo mesclado.
 > Para cada projeto registrado, o campo `knowledge` define o diretório base.
 > O checkpoint fica em `<knowledge>/plans/checkpoint-<slug>.json`.
 > Ex: `meu-projeto` → `projects/meu-projeto/knowledge/plans/checkpoint-<slug>.json`
@@ -145,12 +145,12 @@ Se @revisor apontar issues graves → reporte ao usuário e pause.
 
 Salve o progresso em `<project_checkpoint_path>/checkpoint-<slug>.json` contendo: módulos concluídos, status de cada um, checkpoint do git.
 
-> **Resolução de paths por projeto:** Consulte `.opencode/config/project-mapping.json`.
+> **Resolução de paths por projeto:** Consulte o catálogo mesclado.
 > O checkpoint fica em `<knowledge>/plans/checkpoint-<slug>.json`.
 > Ex: `meu-projeto` → `projects/meu-projeto/knowledge/plans/`. `.workbench` → `.opencode/knowledge/plans/`.
 > O diretório `plans/` está no `.gitignore` (checkpoints são efêmeros).
 >
-> **⚠️ Fallback para projetos sem `knowledge`:** Se o projeto não tiver `knowledge` em project-mapping.json (ex: `mural-melhorias`, `outro-projeto`, `legado`), use `.opencode/knowledge/plans/` como fallback e avise o usuário.
+> **⚠️ Fallback para projetos sem `knowledge`:** Se o projeto não tiver `knowledge` no catálogo mesclado (ex: `mural-melhorias`, `outro-projeto`, `legado`), use `.opencode/knowledge/plans/` como fallback e avise o usuário.
 
 ### FASE 4 — Relatório Final
 

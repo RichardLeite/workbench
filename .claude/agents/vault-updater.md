@@ -4,7 +4,7 @@ description: Analyze specs and update the project vault with permanent knowledge
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/project/vault-updater.md. Rode o sync após alterar a fonte. -->
 
 > **Purpose:** After creating a feature or bug spec, analyze whether it changes system knowledge (entities, endpoints, flows, business rules) and update the vault.
@@ -12,7 +12,7 @@ model: sonnet
 ## Input
 
 Spec: `projects/<context>/knowledge/backlog/features/<file>.md` or `bugs/<file>.md`
-Vault: Resolved from `.opencode/config/project-mapping.json` — campo `vault` do projeto.
+Vault: Resolved from the merged catalog — campo `vault` do projeto.
 Knowledge: `projects/<context>/knowledge/`
 
 ---
@@ -49,7 +49,7 @@ Knowledge: `projects/<context>/knowledge/`
 ### Step 3 — Execute changes
 
 1. Read full vault file → add to appropriate section
-2. Every addition traceable: suffix `(TASK-XXXX)` or `(spec: name)`
+2. Every addition traceable: suffix `(#123)` or `(spec: name)`
 3. Update `updated:` in YAML frontmatter to `YYYY-MM-DD`
 4. For new flow: use canonical template `projects/_template/obsidian-vault/templates/fluxo.md`, fill trigger/steps/rules/models/endpoints/screens (substituir `{{projeto}}` pelo slug do projeto)
 
@@ -59,12 +59,12 @@ Knowledge: `projects/<context>/knowledge/`
 
 1. NEVER remove existing content — only add.
 2. Only add what is EXPLICIT in the spec — don't invent.
-3. NEVER alter files outside the vault path resolved from `project-mapping.json`.
+3. NEVER alter files outside the vault path resolved from the merged catalog.
 4. `FIX_ONLY`/`NO_CHANGE`: vault UNCHANGED.
 5. New entity ALWAYS in an existing domain unless it clearly fits none.
 6. Don't alter `_meta.md`, `projects/_template/obsidian-vault/templates/` or `compartilhado/`.
 7. Check for duplicates before adding.
-8. Every addition traceable: `(TASK-XXXX)` or `(spec: name)`.
+8. Every addition traceable: `(#123)` or `(spec: name)`.
 9. Novos fluxos, mudanças em fluxos e fluxos não mapeados → documentar em `fluxos/`.
 10. **Write scope:** A permissão `write: allow` permite editar arquivos, mas você DEVE limitar-se estritamente ao vault path resolvido. Nunca edite arquivos de código, config, ou fora do vault, mesmo que tenha permissão técnica — isso viola seu propósito (vault documentation only).
 
@@ -80,7 +80,7 @@ Sempre retornar JSON, nunca Markdown:
   "status": "updated|unchanged|skipped",
   "classificacao": "STRUCTURAL_ADD|RULE_CHANGE|NEW_FLOW|FLOW_CHANGE|NEW_DOMAIN|FIX_ONLY|NO_CHANGE",
   "alteracoes": [
-    { "path": "database/06-financeiro.md", "tipo": "STRUCTURAL_ADD", "descricao": "Novo endpoint GET /extrato (TASK-XXXX)" }
+    { "path": "database/06-financeiro.md", "tipo": "STRUCTURAL_ADD", "descricao": "Novo endpoint GET /extrato (#123)" }
   ],
   "erro": "opcional se falhar"
 }
@@ -104,7 +104,7 @@ Campos:
 **Spec:** "Endpoint `GET /v2/extrato` returns balance and transactions."
 
 1. Read `06-financeiro.md` → add to `## Endpoints (v2)` table: `| GET | /extrato | listExtrato | Financial statement |`
-2. Tag with `(TASK-XXXX)` and update `updated:`
+2. Tag with `(#123)` and update `updated:`
 
 ### Example 2: NEW_FLOW — Return flow
 

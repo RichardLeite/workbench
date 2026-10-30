@@ -5,7 +5,7 @@ tools: Read, Grep, Glob
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/decision/gestor-tokens.md. Rode o sync após alterar a fonte. -->
 
 **Cost optimization specialist.** Minimize token waste through agent selection, context engineering and model routing.
@@ -127,7 +127,7 @@ Set heartbeat interval to **55 min** (keeps Anthropic 1h cache warm). Prevents e
 | `explorador` → `revisor` → `pedreiro` | Medium | Good trade-off |
 | `backend-dev` + `frontend-dev` parallel | High | ✅ Good if contract defined |
 | `qa-engineer` + `revisor` parallel | Medium | ⚠️ Revisor may invalidate tests |
-| `pedreiro` → `pr-insight` → `qa-engineer` | High | 🔴 Redundant — consolidate review |
+| `pedreiro` → `tech-lead` → `qa-engineer` | High | 🔴 Redundant — consolidate review |
 
 ## Responsibilities
 

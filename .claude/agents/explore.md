@@ -5,7 +5,7 @@ tools: Read, Grep, Glob, Bash
 model: haiku
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/analysis/explore.md. Rode o sync após alterar a fonte. -->
 
 **Fast codebase exploration specialist.** Use for quick searches, file discovery, and basic codebase understanding. Lighter than `explorador` — no write access, no complex analysis.

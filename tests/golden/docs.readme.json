@@ -1,0 +1,14 @@
+{
+  "id": "docs.readme",
+  "implementation": "python",
+  "argv": [
+    "C:\\Repositories\\workbench\\.venv\\Scripts\\python.exe",
+    "-m",
+    "workbench",
+    "docs",
+    "readme"
+  ],
+  "returncode": 0,
+  "stdout": "{\n  \"tipo\": \"readme\",\n  \"arquivo\": \"README.md\",\n  \"conteudo\": \"# workbench\\n\\n\\n\\n## Stack\\n\\nN/A\\n\\n## Scripts\\n\\n| Comando | Descrição |\\n|---------|-----------|\\n| `validate` | `uv run --frozen python -m workbench process validate` |\\n| `sync:claude` | `uv run --frozen python -m workbench sync claude` |\\n| `sync:codex` | `uv run --frozen python -m workbench sync codex` |\\n| `test` | `uv run pytest` |\\n| `lint` | `uv run ruff check src tests` |\\n| `format` | `uv run ruff format src tests` |\\n\\n## Estrutura\\n\\n- docs\\n- projects\\n- scripts\\n- src\\n- tests\\n\"\n}",
+  "stderr": ""
+}

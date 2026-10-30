@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import uuid
 from collections.abc import Sequence
@@ -47,6 +48,22 @@ def _force_utf8() -> None:
             reconfigure(encoding="utf-8", errors="replace")
 
 
+def _refresh_projects(args: argparse.Namespace) -> None:
+    if os.environ.get("WB_NO_DISCOVERY") == "1":
+        return
+    if getattr(args, "command", None) == "projects" and getattr(args, "projects_command", None) in {
+        "scan",
+        "sync",
+    }:
+        return
+    try:
+        from workbench.discovery import sync_projects
+
+        sync_projects()
+    except Exception as exc:  # noqa: BLE001 - descoberta nunca deve bloquear a CLI
+        log_event("projects.sync.failed", "debug", error=str(exc))
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     _force_utf8()
     parser = build_parser()
@@ -59,6 +76,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     if handler is None:
         parser.print_help(sys.stderr)
         return EXIT_USAGE
+
+    _refresh_projects(args)
 
     try:
         return int(handler(args))

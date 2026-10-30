@@ -12,19 +12,14 @@ from workbench.paths import workbench_root
 from workbench.process import run
 
 BRANCH_RULES: list[tuple[re.Pattern[str], str]] = [
-    (re.compile(r"feat/TASK-\d+"), "meu-projeto SPRINT"),
-    (re.compile(r"fix/TASK-\d+"), "meu-projeto HOTFIX"),
-    (re.compile(r"(fix|feat)/TASK-\d+-release"), "backport para release"),
     (
-        re.compile(r"(feat|fix|chore|refactor|docs|test|perf)/[a-z0-9]+(-[a-z0-9]+)*"),
-        ".workbench kebab",
+        re.compile(r"(feat|fix|chore|refactor|docs|test|perf|style)/[a-z0-9]+(-[a-z0-9]+)*"),
+        "conventional branch",
     ),
     (
-        re.compile(r"(feat|fix|chore|refactor|docs|test|perf)\([a-z0-9_-]+\):\s[a-z0-9].+"),
-        ".workbench conventional commit",
+        re.compile(r"(feat|fix|chore|refactor|docs|test|perf|style)\([a-z0-9_-]+\):\s[a-z0-9].+"),
+        "conventional commit",
     ),
-    (re.compile(r"refactor/[a-z0-9]+(-[a-z0-9]+)*"), "refactor genérico"),
-    (re.compile(r"docs/[a-z0-9]+(-[a-z0-9]+)*"), "docs genérico"),
 ]
 
 PR_CHECKS = [
@@ -93,11 +88,10 @@ def _run_branch(args: Namespace) -> int:
 
     print(f"❌ Branch '{branch}' não corresponde a nenhum padrão conhecido.")
     print("   Padrões válidos:")
-    print("   - feat/TASK-1234 (SPRINT)")
-    print("   - fix/TASK-1234 (HOTFIX)")
-    print("   - fix/TASK-1234-release (HOTFIX → release)")
-    print("   - feat/add-feature (workbench)")
-    print("   - fix/TASK-1234-descricao (opcional)")
+    print("   - feat/add-feature")
+    print("   - fix/corrige-login")
+    print("   - docs/atualiza-readme")
+    print("   - feat(escopo): descrição")
     return 1
 
 

@@ -241,7 +241,7 @@ Após todas as fases, montar o resumo final:
 |---|---|---|
 | **Release completa** | `release v2.3.0 production` | Fase 1 → 2 → 3 → 4 (pipeline completa) |
 | **Deploy apenas** | `deploy v2.3.0 staging` | Pula Fase 1 (tag já existe) → 2 → 3 → 4 |
-| **Hotfix** | `hotfix v2.3.1 production` | Fase 1 (versionamento rápido) → 2 → 3 → 4 |
+| **Patch release** | `release v2.3.1 production` | Fase 1 (versionamento rápido) → 2 → 3 → 4 |
 | **Dry run** | `release v2.3.0 --dry-run` | Fase 1 → valida pré-requisitos → aborta antes do deploy |
 
 ## Guardrails da Pipeline

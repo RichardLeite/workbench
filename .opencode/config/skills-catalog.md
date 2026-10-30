@@ -8,63 +8,59 @@
 |-------|-------------|
 | api-testing | Contract testing, response validation, rate-limit testing, integration testing for REST/GraphQL APIs |
 | bugfix | Fix bug with minimal, auditable impact |
-| e2e-testing-playwright-cli | Complete E2E testing with playwright-cli — template script, helpers, login patterns, assertions, video recording |
-| caveman | Ultra-compressed communication mode for token efficiency (~75% fewer tokens) |
+| caveman | Ultra-compressed communication mode for token efficiency |
 | code-review | Formal code review — diff analysis, checklist, improvement suggestions |
 | code-scan | SAST (Semgrep) + Security (Trivy) scanning |
 | commit | Atomic commit flow with verification |
-| complex-task-planner | Manus-style file-based planning for complex multi-step tasks |
+| complex-task-planner | File-based planning for complex multi-step tasks |
+| e2e-testing-playwright-cli | E2E testing with playwright-cli |
 | feature | Deliver feature by spec with testable acceptance criteria |
-| mutation-testing | Test quality measurement via Stryker mutation testing |
+| mutation-testing | Test quality measurement via mutation testing |
 | performance | Fix bottlenecks using measurable evidence |
 | playwright-cli | Browser automation via Playwright CLI |
-| playwright-testing | E2E testing with Page Objects, cross-browser, CI/CD integration |
-| pr | Pull Request creation (MCP/gh CLI) with centralized template |
-| property-testing | Property-based testing using fast-check |
-| repo-scan | Objective codebase inventory for decision-making |
-| skill-creator | Create, modify, evaluate, and optimize agent skills |
+| playwright-testing | E2E testing with Page Objects and CI integration |
+| pr | Pull Request creation with centralized template |
+| property-testing | Property-based testing |
+| repo-scan | Objective codebase inventory |
+| task-refiner | Refine ideas into structured artifacts |
 
 ## Architecture & Review
 
 | Skill | Description |
 |-------|-------------|
-| architecture-review | Review architecture decisions, analyze trade-offs, document ADR inputs |
-| review-bot | Process bot suggestions on PRs |
+| architecture-review | Review architecture decisions, trade-offs and ADR inputs |
 
 ## Database
 
 | Skill | Description |
 |-------|-------------|
 | db-migrations | Safe migrations with rollback and lock awareness |
-| mysql-performance | MySQL query optimization, index strategy, EXPLAIN analysis |
-| redis-caching | Redis caching strategies, data structures, eviction policies |
+| mysql-performance | MySQL query optimization, indexes and EXPLAIN |
+| redis-caching | Redis caching strategies and eviction policies |
 
 ## DevOps & Infrastructure
 
 | Skill | Description |
 |-------|-------------|
-| deployment | Deploy flow with health check verification, rollback, post-deploy validation |
-| observability | Structured logging, metrics, distributed tracing, SLO monitoring |
+| deployment | Deploy flow with health check, rollback and validation |
+| observability | Structured logging, metrics, tracing and SLO monitoring |
+| release-management | Release coordination, versioning and checklist |
 
 ## Planning & Process
 
 | Skill | Description |
 |-------|-------------|
 | issue | Create GitHub issues with structured template and labels |
-| planning-analysis | Classify impact, estimate effort, analyze effort/impact |
-| planning-setup | Sprint setup with standard tasks for each PBI/Bug |
-| qa-test | Generate test plans, test cases, regression strategies |
-| release-management | Coordinate releases with versioning and deploy checklist |
-| retrospective | Sprint retro with metrics, patterns, and action items |
-| task-refiner | Interview engine that refines ideas into structured artifacts |
+| qa-test | Test plans, test cases and regression strategies |
+| retrospective | Retrospectives with metrics and action items |
 
-## Security
+## Security & Privacy
 
 | Skill | Description |
 |-------|-------------|
-| security-audit-api | Audits REST APIs for OWASP Top 10, auth bypass, rate limiting |
-| security-audit-database | Audits database security — RLS, SQL injection, access control |
-| security-lgpd | Protect PII, secrets, and authorization boundaries |
+| security-audit-api | Audit REST APIs for OWASP Top 10, auth bypass and rate limiting |
+| security-audit-database | Audit database security — RLS, SQL injection and access control |
+| security-privacy | Protect personal data, secrets and authorization boundaries |
 
 ## Visualization & Pipelines
 
@@ -78,7 +74,8 @@
 | Skill | Description |
 |-------|-------------|
 | find-skills | Discover and install agent skills from the open ecosystem |
+| skill-creator | Create, modify, evaluate and optimize agent skills |
 
 ---
 
-> Last updated: 2026-10-29
+> Last updated: 2026-10-30

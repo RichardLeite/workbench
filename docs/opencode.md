@@ -1,29 +1,23 @@
 # OpenCode Workbench — Guia de Uso
 
-Este guia explica como usar o workbench. Para configurações técnicas que o agente
-usa, consulte o `AGENTS.md`.
+Este guia explica como usar o Workbench. Para configuração técnica, consulte o
+`AGENTS.md`.
 
 ## O que é
 
-O workbench é o lugar onde a gente guarda tudo que o agente precisa saber: regras
-de como trabalhar, contexto dos projetos, templates de PR, e ferramentas que
-automatizam tarefas repetitivas.
-
-O **OpenCode** é o agente que lê essas configurações e trabalha do seu lado.
-Quando você abre o OpenCode na raiz do workbench, ele começa perguntando em
-qual contexto você quer trabalhar e então aplica as regras correspondentes.
+O Workbench guarda tudo que o agente precisa saber: regras, contexto dos
+projetos, templates, agentes, skills e processos. O **OpenCode** lê essas
+configurações e trabalha do seu lado.
 
 ## Como começar
 
-1. Clone este repositório
-2. Clone os repositórios dos projetos na raiz do workbench
-3. Abra o OpenCode na raiz
+1. Clone este repositório.
+2. Clone os repositórios dos projetos na raiz do Workbench.
+3. Abra o OpenCode na raiz.
 
-Pronto. O agente vai pedir o contexto de trabalho antes de começar.
+O agente pergunta o contexto de trabalho antes de começar.
 
-## Como a gente trabalha
-
-Toda conversa começa com uma pergunta de roteamento:
+## Contextos
 
 ```text
 Em qual contexto vamos trabalhar?
@@ -32,26 +26,62 @@ Em qual contexto vamos trabalhar?
 - outro projeto
 ```
 
-## MCPs globais
-
-O `opencode.json` da raiz do `.workbench` carrega a configuração global do ambiente.
+## MCPs
 
 - `mcp-image` fica ativo por padrão (sem dependências externas).
-- `azure-devops`, `teams-graph` e `mysql` são **adapters opcionais**, desativados por padrão.
+- `mysql` é um adapter opcional, desativado por padrão.
 
-Para usar um adapter, preencha o `.env` e mude `"enabled": true` no MCP correspondente
-em `opencode.json`.
+Para usar MySQL, preencha o `.env` e mude `"enabled": true` no MCP
+correspondente em `opencode.json`.
+
+## Projetos e descoberta
+
+Os projetos são descobertos automaticamente a partir dos checkouts git na raiz
+do workspace e em `discovery.roots`/`WB_PROJECT_ROOTS` dentro dele. Os metadados ficam em
+`projects/<slug>/project.json`; sem esse arquivo, o nome vem do `AGENTS.md` ou do
+diretório. Para vários repositórios, declare os papéis em `repos`.
+
+```bash
+uv run --frozen python -m workbench projects scan
+uv run --frozen python -m workbench projects sync
+uv run --frozen python -m workbench projects list
+```
+
+O resultado local é gravado em `.opencode/config/project-mapping.local.json`
+(ignorado pelo git) e mesclado com o `project-mapping.json` base. O plugin do
+OpenCode injeta os aliases `@` em memória; o CLI e o hook `SessionStart` do
+Claude atualizam o catálogo no carregamento. Use `WB_NO_DISCOVERY=1` para
+desativar a atualização automática.
+
+## Processos
+
+Cada projeto escolhe um processo no catálogo mesclado:
+
+```json
+{ "process": "default" }
+```
+
+O processo define stages, agentes, gates e artefatos:
+
+```bash
+uv run --frozen python -m workbench process show default
+uv run --frozen python -m workbench process plan default
+```
+
+Crie um processo próprio:
+
+```bash
+uv run --frozen python -m workbench process init meu-fluxo
+```
+
+Edite `.opencode/processes/meu-fluxo/process.json` ou
+`projects/<slug>/processes/meu-fluxo/process.json`.
 
 ## Fluxo do `.workbench`
 
-Use este contexto quando a mudança for nas regras, skills, templates, comandos
-e documentação do próprio workbench.
-
-- Base principal: `main`
-- Não exige `TASK`
-- Sempre abre PR para `main`
-
-Exemplo:
+- Base: `main`
+- Sempre branch + PR
+- Sem prefixo de task obrigatório
 
 ```bash
 git checkout main && git pull
@@ -61,7 +91,7 @@ git push -u origin feat/new-issue-command
 # abre PR para main
 ```
 
-Commits do `.workbench` seguem Conventional Commits com escopo `workbench`:
+Commits do `.workbench`:
 
 ```text
 feat(workbench): add /new-issue command
@@ -69,124 +99,38 @@ feat(workbench): add /new-issue command
 
 ## Fluxo de `projects/<nome>`
 
-Para projetos dentro de `projects/`, o comportamento atual continua baseado em
-**RELEASE** e **HOTFIX**.
-
-### RELEASE
-
-É quando você vai implementar uma feature nova, refatorar algo ou fazer uma
-melhoria. Você cria uma branch a partir de `release` e abre um PR de volta
-para ela quando terminar.
-
-Exemplo: você vai adicionar um endpoint de retry de invoice.
+O fluxo vem do processo escolhido. O processo pode ser tão simples quanto:
 
 ```
-git checkout release && git pull
-git checkout -b feat/AB#1234-retry-invoice
-# implementa...
-git push -u origin feat/AB#1234-retry-invoice
-# abre PR para release
+discover → plan → implement → test → review → docs
 ```
 
-### HOTFIX
+ou incluir gates, módulos, releases e etapas específicas do time.
 
-É quando algo quebrou em produção e precisa ser corrigido com urgência. Você
-cria uma branch a partir de `main`, corrige, abre PR para `main`, e depois faz
-um backport para `release`.
-
-Exemplo: o cálculo de fee está afetando valores de NFe.
-
-```
-git checkout main && git pull
-git checkout -b fix/AB#19529-fix-fee-nfe
-# corrige...
-git push -u origin fix/AB#19529-fix-fee-nfe
-# abre PR para main
-# depois abre PR de backport para release
-```
-
-Antes de começar um trabalho em `projects/<nome>`, o agente pergunta: é
-RELEASE ou HOTFIX? Qual o TASK id? Qual repo é afetado?
+Use `/git-pr` para branch + PR genérico, ou o comando `/process` para seguir o
+processo do projeto.
 
 ## Commits
 
-Os commits seguem Conventional Commits, com formato dependente do contexto:
-
 ```
 .workbench -> tipo(workbench): descrição
-projects/<nome> -> tipo(AB#TASK): descrição
+projects/<nome> -> tipo(escopo): descrição
 ```
 
-- **tipo** diz o que você fez: `feat` (feature nova), `fix` (correção),
-  `refactor` (refatoração), `perf` (otimização), `test` (teste),
-  `chore` (tarefa), `docs` (documentação)
-- **AB#TASK** é obrigatório apenas para projetos que usam TASK
-- **descrição** diz o que mudou, em inglês, no passado
-
-Exemplos reais:
-
-- `feat(AB#1234): add invoice retry endpoint`
-- `fix(AB#19529): prevent fee from affecting nfe values`
-- `refactor(AB#1234): use Sequelize attributes for performance`
-- `perf(AB#1234): optimize order listing query`
-
-Regra simples: cada commit faz uma coisa só. Se você está consertando bug e
-refatorando ao mesmo tempo, são dois commits.
+Tipos: `feat`, `fix`, `refactor`, `perf`, `test`, `chore`, `docs`.
+Cada commit faz uma coisa só.
 
 ## Como o agente te ajuda
-
-Você conversa com o agente pelo terminal. Ele entende contexto, faz perguntas
-quando precisa, e segue as regras do projeto.
-
-### Exemplos de uso
 
 | Contexto | Exemplo |
 |----------|---------|
 | `.workbench` | "No .workbench, adiciona um comando /new-issue" |
-| Estratégia | "Preciso priorizar as features do próximo release" |
+| Estratégia | "Preciso priorizar as features do próximo ciclo" |
 | Bug | "Corrige o bug #1234 — o cálculo de fee está errado" |
-| Feature | "Adiciona a feature #5678 — usuário precisa ver histórico de pedidos" |
+| Feature | "Adiciona a feature #5678 — usuário precisa ver histórico" |
 | Revisão | "Analisa o PR #42 e me diz o que melhorar" |
 | Especificação | "Cria uma spec para o bug que encontrei" |
 
-### Como o orquestrador decide qual agente chamar
-
-O orquestrador classifica sua tarefa em uma das categorias abaixo e delega
-para o agente mais adequado:
-
-| Sua task envolve... | Agente chamado |
-|---------------------|----------------|
-| Estratégia de produto, roadmap | `product-manager` |
-| Refinamento de requisitos, specs | `business-analyst` |
-| Processo ágil, métricas, sprints | `scrum-master` |
-| Arquitetura, ADRs, design decisions | `tech-architect` |
-| Plano de implementação (pré-código) | `tech-lead` |
-| Implementação backend | `backend-dev` |
-| Implementação frontend | `frontend-dev` |
-| Banco de dados, migrations | `database-dev` |
-| Implementação genérica | `pedreiro` |
-| Busca no código | `explorador` / `explore` |
-| Análise de PR (pré-submissão) | `pr-insight` |
-| Code review, debugging | `revisor` |
-| Testes, planos de teste | `qa-engineer` |
-| Deploy, CI/CD | `devops-engineer` |
-| UX, acessibilidade | `ux-analyzer` |
-| Análise de imagens/layout | `image-analyzer` |
-| **Conflito ou baixa confiança** | `arbitro` (escalação) |
-| **Auditoria de custo de tokens** | `gestor-tokens` |
-
-Os dois últimos (`arbitro` e `gestor-tokens`) são agentes de **suporte à
-decisão** — não são chamados por padrão, apenas quando necessário.
-
-### PRs e Revisão
-
-Quando você termina o código, use `/pr-analyze` para análise completa do diff:
-verifica corretude, segurança e convenções, e sugere melhorias. Depois da
-análise, o sistema pergunta se deseja criar o PR e, se o adapter estiver
-habilitado, notificar o time.
-
-Se o bot do GPT-4o-mini comentar sugestões no PR, o agente pode processá-las
-com `/review-bot`.
-
-Para referência técnica (skills, templates, branching, ADR), consulte o
+O orquestrador segue o processo do projeto e delega para os agentes definidos
+nele. Para referência técnica (skills, templates, branching), consulte o
 `AGENTS.md`.

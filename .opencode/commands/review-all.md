@@ -90,7 +90,7 @@ Se nenhum caminho for informado, escaneia o repositório atual.
 
 ### Outros projetos
 
-Para `outro-projeto-api`, `sistema-legado` ou outros, detectar a stack do `projects/<projeto>/AGENTS.md`
+Para `meu-projeto-api`, `meu-projeto-app` ou outros, detectar a stack do `projects/<projeto>/AGENTS.md`
 e perguntar ao usuário quais comandos de lint/test usar, ou pular camadas sem ferramentas.
 
 ## Relatório

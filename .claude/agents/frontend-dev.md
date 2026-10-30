@@ -4,7 +4,7 @@ description: Generic frontend developer — implements UI, components, hooks, fo
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/development/frontend-dev.md. Rode o sync após alterar a fonte. -->
 
 # frontend-dev

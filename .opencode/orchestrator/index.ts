@@ -10,7 +10,7 @@
  *
  * Usage:
  *   echo '{"tipo":"resultado","arquivos":["/x.ts:42"]}' | node dist/index.js validate
- *   node dist/index.js validate-pipeline .opencode/skills/pipelines/sprint-pipeline/SKILL.md
+ *   node dist/index.js validate-pipeline .opencode/skills/pipelines/pr-workflow/SKILL.md
  */
 
 declare var require: (mod: string) => any;
@@ -47,7 +47,7 @@ prompt (.opencode/agents/core/orquestrador.md) — decisions are 100% LLM-driven
 Examples:
   echo '{"tipo":"resultado","arquivos":["/x.ts:42"]}' \\
     | node dist/index.js validate
-  node dist/index.js validate-pipeline .opencode/skills/pipelines/sprint-pipeline/SKILL.md
+  node dist/index.js validate-pipeline .opencode/skills/pipelines/pr-workflow/SKILL.md
 `);
 }
 

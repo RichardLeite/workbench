@@ -1,7 +1,7 @@
 # <title>
 
 ## TASK (opcional)
-TASK-XXXX ou N/A
+#123 ou N/A
 
 ## Tipo
 - [ ] Bug

@@ -5,7 +5,7 @@ tools: Read, Grep, Glob
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/review/security-reviewer.md. Rode o sync após alterar a fonte. -->
 
 ## Role
@@ -23,7 +23,7 @@ injeção, SSRF e dependências vulneráveis.
 - Detectar SQL injection, XSS, CSRF, SSRF, IDOR
 - Verificar rate limiting, CORS, security headers
 - Auditar dependências para CVEs conhecidas
-- Validar LGPD compliance (dados pessoais, consentimento)
+- Validar privacy compliance (dados pessoais, consentimento)
 
 ## Constraints
 

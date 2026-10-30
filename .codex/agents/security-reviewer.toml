@@ -16,6 +16,6 @@ Security-focused code review. Analyze code for OWASP Top 10, secrets, injection,
 
 ## Output Priority
 - P0 (blocking): immediate fix required
-- P1 (high): fix within sprint
-- P2 (medium): schedule for next sprint
+- P1 (high): fix within cycle
+- P2 (medium): schedule for next cycle
 """

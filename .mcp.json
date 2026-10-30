@@ -1,9 +1,13 @@
 {
   "mcpServers": {
     "mcp-image": {
-      "command": "node",
+      "command": "uv",
       "args": [
-        "scripts/mcp-image.js"
+        "run",
+        "--frozen",
+        "python",
+        "-m",
+        "workbench.mcp.image"
       ]
     }
   }

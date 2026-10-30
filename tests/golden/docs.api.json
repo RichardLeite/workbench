@@ -1,0 +1,12 @@
+{
+  "id": "docs.api",
+  "implementation": "node",
+  "argv": [
+    "node",
+    ".opencode/scripts/auto-doc.js",
+    "api"
+  ],
+  "returncode": 0,
+  "stdout": "{\n  \"tipo\": \"api\",\n  \"arquivo\": \"API.md\",\n  \"conteudo\": \"# API\\n\\nNo route files found.\"\n}",
+  "stderr": ""
+}

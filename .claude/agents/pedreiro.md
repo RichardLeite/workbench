@@ -4,7 +4,7 @@ description: Fast implementation of well-defined tasks — executes plans verbat
 model: haiku
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/infrastructure/pedreiro.md. Rode o sync após alterar a fonte. -->
 
 Fast precise implementer. **Execute** well-defined tasks following the plan provided by the orchestrator.

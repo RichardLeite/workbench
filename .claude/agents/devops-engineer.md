@@ -4,7 +4,7 @@ description: DevOps Engineer — CI/CD pipeline design, deploy automation, Docke
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/infrastructure/devops-engineer.md. Rode o sync após alterar a fonte. -->
 
 Automate and operate infrastructure — pipelines, deploys, monitoring, recovery.

@@ -19,7 +19,7 @@ Create GitHub issues in the correct repo with proper template, labels, and descr
 ### Step 1 — Identify project
 If user didn't specify, ask which repo:
 1. `.workbench` (current repo)
-2. A project registered in `project-mapping.json`
+2. A project in the merged catalog
 3. Other (specify owner/repo)
 
 ### Step 2 — Collect info
@@ -92,7 +92,7 @@ gh issue create --title "{{TITLE}}" --body "{{DESCRIPTION}}" --label "{{LABELS}}
 | Project               | GitHub Repo                       |
 | --------------------- | --------------------------------- |
 | .workbench            | (current repo)                    |
-| Projetos registrados  | `$GITHUB_OWNER/<repo>` via project-mapping |
+| Projetos registrados  | `$GITHUB_OWNER/<repo>` via `wb projects list` |
 | Other                 | Ask owner/repo                    |
 
 ## Guardrails

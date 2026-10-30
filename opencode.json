@@ -2,7 +2,8 @@
   "$schema": "https://opencode.ai/config.json",
   "default_agent": "Orquestrador",
   "plugin": [
-    ".opencode/plugins/metrics.ts"
+    ".opencode/plugins/metrics.ts",
+    ".opencode/plugins/projects.ts"
   ],
   "reference": {
     ".workbench": {
@@ -87,7 +88,7 @@
       "mode": "subagent",
       "temperature": 0.1,
       "skills": [
-        "security-lgpd",
+        "security-privacy",
         "security-audit-api",
         "security-audit-database"
       ],
@@ -97,36 +98,6 @@
         "bash": "deny"
       },
       "prompt": "{file:./.opencode/agents/review/security-reviewer.md}"
-    },
-    "task-refiner-ado": {
-      "description": "Azure DevOps task management (optional adapter) — refine PBIs, create/update tasks, add comments, process sprint backlogs",
-      "mode": "subagent",
-      "temperature": 0.2,
-      "skills": [
-        "planning-analysis",
-        "planning-setup",
-        "task-refiner"
-      ],
-      "permission": {
-        "write": "allow",
-        "edit": "allow",
-        "azure-devops_wit_add_work_item_comment": "allow",
-        "azure-devops_wit_add_child_work_items": "allow",
-        "azure-devops_wit_create_work_item": "allow",
-        "azure-devops_wit_update_work_item": "allow",
-        "azure-devops_wit_update_work_items_batch": "allow",
-        "azure-devops_wit_get_work_item": "allow",
-        "azure-devops_wit_get_work_items_batch_by_ids": "allow",
-        "azure-devops_wit_get_work_items_for_iteration": "allow",
-        "azure-devops_wit_query_by_wiql": "allow",
-        "azure-devops_wit_list_work_item_comments": "allow",
-        "azure-devops_core_list_projects": "allow",
-        "azure-devops_core_list_project_teams": "allow",
-        "azure-devops_work_list_iterations": "allow",
-        "azure-devops_work_list_team_iterations": "allow",
-        "azure-devops_wit_work_items_link": "allow"
-      },
-      "prompt": "{file:./.opencode/agents/process/task-refiner-ado.md}"
     },
     "planner": {
       "description": "Expert planning specialist — decomposes features, refactors and complex tasks into implementable plans with phases, dependencies and risk analysis.",
@@ -139,32 +110,6 @@
         "bash": "allow"
       },
       "prompt": "{file:./.opencode/agents/decision/planner.md}"
-    },
-    "pr-insight": {
-      "description": "PR Insight — Complete PR analysis: diff review, task validation, review comments, approve/request changes and optional private notification.",
-      "mode": "subagent",
-      "temperature": 0.1,
-      "skills": [
-        "code-review",
-        "security-lgpd",
-        "performance"
-      ],
-      "permission": {
-        "write": "allow",
-        "edit": "allow",
-        "bash": "allow",
-        "question": "allow",
-        "teams-graph_send_channel_message": "allow",
-        "teams-graph_send_chat_message": "allow",
-        "teams-graph_search_users_for_mentions": "allow",
-        "teams-graph_list_teams": "allow",
-        "teams-graph_list_channels": "allow",
-        "azure-devops_wit_get_work_item": "allow",
-        "azure-devops_core_list_projects": "allow",
-        "azure-devops_core_list_project_teams": "allow",
-        "azure-devops_wit_list_work_item_comments": "allow"
-      },
-      "prompt": "{file:./.opencode/agents/review/pr-insight.md}"
     },
     "business-analyst": {
       "description": "Business Analyst / PO — Refines requirements, writes specs, validates with stakeholders. Never implements code — requirements and specs only.",
@@ -274,7 +219,7 @@
       "skills": [
         "code-review",
         "architecture-review",
-        "security-lgpd",
+        "security-privacy",
         "performance"
       ],
       "permission": {
@@ -295,14 +240,7 @@
         "write": "ask",
         "edit": "ask",
         "bash": "deny",
-        "question": "allow",
-        "azure-devops_wit_add_work_item_comment": "allow",
-        "azure-devops_wit_add_child_work_items": "allow",
-        "azure-devops_wit_create_work_item": "allow",
-        "azure-devops_wit_get_work_item": "allow",
-        "azure-devops_wit_get_work_items_batch_by_ids": "allow",
-        "azure-devops_wit_query_by_wiql": "allow",
-        "azure-devops_core_list_projects": "allow"
+        "question": "allow"
       },
       "prompt": "{file:./.opencode/agents/analysis/integracoes-power.md}"
     },
@@ -439,29 +377,16 @@
       "prompt": "{file:./.opencode/agents/infrastructure/pedreiro.md}"
     },
     "scrum-master": {
-      "description": "Scrum Master — Sprint metrics, retrospective facilitation, impediment tracking. Never implements code or reviews PRs.",
+      "description": "Scrum Master — process metrics, retrospective facilitation and impediment tracking. Never implements code or reviews PRs.",
       "mode": "subagent",
       "temperature": 0.1,
       "skills": [
-        "planning-analysis",
-        "planning-setup",
         "retrospective"
       ],
       "permission": {
         "write": "allow",
         "edit": "allow",
-        "bash": "allow",
-        "azure-devops_wit_get_work_item": "allow",
-        "azure-devops_wit_get_work_items_batch_by_ids": "allow",
-        "azure-devops_wit_query_by_wiql": "allow",
-        "azure-devops_wit_list_work_item_comments": "allow",
-        "azure-devops_core_list_projects": "allow",
-        "azure-devops_core_list_project_teams": "allow",
-        "azure-devops_work_list_iterations": "allow",
-        "azure-devops_work_list_team_iterations": "allow",
-        "azure-devops_work_get_team_capacity": "allow",
-        "azure-devops_work_get_team_settings": "allow",
-        "azure-devops_work_get_iteration_capacities": "allow"
+        "bash": "allow"
       },
       "prompt": "{file:./.opencode/agents/process/scrum-master.md}"
     },
@@ -493,28 +418,26 @@
         "bash": "allow"
       },
       "prompt": "{file:./.opencode/agents/development/perf-auditor.md}"
+    },
+    "sec-arch": {
+      "description": "Security Architect — threat modeling, privacy gate, ADR security review.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "skills": [
+        "security-privacy",
+        "security-audit-api",
+        "security-audit-database",
+        "architecture-review"
+      ],
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "prompt": "{file:./.opencode/agents/review/sec-arch.md}"
     }
   },
   "mcp": {
-    "azure-devops": {
-      "type": "local",
-      "command": [
-        "node",
-        "scripts/start-azure-devops-mcp.js"
-      ],
-      "enabled": false
-    },
-    "teams-graph": {
-      "type": "local",
-      "command": [
-        "node",
-        "scripts/start-teams-graph-mcp.js"
-      ],
-      "env": {
-        "TEAMS_MCP_CLIENT_ID": "${TEAMS_MCP_CLIENT_ID}"
-      },
-      "enabled": false
-    },
     "mysql": {
       "type": "local",
       "command": [
@@ -529,8 +452,12 @@
     "mcp-image": {
       "type": "local",
       "command": [
-        "node",
-        "scripts/mcp-image.js"
+        "uv",
+        "run",
+        "--frozen",
+        "python",
+        "-m",
+        "workbench.mcp.image"
       ],
       "enabled": true
     }

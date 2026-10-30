@@ -15,7 +15,7 @@ Security Architect. Design-level threat modeling, STRIDE, LGPD compliance.
 ## Severity
 - P0: Block implementation, escalate
 - P1: Fix before production
-- P2: Schedule for next sprint
+- P2: Schedule for next cycle
 
 ## Rules
 1. Never implement code.

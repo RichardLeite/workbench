@@ -1,11 +1,11 @@
 ---
-description: "Clona um repositório da organização configurada e registra automaticamente no workbench"
+description: "Clona um repositório da organização configurada e atualiza a descoberta automática"
 ---
 
 # /clone
 
 > Clona um repositório da organização configurada em `GITHUB_OWNER` após validar
-> sua disponibilidade dinâmica e o registra nas configurações necessárias.
+> sua disponibilidade dinâmica.
 
 ## Uso
 
@@ -20,14 +20,14 @@ Aceita com ou sem `@` na frente.
 
 ### FASE 1 — Validar
 
-1. Extraia o nome do repositório do argumento (remova `@` se presente)
-2. Verifique no `project-mapping.json` se o repo está catalogado
-3. Se não estiver catalogado → pergunte: "Qual projeto este repo pertence?"
-4. Execute `node .opencode/scripts/repository-resolver.js --project <slug> --repo <role>`
-5. Respeite o estado retornado:
+1. Extraia o nome do repositório do argumento.
+2. Procure um checkout local com esse nome antes de clonar.
+3. Se o repositório pertencer a um projeto catalogado, execute:
+   `uv run --frozen python -m workbench repo resolve --project <slug> --repo <role>`
+4. Respeite o estado retornado:
    - `available`: use o checkout existente; não clone
    - `missing`: peça confirmação explícita antes de clonar somente esse repo
-   - `invalid_git`: bloqueie o clone/sobrescrita e peça ao usuário uma decisão sobre o path existente
+   - `invalid_git`: bloqueie o clone/sobrescrita e peça uma decisão sobre o path
 
 ### FASE 2 — Clonar
 
@@ -35,62 +35,37 @@ Aceita com ou sem `@` na frente.
 gh repo clone ${GITHUB_OWNER}/<repo>
 ```
 
-Isso clona dentro do diretório atual (workbench root).
+Clone na raiz do workbench ou em `discovery.roots`.
 
-### FASE 3 — Configurar
+### FASE 3 — Descobrir
 
-#### 3.1 .gitignore
+```bash
+uv run --frozen python -m workbench projects sync
+uv run --frozen python -m workbench projects list
+```
 
-Adicione `repo/` na seção `# Project repos (cloned to root)` do `.gitignore`,
-em ordem alfabética.
-
-#### 3.2 opencode.json (references)
-
-Adicione a referência:
+Se o repositório não aparecer ou precisar de um papel específico, crie/edite
+`projects/<slug>/project.json` com `repos`:
 
 ```json
-"<repo>": { "path": "<repo>" }
+{ "repos": { "api": "meu-projeto-api" } }
 ```
 
-Mantenha a lista em ordem alfabética.
+Não edite `opencode.json#reference` nem o `project-mapping.json` central.
 
-#### 3.3 project-mapping.json
+### FASE 4 — Validar disponibilidade
 
-Se o repo não estava catalogado:
-1. Pergunte: nome do projeto, descrição, slug, outros repos do mesmo projeto
-2. Crie a entrada no `project-mapping.json`
-3. Crie `projects/<slug>/` com a estrutura do template
+Execute novamente `wb repo resolve --project <slug> --repo <role>` e exija
+estado `available` quando o projeto tiver papéis declarados.
 
-#### 3.4 Validar disponibilidade
+### FASE 5 — Resumo
 
-Execute novamente `node .opencode/scripts/repository-resolver.js --project <slug> --repo <role>` e exija estado `available`.
-
-### FASE 4 — Resumo
-
-```
-╔══════════════════════════════════════════════╗
-║  Repositório clonado com sucesso!           ║
-╠══════════════════════════════════════════════╣
-║                                              ║
-║  Repo:     <repo>                            ║
-║  Projeto:  <project>                         ║
-║  Path:     <workbench-root>/<repo>/            ║
-║                                              ║
-║  Configurado:                                ║
-║  ├── .gitignore                              ║
-║  ├── opencode.json                           ║
-║  └── disponibilidade: available              ║
-║                                              ║
-║  Próximos passos:                            ║
-║  ├── /new-project (se projeto novo)          ║
-║  └── /mcp-start <projeto> (se tiver DB)      ║
-║                                              ║
-╚══════════════════════════════════════════════╝
-```
+Mostre repositório, projeto, path, catálogo atualizado e disponibilidade.
+Sugira `/new-project` se o projeto ainda não tiver metadados.
 
 ## Regras
 
-1. **Sempre pergunte antes de clonar** — confirme com o usuário
-2. **Resolva antes e depois** — use `repository-resolver.js` como fonte runtime de disponibilidade
-3. **Nunca sobrescreva `invalid_git`** — interrompa e peça uma decisão
-4. **Se não catalogado** — trate como novo projeto e sugira `/new-project`
+1. **Sempre pergunte antes de clonar**.
+2. **Resolva antes e depois** — use `wb repo resolve` como fonte de disponibilidade.
+3. **Nunca sobrescreva `invalid_git`**.
+4. **Sem registro manual** — use `wb projects sync` e `projects/<slug>/project.json`.

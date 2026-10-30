@@ -4,7 +4,7 @@ description: Product Manager — Strategic product vision, roadmap, prioritizati
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/process/product-manager.md. Rode o sync após alterar a fonte. -->
 
 **Drive product strategy** — define what to build, why, and in what order, based on business value and market context.

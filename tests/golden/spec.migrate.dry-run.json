@@ -1,0 +1,16 @@
+{
+  "id": "spec.migrate.dry-run",
+  "implementation": "python",
+  "argv": [
+    "C:\\Repositories\\workbench\\.venv\\Scripts\\python.exe",
+    "-m",
+    "workbench",
+    "spec",
+    "migrate",
+    "tests/fixtures/spec-old.md",
+    "--dry-run"
+  ],
+  "returncode": 0,
+  "stdout": "\n📋 Migrando: Melhoria de conversão\n\n📄 Preview da spec migrada:\n────────────────────────────────────────────────────────────\n# Spec: Melhoria de conversão\n\n> **Gerado em:** <DATE>\n> **Esquema:** Spec Executável v1 — Migrado automaticamente do formato antigo\n> **Uso:** Projetada para ser executada pelo `/execute-spec`\n\n## Task\n\nN/A\n\n## Objetivo\n\nMelhorar a conversão de propostas em pedidos.\n\n## Pré-requisitos\n\n- Riscos identificados: - Duplicidade de pedidos\n\n---\n\n## Módulos\n\n> Cada módulo é uma unidade atômica: testes primeiro (se o projeto tiver infra) → implementação → validação.\n> A ordem dos módulos é a ordem de execução. Módulos sem dependências podem ser paralelizados.\n\n---\n\n### Módulo 1: Implementação Base\n\n**Camada:** backend\n**Dependências:** Nenhuma\n**Estimativa:** *(a definir)*\n\n#### Descrição\n\nMelhorar a conversão de propostas em pedidos.\n\n#### Requisitos\n\n##### Requisito: FuncionalidadePrincipal\n\nO sistema SHALL implementar a funcionalidade conforme especificado.\n\n###### Cenário: ComportamentoPadrao\n- **GIVEN** o estado atual do sistema\n- **WHEN** a ação principal é executada\n- **THEN** o resultado esperado é obtido\n\n#### Testes (TDD)\n\nN/A — Migrado de spec antiga sem especificação de testes.\n\n#### Implementação\n\n- [ ] Criar endpoint de conversão\n- [ ] Criar tela de confirmação\n\n#### Validação\n\n- [ ] **Testes:** N/A (spec migrada)\n- [ ] **Auto-review:** @revisor aprovou o módulo\n- [ ] **Checkpoint:** sem issues graves\n\n---\n\n### Módulo 2: Interface do Usuário\n\n**Camada:** frontend\n**Dependências:** Módulo 1\n**Estimativa:** *(a definir)*\n\n#### Descrição\n\nImplementar a interface do usuário conforme especificado.\n\n#### Requisitos\n\n##### Requisito: InterfaceFuncional\n\nO sistema SHALL exibir a interface conforme especificado.\n\n###### Cenário: ExibicaoPadrao\n- **GIVEN** o usuário acessa a funcionalidade\n- **WHEN** a tela é carregada\n- **THEN** os dados são exibidos corretamente\n\n#### Testes (TDD)\n\nN/A — Migrado de spec antiga.\n\n#### Implementação\n\n- [ ] Implementar componentes de UI\n- [ ] Integrar com API\n\n#### Validação\n\n- [ ] **Testes:** N/A (spec migrada)\n- [ ] **Auto-review:** @revisor aprovou o módulo\n- [ ] **Checkpoint:** sem issues graves\n\n---\n### Módulo 3: Validação\n\n**Camada:** docs\n**Dependências:** Módulo 2\n**Estimativa:** *(a definir)*\n\n#### Descrição\n\n- Testar conversão com proposta válida\n\n#### Implementação\n\n- [ ] Validar cenários de teste\n- [ ] Verificar comportamento esperado\n\n#### Validação\n\n- [ ] **Testes:** validados conforme critérios\n- [ ] **Auto-review:** @revisor aprovou o módulo\n- [ ] **Checkpoint:** sem issues graves\n\n---\n\n## Dependências Externas\n\n- - Duplicidade de pedidos\n\n## Critérios de Aceite (originais)\n\n- [ ] Proposta convertida gera pedido\n- [ ] Usuário vê confirmação\n\n────────────────────────────────────────────────────────────\n\n⚠️  Dry-run — arquivo não foi modificado.\n   Remova --dry-run para salvar as alterações.",
+  "stderr": ""
+}

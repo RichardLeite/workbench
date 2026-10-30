@@ -1,14 +1,15 @@
 {
   "id": "validate-branch.valid",
-  "implementation": "node",
+  "implementation": "python",
   "argv": [
-    "node",
-    "scripts/validate-branch-name.js",
+    "C:\\Repositories\\workbench\\.venv\\Scripts\\python.exe",
+    "-m",
+    "workbench",
+    "validate",
+    "branch",
     "feat/add-feature"
   ],
   "returncode": 0,
-  "stdout": "✅ Branch 'feat/add-feature' é válida (.workbench kebab).",
-  "stderr": "",
-  "duration_ms": 49.05,
-  "captured_at": "2026-10-30T02:16:06+00:00"
+  "stdout": "✅ Branch 'feat/add-feature' é válida (conventional branch).",
+  "stderr": ""
 }

@@ -16,7 +16,7 @@ Implementar uma feature com segurança, garantindo contexto, testes e documenta�
 
 ## Processo
 1. **Entender requisito**: Ler descrição e critérios de aceite
-2. **Buscar contexto na memória**: Consultar `.opencode/knowledge/` + `project-mapping.json`
+2. **Buscar contexto na memória**: Consultar `.opencode/knowledge/` + catálogo mesclado
 3. **Identificar arquivos afetados**: Mapear tudo que precisa mudar
 4. **Criar plano curto**: Lista de passos em ordem
 5. **Implementar em passos pequenos**: Um arquivo por vez, testando cada passo

@@ -29,15 +29,35 @@ if (!projectName) {
 
 const workbenchRoot = path.resolve(__dirname, "..");
 
-// Resolve o diretório do repositório a partir de project-mapping.json
 let repoDir = projectName;
 try {
-  const mappingPath = path.join(workbenchRoot, ".opencode", "config", "project-mapping.json");
-  const mapping = JSON.parse(fs.readFileSync(mappingPath, "utf8"));
-  const project = mapping.projects && mapping.projects[projectName];
+  const configDir = path.join(workbenchRoot, ".opencode", "config");
+  const basePath = path.join(configDir, "project-mapping.json");
+  const overlayPath = path.join(configDir, "project-mapping.local.json");
+  const base = JSON.parse(fs.readFileSync(basePath, "utf8"));
+  let discovered = {};
+  try {
+    discovered = JSON.parse(fs.readFileSync(overlayPath, "utf8")).projects || {};
+  } catch {
+    discovered = {};
+  }
+  const projects = { ...discovered };
+  for (const [slug, project] of Object.entries(base.projects || {})) {
+    const local = projects[slug] || {};
+    const localRepos = local.repos || {};
+    const explicitRepos = project.repos || {};
+    projects[slug] = {
+      ...local,
+      ...project,
+      repos: Object.keys(explicitRepos).length ? explicitRepos : localRepos,
+    };
+  }
+  const project = projects[projectName];
   const repos = project && project.repos ? Object.values(project.repos) : [];
-  if (repos.length) repoDir = repos[0];
-} catch { /* usa o nome informado como diretório */ }
+  if (repos.length && typeof repos[0] === "string") repoDir = repos[0];
+} catch {
+  repoDir = projectName;
+}
 
 (function loadEnv() {
   const envPath = path.resolve(workbenchRoot, repoDir, ".env");

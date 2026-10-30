@@ -4,7 +4,7 @@ description: Test-First Development guide — TDD Red-Green-Refactor cycle, test
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/development/tdd-guide.md. Rode o sync após alterar a fonte. -->
 
 ## Role

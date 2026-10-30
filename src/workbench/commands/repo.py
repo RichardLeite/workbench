@@ -8,11 +8,9 @@ from argparse import ArgumentParser, Namespace, _SubParsersAction
 from pathlib import Path
 from typing import Any
 
-from workbench.config import ConfigError
+from workbench.config import ConfigError, load_project_mapping
 from workbench.errors import WorkbenchError
 from workbench.paths import workbench_root
-
-DEFAULT_MAPPING = Path(".opencode") / "config" / "project-mapping.json"
 
 
 def register(subparsers: _SubParsersAction) -> None:
@@ -166,8 +164,10 @@ def _resolve_project(slug: str, mapping: dict[str, Any], root: Path) -> dict[str
 
 def _run_resolve(args: Namespace) -> int:
     root = Path(args.root).resolve() if args.root else workbench_root()
-    mapping_path = Path(args.mapping) if args.mapping else root / DEFAULT_MAPPING
-    mapping = _load_mapping(mapping_path)
+    if args.mapping:
+        mapping = _load_mapping(Path(args.mapping))
+    else:
+        mapping = load_project_mapping(root)
 
     if args.repo and not args.project:
         raise WorkbenchError("--repo requires --project")

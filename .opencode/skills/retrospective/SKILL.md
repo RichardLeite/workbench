@@ -1,12 +1,12 @@
 ---
 name: retrospective
-description: Sprint retrospective — gather metrics, identify patterns, generate action items
+description: Process retrospective — gather metrics, identify patterns, generate action items
 ---
 
 # Skill: retrospective
 
 ## Goal
-Analyze sprint data, identify improvement opportunities, generate actionable retro items.
+Analyze process data, identify improvement opportunities, generate actionable retro items.
 
 ## Efficiency
 - Be concise by default. Output findings and action items directly.
@@ -16,20 +16,20 @@ Analyze sprint data, identify improvement opportunities, generate actionable ret
 
 ## Procedure
 
-### 1. Gather sprint metrics
-Collect from Azure DevOps:
+### 1. Gather process metrics
+Collect from git, issues and project metrics:
 - **Velocity**: completed SP vs planned SP
 - **Bug rate**: opened vs closed
 - **Lead time**: avg from dev start to deploy
 - **WIP**: avg work in progress
-- **Scope**: mid-sprint changes
+- **Scope**: mid-cycle changes
 
 ### 2. Analyze patterns
 
 | Pattern | Signal | Action |
 |---------|--------|--------|
 | 🔴 Overcommit | Planned > 120% avg velocity | Cut scope earlier |
-| 🟡 Scope creep | >20% items added mid-sprint | Improve refinement |
+| 🟡 Scope creep | >20% items added mid-cycle | Improve refinement |
 | 🟢 Healthy | 90-110% velocity, few bugs | Keep doing what works |
 | 🔴 Bug influx | Bugs > 30% of total work | Address tech debt |
 
@@ -48,14 +48,14 @@ Each item must have: **owner**, **deadline**, **metric** to measure success.
 
 ### 5. Link to backlog
 - Add to `projects/meu-projeto/knowledge/backlog/01-tech-debt.md`
-- Or create Azure task
+- Or create an issue/task
 
 ## Output
 
 ```json
 {
   "tipo": "retrospective",
-  "sprint": "Sprint 05-2026",
+  "cycle": "2026-05",
   "metrics": {
     "planned_velocity": 42,
     "delivered_velocity": 38,

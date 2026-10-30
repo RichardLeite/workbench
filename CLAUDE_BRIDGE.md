@@ -19,17 +19,18 @@ O `.workbench` mantém **uma** fonte da verdade (`.opencode/`) e projeta camadas
 
 ```bash
 # 1. Gerar/atualizar a camada .claude/ a partir de .opencode/
-node .opencode/scripts/sync-to-claude.js      # ou: npm run sync:claude
+uv run --frozen python -m workbench sync claude      # ou: npm run sync:claude
 
 # 2. Configurar MCPs (uma vez)
 cp .env.example .env    # preencher credenciais
-npx @floriscornel/teams-mcp@0.9.0 authenticate
 
 # 3. Abrir o Claude Code na raiz do .workbench
 claude
 ```
 
-O sync gera **34 agentes**, `.mcp.json` (4 servidores) e `.claude/settings.json`,
+O `SessionStart` gerado em `.claude/settings.json` roda `wb projects sync` para
+atualizar o catálogo local de projetos. O sync gera **29 agentes**, `.mcp.json`
+(1 servidor ativo) e `.claude/settings.json`,
 e cria os symlinks `skills`/`commands`. Reinicie o Claude Code para carregar.
 
 ### WSL: `node` precisa estar no PATH
@@ -87,8 +88,8 @@ Depois **reinicie o Claude Code** — os 4 MCPs conectam sozinhos.
 
 ### MCP servers (`.mcp.json`)
 
-`mcp-image` (ativo) · `mysql` · `azure-devops` · `teams-graph` (usa `TEAMS_MCP_CLIENT_ID` do `.env`; adapters opcionais).
-Nomes de tools no Claude: `mcp__<server>__<tool>` (ex.: `mcp__azure-devops__wit_get_work_item`).
+`mcp-image` (ativo) e `mysql` (adapter opcional).
+Nomes de tools no Claude: `mcp__<server>__<tool>`.
 
 ## Skills & Commands
 

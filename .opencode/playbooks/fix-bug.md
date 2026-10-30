@@ -11,7 +11,7 @@ Corrigir um bug com impacto mínimo, reproduzindo antes e depois.
 ## Quando usar
 - Bug reportado em produção
 - Bug encontrado durante desenvolvimento
-- Hotfix (ver `/git-hotfix` para fluxo completo)
+- Fluxo do processo do projeto (`/process`)
 
 ## Processo
 1. **Reproduzir**: Entender o cenário que causa o bug

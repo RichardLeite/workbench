@@ -73,7 +73,7 @@ Buscar warm/cold memory APENAS se a mensagem contiver:
 2. **Nome de repositório** ou arquivo específico
 3. **Erro técnico** conhecido ou stack trace
 4. **Stack específica** (Node, React, MySQL, PostgreSQL)
-5. **Módulo específico** (auth, payment, migration, fiscal)
+5. **Módulo específico** (auth, payment, migration, auth)
 6. **Decisão arquitetural** (ADR, trade-off)
 7. **Termo de negócio recorrente** (NF-e, ICMS, OS, contrato)
 8. **Pedido de continuar tarefa anterior**

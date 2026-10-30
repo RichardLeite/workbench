@@ -13,11 +13,10 @@
 4. Every code change must be reproducible and testable
 5. Every relevant decision must have evidence
 6. No change without rollback strategy
-7. No P1 while P0 is open; no P2 while P1 is open
-8. Hotfix must minimize scope and avoid parallel refactoring
-9. Backport must preserve functional equivalence
-10. Specs and backlog must be updated as part of done criteria
-11. **Notification Guard-Rail**: no external message without explicit user approval
+7. Respect the project license; never copy code from an incompatible license
+8. Never expose secrets
+9. Specs and backlog updated when the process requires it
+10. Follow the project process in `.opencode/processes/<name>/process.json`
 
 ## Code Conventions
 
@@ -74,15 +73,14 @@ Classify risk first: **Low** (<3 steps) → **Medium** (3-7, review optional) �
 | Task | Agent |
 |------|-------|
 | DISCOVERY | `explorador` / `explore` |
-| CODE REVIEW | `revisor` / `code-reviewer` / `pr-insight` |
+| CODE REVIEW | `revisor` / `code-reviewer` |
 | SECURITY REVIEW | `security-reviewer` / `sec-arch` |
 | BUILD (generic) | `backend-dev` / `frontend-dev` / `pedreiro` |
 | BUILD (well-defined) | `pedreiro` |
 | DATABASE | `database-dev` |
 | TEST PLAN | `qa-engineer` |
-| SPRINT/PROCESS | `scrum-master` |
+| PROCESS | `scrum-master` |
 | REQUIREMENTS | `business-analyst` |
-| ADO TASKS | `task-refiner-ado` |
 | DEPLOY | `devops-engineer` |
 | VAULT UPDATE | `vault-updater` |
 | INTEGRATION STUDY | `integracoes-power` |
@@ -98,17 +96,16 @@ Classify risk first: **Low** (<3 steps) → **Medium** (3-7, review optional) �
 |-------|---------|-------|
 | `pedreiro` | Fast implementation, well-defined | gpt-5.3-codex-spark medium |
 | `revisor` | Code review (read-only) | gpt-5.4 high |
-| `pr-insight` | PR analysis + GitHub + Teams | gpt-5.4 high |
 | `explorador` | Codebase search (read-only) | gpt-5.3-codex-spark medium |
 
 ## MCP Servers (in `~/.codex/config.toml`)
 
 - `mcp-image` — image I/O e análise (ativo por padrão)
-- `azure-devops` — Work items, queries (adapter opcional)
-- `teams-graph` — Send Teams messages via Graph API (adapter opcional)
 - `mysql` — MySQL queries (adapter opcional)
 
 ## Project Context
 
 Cada projeto declara stack, repositórios e convenções no próprio `AGENTS.md`.
-Consulte `.opencode/config/project-mapping.json` para o catálogo.
+O catálogo é descoberto automaticamente; rode `wb projects sync` no início da
+sessão para atualizar `.opencode/config/project-mapping.local.json`. Consulte
+`wb projects list` para o catálogo mesclado.

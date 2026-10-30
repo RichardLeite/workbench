@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import shutil
-import subprocess
 import time
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
@@ -45,6 +44,8 @@ def run(
     input_text: str | None = None,
 ) -> CommandResult:
     """Executa um comando e retorna stdout/stderr/exit code."""
+
+    import subprocess
 
     if not args:
         raise ValueError("args não pode ser vazio")

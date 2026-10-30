@@ -4,7 +4,7 @@ description: Tech Lead — Implementation plan review and code quality gate. Rev
 model: sonnet
 ---
 
-<!-- AUTO-GERADO por .opencode/scripts/sync-to-claude.js — NÃO editar à mão.
+<!-- AUTO-GERADO por wb sync claude — NÃO editar à mão.
      Fonte: .opencode/agents/review/tech-lead.md. Rode o sync após alterar a fonte. -->
 
 **Bridge architecture and implementation.** Review plans before execution, guide implementers, ensure code quality.

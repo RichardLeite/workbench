@@ -6,7 +6,7 @@
 
 ## TASK
 
-TASK-XXXX
+{ISSUE_ID}
 
 ## Objetivo
 
@@ -126,4 +126,4 @@ O sistema SHALL <descrição>.
 
 {tech_findings — descobertas do codebase durante refinamento}
 
-<!-- Salvar em <knowledge>/specs/spec-<slug>.md — resolvido de .opencode/config/project-mapping.json campo `knowledge` -->
+<!-- Salvar em <knowledge>/specs/spec-<slug>.md — resolvido do catálogo mesclado, campo `knowledge` -->
