@@ -82,30 +82,44 @@ def load_process(
     raise ConfigError(f"Processo não encontrado: {name}")
 
 
-def list_processes(root: Path | None = None) -> list[dict[str, Any]]:
-    base = _root(root) / PROCESSES_DIR
-    if not base.exists():
-        return []
+def list_processes(
+    root: Path | None = None,
+    project: str | None = None,
+) -> list[dict[str, Any]]:
+    base = _root(root)
+    candidates: list[tuple[Path, str]] = []
+    if project:
+        candidates.append((base / "projects" / project / "processes", "project"))
+    candidates.append((base / PROCESSES_DIR, "global"))
+
     processes: list[dict[str, Any]] = []
-    for directory in sorted(base.iterdir()):
-        if not directory.is_dir() or directory.name.startswith("_"):
+    seen: set[str] = set()
+    for directory_base, source in candidates:
+        if not directory_base.exists():
             continue
-        path = directory / "process.json"
-        if not path.is_file():
-            continue
-        try:
-            data = _read_json(path)
-        except ConfigError:
-            continue
-        processes.append(
-            {
-                "name": directory.name,
-                "description": data.get("description"),
-                "version": data.get("version"),
-                "license": data.get("license"),
-                "path": str(path),
-            }
-        )
+        for directory in sorted(directory_base.iterdir()):
+            if not directory.is_dir() or directory.name.startswith("_"):
+                continue
+            if directory.name in seen:
+                continue
+            path = directory / "process.json"
+            if not path.is_file():
+                continue
+            try:
+                data = _read_json(path)
+            except ConfigError:
+                continue
+            seen.add(directory.name)
+            processes.append(
+                {
+                    "name": directory.name,
+                    "description": data.get("description"),
+                    "version": data.get("version"),
+                    "license": data.get("license"),
+                    "path": str(path),
+                    "source": source,
+                }
+            )
     return processes
 
 
@@ -454,7 +468,7 @@ def _load_or_error(args: Any) -> tuple[ProcessDefinition, dict[str, Any]]:
 
 
 def _run_list(args: Any) -> int:
-    _print_json(list_processes())
+    _print_json(list_processes(project=getattr(args, "project", None)))
     return 0
 
 
@@ -465,11 +479,12 @@ def _run_show(args: Any) -> int:
 
 
 def _run_validate(args: Any) -> int:
-    names = [args.name] if args.name else [item["name"] for item in list_processes()]
+    project = getattr(args, "project", None)
+    names = [args.name] if args.name else [item["name"] for item in list_processes(project=project)]
     failures = 0
     for name in names:
         try:
-            definition = load_process(name)
+            definition = load_process(name, project)
         except ConfigError as exc:
             print(f"❌ {name}: {exc}", file=sys.stderr)
             failures += 1
