@@ -9,7 +9,5 @@
   ],
   "returncode": 0,
   "stdout": "{\n  \"valid\": true,\n  \"pattern\": \"fix/TASK-XXXX-release\"\n}",
-  "stderr": "",
-  "duration_ms": 49.28,
-  "captured_at": "2026-10-30T02:16:08+00:00"
+  "stderr": ""
 }

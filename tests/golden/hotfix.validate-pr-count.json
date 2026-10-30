@@ -9,7 +9,5 @@
   ],
   "returncode": 0,
   "stdout": "{\n  \"valid\": true,\n  \"expected\": 2,\n  \"actual\": 2\n}",
-  "stderr": "",
-  "duration_ms": 50.44,
-  "captured_at": "2026-10-30T02:16:08+00:00"
+  "stderr": ""
 }

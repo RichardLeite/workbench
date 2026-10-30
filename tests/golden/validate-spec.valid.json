@@ -8,7 +8,5 @@
   ],
   "returncode": 0,
   "stdout": "\n📋 Validação de Spec: spec-valid.md\n   Módulos encontrados: 1\n   Total de linhas: 28\n\n✅ Spec válida — formato modular compatível com /execute-spec",
-  "stderr": "",
-  "duration_ms": 49.63,
-  "captured_at": "2026-10-30T02:16:07+00:00"
+  "stderr": ""
 }

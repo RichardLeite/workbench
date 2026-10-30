@@ -1,0 +1,12 @@
+{
+  "id": "vision.probe",
+  "implementation": "node",
+  "argv": [
+    "node",
+    "scripts/vision-utils.js",
+    "tests/fixtures/sample.png"
+  ],
+  "returncode": 0,
+  "stdout": "{\"ok\":true,\"mime\":\"image/png\",\"size\":40}",
+  "stderr": ""
+}

@@ -8,7 +8,5 @@
   ],
   "returncode": 0,
   "stdout": "{\n  \"prCount\": 2,\n  \"targets\": [\n    \"main\",\n    \"release\"\n  ]\n}",
-  "stderr": "",
-  "duration_ms": 56.56,
-  "captured_at": "2026-10-30T02:16:08+00:00"
+  "stderr": ""
 }

@@ -1,0 +1,19 @@
+{
+  "id": "teams.shapes.valid",
+  "implementation": "node",
+  "argv": [
+    "node",
+    "scripts/teams-message-shapes.js",
+    "validate",
+    "pr-notification",
+    "--title",
+    "🔥 HOTFIX TASK-21398 — Report layout",
+    "--message",
+    "🔥 HOTFIX TASK-21398 — Report layout\n📂 PRs:\nAPP → #5169 → main: https://github.com/example/app/pull/5169\n✍️ Autor: Pessoa Exemplo\n👤 Revisor: <at id=\"0\">Outra Pessoa</at>",
+    "--mentions",
+    "[{\"name\": \"Outra Pessoa\", \"email\": \"pessoa@example.com\"}]"
+  ],
+  "returncode": 0,
+  "stdout": "{\n  \"errors\": [],\n  \"warnings\": [],\n  \"valid\": true\n}",
+  "stderr": ""
+}

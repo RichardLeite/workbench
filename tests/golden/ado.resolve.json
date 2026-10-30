@@ -8,7 +8,5 @@
   ],
   "returncode": 0,
   "stdout": "{\n  \"project\": \"Sprint Team\",\n  \"organization\": \"your-org\",\n  \"team\": \"Sprint Team\",\n  \"projectId\": \"00000000-0000-0000-0000-000000000000\",\n  \"type\": \"sprint\",\n  \"boardUrl\": \"https://dev.azure.com/your-org/Sprint%20Team\",\n  \"gitFlow\": {\n    \"command\": \"/git-sprint\",\n    \"base\": \"main\",\n    \"branchPattern\": \"feat/TASK-XXXX\",\n    \"prCount\": 1\n  }\n}",
-  "stderr": "",
-  "duration_ms": 49.15,
-  "captured_at": "2026-10-30T02:16:08+00:00"
+  "stderr": ""
 }

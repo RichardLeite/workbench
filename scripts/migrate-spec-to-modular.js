@@ -49,7 +49,7 @@ console.log(`\n📋 Migrando: ${title}`);
 
 // Extrai seções por heading
 function extractSection(heading) {
-  const regex = new RegExp(`^##\\s+${heading}\\s*$([\\s\\S]*?)(?=^##\\s|\\z)`, "m");
+  const regex = new RegExp(`^##\\s+${heading}\\s*$([\\s\\S]*?)(?=^##\\s|(?![\\s\\S]))`, "m");
   const match = content.match(regex);
   return match ? match[1].trim() : "";
 }

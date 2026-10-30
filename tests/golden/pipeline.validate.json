@@ -8,7 +8,5 @@
   ],
   "returncode": 0,
   "stdout": "✅ Pipeline state validation passed. (0 files, 0 passed)",
-  "stderr": "",
-  "duration_ms": 49.62,
-  "captured_at": "2026-10-30T02:16:07+00:00"
+  "stderr": ""
 }

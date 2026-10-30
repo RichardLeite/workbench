@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import difflib
 import json
+import re
 import subprocess
 import sys
 import time
@@ -36,11 +37,18 @@ def load_manifest() -> dict[str, Any]:
         return json.load(handle)
 
 
-def normalize(text: str) -> str:
+ISO_TIMESTAMP = re.compile(r"\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\b")
+ISO_DATE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
+
+
+def normalize(text: str, case: dict[str, Any] | None = None) -> str:
     root = str(ROOT.resolve())
     text = text.replace(root, "<ROOT>")
     text = text.replace(root.replace("\\", "/"), "<ROOT>")
     text = text.replace("\r\n", "\n").replace("\r", "\n")
+    text = ISO_TIMESTAMP.sub("<TIMESTAMP>", text)
+    if case and "dates" in case.get("normalize", []):
+        text = ISO_DATE.sub("<DATE>", text)
     lines = [line.rstrip() for line in text.splitlines()]
     return "\n".join(lines).rstrip("\n")
 
@@ -76,8 +84,8 @@ def run_case(case: dict[str, Any], impl: str) -> dict[str, Any]:
         "implementation": impl,
         "argv": argv,
         "returncode": completed.returncode,
-        "stdout": normalize(completed.stdout or ""),
-        "stderr": normalize(completed.stderr or ""),
+        "stdout": normalize(completed.stdout or "", case),
+        "stderr": normalize(completed.stderr or "", case),
         "duration_ms": elapsed,
         "captured_at": datetime.now(UTC).isoformat(timespec="seconds"),
     }
@@ -100,7 +108,12 @@ def capture(cases: list[dict[str, Any]], only: set[str] | None) -> int:
             failures += 1
             continue
         path = golden_path(case["id"])
-        path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        persisted = {
+            key: result[key]
+            for key in ("id", "implementation", "argv", "returncode", "stdout", "stderr")
+        }
+        serialized = json.dumps(persisted, ensure_ascii=False, indent=2) + "\n"
+        path.write_text(serialized, encoding="utf-8")
         status = "ok" if result["returncode"] == 0 else f"exit {result['returncode']}"
         print(f"[CAPTURE] {case['id']} ({status}) -> {path.relative_to(ROOT)}")
     return 1 if failures else 0

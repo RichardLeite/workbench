@@ -8,7 +8,5 @@
   ],
   "returncode": 1,
   "stdout": "❌ Branch 'Not A Branch' não corresponde a nenhum padrão conhecido.\n   Padrões válidos:\n   - feat/TASK-1234 (SPRINT)\n   - fix/TASK-1234 (HOTFIX)\n   - fix/TASK-1234-release (HOTFIX → release)\n   - feat/add-feature (workbench)\n   - fix/TASK-1234-descricao (opcional)",
-  "stderr": "",
-  "duration_ms": 48.32,
-  "captured_at": "2026-10-30T02:16:07+00:00"
+  "stderr": ""
 }

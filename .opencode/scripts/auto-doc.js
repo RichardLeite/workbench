@@ -148,7 +148,7 @@ function scanApi(routesPath, projectSlug) {
   }
 
   if (!routesPath || !fs.existsSync(routesPath)) {
-    return { tipo: 'api', arquivo: 'API.md', conteudo: '# API\\n\\nNo route files found.' };
+    return { tipo: 'api', arquivo: 'API.md', conteudo: '# API\n\nNo route files found.' };
   }
 
   let endpoints = [];

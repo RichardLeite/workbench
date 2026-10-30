@@ -454,6 +454,159 @@
         "quality-gates",
         "default"
       ]
+    },
+    {
+      "id": "docs.readme",
+      "argv": [
+        "node",
+        ".opencode/scripts/auto-doc.js",
+        "readme"
+      ],
+      "python_argv": [
+        "{python}",
+        "-m",
+        "workbench",
+        "docs",
+        "readme"
+      ]
+    },
+    {
+      "id": "docs.api",
+      "argv": [
+        "node",
+        ".opencode/scripts/auto-doc.js",
+        "api"
+      ],
+      "python_argv": [
+        "{python}",
+        "-m",
+        "workbench",
+        "docs",
+        "api"
+      ]
+    },
+    {
+      "id": "knowledge.search",
+      "argv": [
+        "node",
+        ".opencode/scripts/rag-search.js",
+        "Workbench",
+        "--project",
+        "workbench",
+        "--limit",
+        "2"
+      ],
+      "python_argv": [
+        "{python}",
+        "-m",
+        "workbench",
+        "knowledge",
+        "search",
+        "Workbench",
+        "--project",
+        "workbench",
+        "--limit",
+        "2"
+      ]
+    },
+    {
+      "id": "metrics.defects",
+      "argv": [
+        "node",
+        ".opencode/scripts/cycle-time.js",
+        "--mode=defects"
+      ],
+      "python_argv": [
+        "{python}",
+        "-m",
+        "workbench",
+        "metrics",
+        "cycle-time",
+        "--mode=defects"
+      ]
+    },
+    {
+      "id": "teams.shapes.valid",
+      "argv": [
+        "node",
+        "scripts/teams-message-shapes.js",
+        "validate",
+        "pr-notification",
+        "--title",
+        "🔥 HOTFIX TASK-21398 — Report layout",
+        "--message",
+        "🔥 HOTFIX TASK-21398 — Report layout\n📂 PRs:\nAPP → #5169 → main: https://github.com/example/app/pull/5169\n✍️ Autor: Pessoa Exemplo\n👤 Revisor: <at id=\"0\">Outra Pessoa</at>",
+        "--mentions",
+        "[{\"name\": \"Outra Pessoa\", \"email\": \"pessoa@example.com\"}]"
+      ],
+      "python_argv": [
+        "{python}",
+        "-m",
+        "workbench",
+        "teams",
+        "shapes",
+        "validate",
+        "pr-notification",
+        "--title",
+        "🔥 HOTFIX TASK-21398 — Report layout",
+        "--message",
+        "🔥 HOTFIX TASK-21398 — Report layout\n📂 PRs:\nAPP → #5169 → main: https://github.com/example/app/pull/5169\n✍️ Autor: Pessoa Exemplo\n👤 Revisor: <at id=\"0\">Outra Pessoa</at>",
+        "--mentions",
+        "[{\"name\": \"Outra Pessoa\", \"email\": \"pessoa@example.com\"}]"
+      ]
+    },
+    {
+      "id": "spec.migrate.dry-run",
+      "argv": [
+        "node",
+        "scripts/migrate-spec-to-modular.js",
+        "tests/fixtures/spec-old.md",
+        "--dry-run"
+      ],
+      "python_argv": [
+        "{python}",
+        "-m",
+        "workbench",
+        "spec",
+        "migrate",
+        "tests/fixtures/spec-old.md",
+        "--dry-run"
+      ],
+      "normalize": [
+        "dates"
+      ]
+    },
+    {
+      "id": "vision.probe",
+      "argv": [
+        "node",
+        "scripts/vision-utils.js",
+        "tests/fixtures/sample.png"
+      ],
+      "python_argv": [
+        "{python}",
+        "-m",
+        "workbench",
+        "vision",
+        "probe",
+        "tests/fixtures/sample.png"
+      ]
+    },
+    {
+      "id": "vision.probe.invalid",
+      "argv": [
+        "node",
+        "scripts/vision-utils.js",
+        "tests/fixtures/too-short.bin"
+      ],
+      "python_argv": [
+        "{python}",
+        "-m",
+        "workbench",
+        "vision",
+        "probe",
+        "tests/fixtures/too-short.bin"
+      ]
     }
   ]
 }

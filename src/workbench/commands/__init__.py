@@ -5,7 +5,24 @@ from __future__ import annotations
 from argparse import _SubParsersAction
 from collections.abc import Callable
 
-from workbench.commands import ado, doctor, hotfix, pipeline, repo, sprint, validate, version
+from workbench.commands import (
+    ado,
+    docs,
+    doctor,
+    hotfix,
+    issue,
+    knowledge,
+    metrics,
+    pipeline,
+    repo,
+    reviewers,
+    spec,
+    sprint,
+    teams,
+    validate,
+    version,
+    vision,
+)
 
 CommandHandler = Callable[[object], int]
 
@@ -19,3 +36,11 @@ def register_all(subparsers: _SubParsersAction) -> None:
     pipeline.register(subparsers)
     ado.register(subparsers)
     hotfix.register(subparsers)
+    issue.register(subparsers)
+    teams.register(subparsers)
+    spec.register(subparsers)
+    knowledge.register(subparsers)
+    docs.register(subparsers)
+    metrics.register(subparsers)
+    reviewers.register(subparsers)
+    vision.register(subparsers)

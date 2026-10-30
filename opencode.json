@@ -529,8 +529,12 @@
     "mcp-image": {
       "type": "local",
       "command": [
-        "node",
-        "scripts/mcp-image.js"
+        "uv",
+        "run",
+        "--frozen",
+        "python",
+        "-m",
+        "workbench.mcp.image"
       ],
       "enabled": true
     }

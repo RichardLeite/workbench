@@ -10,7 +10,5 @@
   ],
   "returncode": 0,
   "stdout": "{\n  \"status\": \"approved\",\n  \"acao\": \"✅ Avança para Fase 3\"\n}",
-  "stderr": "",
-  "duration_ms": 49.58,
-  "captured_at": "2026-10-30T02:16:08+00:00"
+  "stderr": ""
 }

@@ -8,7 +8,5 @@
   ],
   "returncode": 0,
   "stdout": "✅ Sprint tasks validation passed.",
-  "stderr": "",
-  "duration_ms": 208.09,
-  "captured_at": "2026-10-30T02:16:07+00:00"
+  "stderr": ""
 }

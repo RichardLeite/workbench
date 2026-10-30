@@ -8,7 +8,5 @@
   ],
   "returncode": 0,
   "stdout": "✅ Branch 'feat/add-feature' é válida (.workbench kebab).",
-  "stderr": "",
-  "duration_ms": 49.05,
-  "captured_at": "2026-10-30T02:16:06+00:00"
+  "stderr": ""
 }

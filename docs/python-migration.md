@@ -55,9 +55,21 @@ tests/
 | `validate-spec-format.js` | `wb validate spec` |
 | `repository-resolver.js` | `wb repo resolve` |
 | `sprint.js` (definitions/validate/…) | `wb sprint …` |
-| `pipeline.js` (select-agent/validate/phase/…) | `wb pipeline …` |
+| `pipeline.js` (state/select-agent/phase/report/…) | `wb pipeline …` |
 | `ado.js` (resolve/parse/fallback) | `wb ado …` |
 | `hotfix.js` (config/validators/gates) | `wb hotfix …` |
+| `tech-debt-issue.js` | `wb issue tech-debt` |
+| `teams-mentions.js` | `wb teams mentions` |
+| `teams-message-shapes.js` | `wb teams shapes validate` |
+| `migrate-spec-to-modular.js` | `wb spec migrate` |
+| `rag-search.js` | `wb knowledge search` |
+| `auto-doc.js` | `wb docs …` |
+| `cycle-time.js` | `wb metrics cycle-time` |
+| `reviewer-sort.js` | `wb reviewers sort` |
+| `vision-utils.js` | `wb vision probe` |
+| `mcp-image.js` | `uv run --frozen python -m workbench.mcp.image` |
+
+> O MCP `mcp-image` agora é Python por padrão (`opencode.json` e `.mcp.json`).
 
 ## Harness de paridade
 
@@ -82,9 +94,6 @@ uv run pytest --cov=workbench --cov-report=term-missing
 
 ## Próximas fases
 
-- Fase 1 restante: `tech-debt`, `teams-*`, `rag-search`, `auto-doc`, `cycle-time`,
-  `reviewer-sort`, `spec migrate`.
 - Fase 2: `create-release` e fluxos de release.
-- Fase 3: `vision-utils` + `mcp-image` em Python.
-- Fase 4: `sync claude/codex`, docs/comandos e CI final.
-- Fase 5: remoção dos scripts Node migrados.
+- Fase 4: `sync claude/codex`, atualização dos comandos/docs e CI final.
+- Fase 5: remoção dos scripts Node migrados e relatório final de paridade/benchmark.
