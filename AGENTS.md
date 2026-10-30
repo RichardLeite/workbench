@@ -35,7 +35,7 @@ Consulte `.opencode/config/project-mapping.json` para o catálogo completo com:
 - Repositórios associados
 - Path de knowledge
 - Agentes compatíveis
-- Disponibilidade dinâmica via `.opencode/scripts/repository-resolver.js`
+- Disponibilidade dinâmica via `wb repo resolve` (`uv run --frozen python -m workbench repo resolve`)
 
 ## Initial Routing
 

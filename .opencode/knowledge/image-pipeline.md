@@ -1,7 +1,7 @@
 # Image Pipeline Architecture
 
 > **Criado em:** 2026-07-07
-> **Spec:** [Image Pipeline Skill](specs/spec-image-pipeline-skill.md)
+> **Implementação:** `src/workbench/mcp/image.py` + `src/workbench/vision.py`
 > **Skill:** `../skills/image-pipeline/SKILL.md`
 > **TASK:** WORKBENCH-IMAGEPIPE
 > **Status:** Implantado
@@ -28,8 +28,8 @@ Orquestrador (orquestrador.md)
 | Componente | Path | Função |
 |-----------|------|--------|
 | **Skill `image-pipeline`** | `.opencode/skills/image-pipeline/SKILL.md` | Pacote canônico: auto-detect source, chamar MCP, iterar imagens, vision check, analisar conforme `analysis_type`, consolidar `analises[]` |
-| **MCP `mcp-image`** | `scripts/mcp-image.js` | Servidor JSON-RPC stdio — 4 tools: `image_save`, `image_get_dir`, `image_validate`, `check_vision_error` |
-| **`vision-utils.js`** | `scripts/vision-utils.js` | Lib zero-deps (Node stdlib): magic header validation, SSRF block, ADO download, cache, vision error detection |
+| **MCP `mcp-image`** | `src/workbench/mcp/image.py` | Servidor JSON-RPC stdio — 4 tools: `image_save`, `image_get_dir`, `image_validate`, `check_vision_error` |
+| **`vision`** | `src/workbench/vision.py` | Lib stdlib: magic header validation, SSRF block, ADO download, cache, vision error detection |
 | **Subagente `image-analyzer`** | `.opencode/agents/analysis/image-analyzer.md` | Executa skill com `analysis_type: "visual_spec"` |
 | **Subagente `ux-analyzer`** | `.opencode/agents/analysis/ux-analyzer.md` | Executa skill com `analysis_type: "ux_audit"` |
 | **Orquestrador** | `.opencode/agents/core/orquestrador.md` — seção `## IMAGE HANDLING` | Detecta imagem no input, decide subagente, delega, injeta resultado no artefato |
@@ -200,7 +200,7 @@ Registro em `opencode.json`:
 ```json
 "mcp-image": {
   "type": "local",
-  "command": ["node", "scripts/mcp-image.js"],
+  "command": ["uv", "run", "--frozen", "python", "-m", "workbench.mcp.image"],
   "enabled": true
 }
 ```
@@ -213,15 +213,14 @@ Registro em `opencode.json`:
 2. **Skill é o pacote canônico:** I/O + análise + vision detection vivem na skill, não nos subagentes
 3. **Não-bloqueante:** visão falha → pipeline segue com warnings. Uma imagem falha → batch continua com as demais
 4. **Cache determinístico:** mesmo source → mesmo path → cache hit idempotente
-5. **Zero dependências externas:** `vision-utils.js` usa apenas Node stdlib
+5. **Zero dependências externas:** `vision.py` usa apenas Python stdlib
 6. **Segurança por design:** SSRF check, size cap, sanitização de paths, secrets nunca logados
 
 ## Artefatos Relacionados
 
-- [Spec completa](specs/spec-image-pipeline-skill.md) — requisitos detalhados, TDD, implementação (1005 linhas)
 - [Skill image-pipeline](../skills/image-pipeline/SKILL.md) — documentação injetada nos subagentes
 - [Orquestrador — IMAGE HANDLING](../agents/core/orquestrador.md) — seção de detecção, delegação e injeção
 - [image-analyzer](../agents/analysis/image-analyzer.md) — subagente de análise visual (visual_spec)
 - [ux-analyzer](../agents/analysis/ux-analyzer.md) — subagente de auditoria UX (ux_audit)
-- [vision-utils.js](../../scripts/vision-utils.js) — utilitário cross-platform
-- [mcp-image.js](../../scripts/mcp-image.js) — servidor MCP JSON-RPC
+- [vision.py](../../src/workbench/vision.py) — utilitário cross-platform
+- [image.py](../../src/workbench/mcp/image.py) — servidor MCP JSON-RPC

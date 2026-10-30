@@ -409,7 +409,7 @@ INSTRUA o subagente a devolver ao orquestrador:
 
 ## Vision error patterns
 
-A skill referencia os **19 padrões regex** de detecção de erro de visão definidos em `VISION_ERROR_PATTERNS` no arquivo `scripts/vision-utils.js`. Estes padrões são aplicados (case-insensitive) ao texto retornado pelo `read` tool após carregar a imagem. Se qualquer padrão der match, a imagem é pulada com warning — o batch continua.
+A skill referencia os **19 padrões regex** de detecção de erro de visão definidos em `VISION_ERROR_PATTERNS` no arquivo `src/workbench/vision.py`. Estes padrões são aplicados (case-insensitive) ao texto retornado pelo `read` tool após carregar a imagem. Se qualquer padrão der match, a imagem é pulada com warning — o batch continua.
 
 | # | Padrão regex | Descrição |
 |:-:|:---|:---|
@@ -433,4 +433,4 @@ A skill referencia os **19 padrões regex** de detecção de erro de visão defi
 | 18 | `/cannot read (binary\|image) file/i` | Read tool recusou arquivo binário (formato não suportado) |
 | 19 | `/unsupported (image )?format/i` | Formato de imagem não suportado |
 
-> **Source único:** `scripts/vision-utils.js` exporta `VISION_ERROR_PATTERNS` como array de RegExp. O MCP `mcp-image` expõe a tool `check_vision_error` que usa internamente `detectVisionError()` (que itera sobre `VISION_ERROR_PATTERNS`). A skill pode usar tanto a tool MCP quanto a lista inline — o resultado é equivalente.
+> **Source único:** `src/workbench/vision.py` exporta `VISION_ERROR_PATTERNS` como lista de `re.Pattern`. O MCP `mcp-image` expõe a tool `check_vision_error` que usa internamente `detect_vision_error()` (que itera sobre `VISION_ERROR_PATTERNS`). A skill pode usar tanto a tool MCP quanto a lista inline — o resultado é equivalente.

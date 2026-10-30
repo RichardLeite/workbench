@@ -14,11 +14,12 @@ def test_extract_task_ids_and_pr() -> None:
     assert release.extract_pr_number("no pr") is None
 
 
-def test_suggest_next_tag() -> None:
+def test_suggest_next_tag(monkeypatch) -> None:
+    monkeypatch.setattr(release, "get_last_tag", lambda: None)
     assert release.suggest_next_tag("v1.2.3") == "v1.2.4"
     assert release.suggest_next_tag("v2.0.0") == "v2.0.1"
     assert release.suggest_next_tag("invalid") == "v1.0.0"
-    assert release.suggest_next_tag(None) in {"v1.0.0", "v1.2.4"}
+    assert release.suggest_next_tag(None) == "v1.0.0"
 
 
 def test_group_work_items_order() -> None:

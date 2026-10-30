@@ -35,7 +35,7 @@ User Input → Identify Context (.workbench | projects/<slug> | explicit slug)
 
 `project-mapping.json#repos` cataloga paths relativos à raiz do workbench, mas
 não armazena disponibilidade por máquina. O contrato runtime está em
-`.opencode/scripts/repository-resolver.js`:
+`wb repo resolve` (`src/workbench/commands/repo.py`):
 
 | Estado do repo | Contrato |
 |----------------|----------|
@@ -57,12 +57,12 @@ ausentes e `invalid` quando nenhum está disponível e ao menos um é `invalid_g
 
 ## Scripts generalizados
 
-| Script | Comportamento |
-|--------|---------------|
-| `auto-doc.js` | Lê `project-mapping.json` para resolver repositório da API. Flag `--project <slug>`. |
-| `cycle-time.js` | Lê `project-mapping.json` para resolver knowledge/bugs e coverage paths. Flag `--project`. |
-| `rag-search.js` | Vaults resolvidos via mapping. Log estruturado. |
-| `reviewer-sort.js` | Lê `config.reviewers` do `eligible-reviewers.json`. |
+| Comando | Comportamento |
+|---------|---------------|
+| `wb docs` | Lê `project-mapping.json` para resolver repositório da API. Flag `--project <slug>`. |
+| `wb metrics cycle-time` | Lê `project-mapping.json` para resolver knowledge/bugs e coverage paths. Flag `--project`. |
+| `wb knowledge search` | Vaults resolvidos via mapping. Log estruturado. |
+| `wb reviewers sort` | Lê `config.reviewers` do `eligible-reviewers.json`. |
 
 ## Onboarding de novo projeto
 

@@ -1,9 +1,12 @@
 {
   "id": "knowledge.search",
-  "implementation": "node",
+  "implementation": "python",
   "argv": [
-    "node",
-    ".opencode/scripts/rag-search.js",
+    "C:\\Repositories\\workbench\\.venv\\Scripts\\python.exe",
+    "-m",
+    "workbench",
+    "knowledge",
+    "search",
     "Workbench",
     "--project",
     "workbench",
@@ -11,6 +14,6 @@
     "2"
   ],
   "returncode": 0,
-  "stdout": "[\n  {\n    \"file\": \"image-pipeline.md\",\n    \"title\": \"image-pipeline\",\n    \"score\": 1,\n    \"snippet\": \"> **Criado em:** 2026-07-07 > **Spec:** [Image Pipeline Skill](specs/spec-image-pipeline-skill.md) > **Skill:** `../skills/image-pipeline/SKILL.md` > **TASK:** WORKBENCH-IMAGEPIPE > **Status:** Implan...\",\n    \"matchedFields\": [\n      \"content\"\n    ]\n  },\n  {\n    \"file\": \"multi-project-architecture.md\",\n    \"title\": \"multi-project-architecture\",\n    \"score\": 1,\n    \"snippet\": \"O workbench é uma plataforma genuinamente multi-project. Todos os projetos catalogados em `project-mapping.json` são tratados com paridade pelo orquestrador, scripts e templates.\",\n    \"matchedFields\": [\n      \"content\"\n    ]\n  }\n]",
+  "stdout": "[\n  {\n    \"file\": \"image-pipeline.md\",\n    \"title\": \"image-pipeline\",\n    \"score\": 1,\n    \"snippet\": \"> **Criado em:** 2026-07-07 > **Implementação:** `src/workbench/mcp/image.py` + `src/workbench/vision.py` > **Skill:** `../skills/image-pipeline/SKILL.md` > **TASK:** WORKBENCH-IMAGEPIPE > **Status:**...\",\n    \"matchedFields\": [\n      \"content\"\n    ]\n  },\n  {\n    \"file\": \"multi-project-architecture.md\",\n    \"title\": \"multi-project-architecture\",\n    \"score\": 1,\n    \"snippet\": \"O workbench é uma plataforma genuinamente multi-project. Todos os projetos catalogados em `project-mapping.json` são tratados com paridade pelo orquestrador, scripts e templates.\",\n    \"matchedFields\": [\n      \"content\"\n    ]\n  }\n]",
   "stderr": "{\"event\":\"search.start\",\"project\":\"workbench\",\"vaults\":1,\"terms\":[\"Workbench\"]}"
 }

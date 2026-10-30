@@ -91,6 +91,6 @@ Execute novamente `uv run --frozen python -m workbench repo resolve --project <s
 ## Regras
 
 1. **Sempre pergunte antes de clonar** — confirme com o usuário
-2. **Resolva antes e depois** — use `repository-resolver.js` como fonte runtime de disponibilidade
+2. **Resolva antes e depois** — use `wb repo resolve` como fonte runtime de disponibilidade
 3. **Nunca sobrescreva `invalid_git`** — interrompa e peça uma decisão
 4. **Se não catalogado** — trate como novo projeto e sugira `/new-project`

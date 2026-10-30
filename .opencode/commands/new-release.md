@@ -39,7 +39,7 @@ description: "Release completa: pre-flight checks → wizard interativo → GitH
 /new-release
 ├── FASE 1 — Pre-flight Checks
 ├── FASE 2 — Wizard Interativo
-│   └── (delega para create-release.js sem flags)
+│   └── (delega para `wb release` sem flags)
 ├── FASE 3 — Verificação
 └── FASE 4 — Teams Notification (opcional, guard-rail)
 ```
@@ -70,7 +70,7 @@ git log --oneline @{u}.. 2>/dev/null | head -10
 ```bash
 git remote get-url origin
 ```
-Cruzar com `.opencode/config/project-mapping.json` (heurística já implementada em `create-release.js#detectProjectFromCwd`).
+Cruzar com `.opencode/config/project-mapping.json` (heurística já implementada em `src/workbench/commands/release.py`).
 
 **Exibir:**
 ```
@@ -104,7 +104,7 @@ gh pr list --state merged --search "merged:>YYYY-MM-DD" --json number,title,url 
 
 ### FASE 2: Wizard Interativo
 
-> Delega para o wizard de `create-release.js` (criado no PR #99). 7 etapas com prompts amigáveis.
+> Delega para o wizard de `wb release` (criado no PR #99). 7 etapas com prompts amigáveis.
 
 ```bash
 uv run --frozen python -m workbench release
@@ -202,7 +202,7 @@ Após sucesso, perguntar:
 | `--tag <versão>`  | `--tag v2.0.0`                       | Pré-preencher tag (opcional)       |
 | `--repo <path>`   | `--repo your-org/your-repo`| Pré-preencher repo (opcional)      |
 
-> Argumentos extras são passados para o `create-release.js` no modo CLI (não-wizard).
+> Argumentos extras são passados para o `wb release` no modo CLI (não-wizard).
 
 ---
 
@@ -219,7 +219,7 @@ Após sucesso, perguntar:
 
 ## Veja também
 
-- [`.opencode/scripts/create-release.js`](../../scripts/create-release.js) — script subjacente
+- [`release.py`](../../src/workbench/commands/release.py) — implementação subjacente (`wb release`)
 - [`.opencode/config/project-mapping.json`](../../config/project-mapping.json) — catálogo de projetos
 - [`/git-sprint`](git-sprint.md) — fluxo de sprint (cria PR, não release)
 - [`/git-hotfix`](git-hotfix.md) — fluxo de hotfix (cria PR, não release)

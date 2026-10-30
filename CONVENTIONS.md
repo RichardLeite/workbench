@@ -328,7 +328,7 @@ Como referenciar scripts, skills, configs e ADRs no workbench:
 | **ADR** | `` `@.opencode/backlog/adr/<arquivo>.md (R#)` `` | `` `@.opencode/backlog/adr/ADR-004-sprint-tasks.md (R4)` `` | Ler a regra de negócio no ADR |
 
 **Regras:**
-1. **Scripts** são referenciados como CLI (comando executável) — `` `node .opencode/scripts/<script>.js` ``.
+1. **Scripts** são referenciados como CLI (comando executável) — `` `uv run --frozen python -m workbench <command>` ``.
 2. **Documentos** (skills, ADRs, configs) usam path direto — `` `@.opencode/<path>` ``.
 
 ---
