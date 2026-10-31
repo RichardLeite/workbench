@@ -42,7 +42,10 @@ Clone na raiz do workbench ou em `discovery.roots`.
 ```bash
 uv run --frozen python -m workbench projects sync
 uv run --frozen python -m workbench projects list
+uv run --frozen python -m workbench projects exclude
 ```
+
+Para repos clonados na raiz, `wb projects exclude` mantém o `.git/info/exclude` sincronizado.
 
 Se o repositório não aparecer ou precisar de um papel específico, crie/edite
 `projects/<slug>/project.json` com `repos`:

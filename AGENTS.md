@@ -24,6 +24,7 @@ projects declare `repos` roles in the manifest.
 uv run --frozen python -m workbench projects scan
 uv run --frozen python -m workbench projects sync
 uv run --frozen python -m workbench projects list
+uv run --frozen python -m workbench projects exclude
 ```
 
 The OpenCode plugin, the `wb` CLI and the Claude Code `SessionStart` hook refresh

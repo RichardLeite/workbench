@@ -9,6 +9,7 @@ from typing import Any
 
 from workbench.config import ConfigError, load_project_mapping
 from workbench.discovery import discover_projects, sync_projects
+from workbench.git_exclude import apply_exclude, discovered_entries
 from workbench.paths import workbench_root
 
 
@@ -35,6 +36,15 @@ def register(subparsers: _SubParsersAction) -> None:
     list_command.add_argument("--root", default=None)
     list_command.add_argument("--json", action="store_true", help="Saída JSON no stdout.")
     list_command.set_defaults(handler=_run_list)
+
+    exclude = projects_sub.add_parser(
+        "exclude",
+        help="Gerencia repos descobertos em .git/info/exclude.",
+    )
+    exclude.add_argument("--root", default=None)
+    exclude.add_argument("--dry-run", action="store_true")
+    exclude.add_argument("--json", action="store_true", help="Saída JSON no stdout.")
+    exclude.set_defaults(handler=_run_exclude)
 
 
 def _root(value: str | None) -> Path:
@@ -120,4 +130,25 @@ def _run_list(args: Namespace) -> int:
         repos: Any = item["repos"] or {}
         repo_list = ", ".join(f"{role}={path}" for role, path in repos.items()) or "sem repos"
         print(f"- {item['slug']}: {item['name'] or item['slug']} ({repo_list})")
+    return 0
+
+
+def _run_exclude(args: Namespace) -> int:
+    root = _root(args.root)
+    result = apply_exclude(
+        root,
+        discovered_entries(root),
+        dry_run=args.dry_run,
+    )
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0
+
+    label = "Dry-run" if result["dryRun"] else "Atualizado"
+    print(f"{label}: {result['path']}")
+    print(f"Entradas: {len(result['entries'])}")
+    if result["added"]:
+        print(f"Adicionados: {', '.join(result['added'])}")
+    if result["removed"]:
+        print(f"Removidos: {', '.join(result['removed'])}")
     return 0
