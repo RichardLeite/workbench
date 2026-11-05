@@ -13,7 +13,7 @@ Criar um Pull Request com evidências objetivas, seguindo MCP First / gh CLI Fal
 
 ## Parameters
 
-- `base`: branch alvo (`main` ou a base do processo)
+- `base`: branch alvo (`dev` ou a base do processo)
 - `head`: branch de origem
 - `issue`: issue relacionada (opcional, ex: `#123`)
 - `context`: `.workbench` ou projeto
@@ -31,7 +31,7 @@ which gh && gh auth status
 
 ### STEP 2 — Validar branch
 
-- `head` não pode ser `main`/`release`.
+- `head` não pode ser `main`/`dev`.
 - `base` deve ser a base definida pelo processo do projeto.
 - Diff deve conter apenas arquivos relevantes.
 
@@ -69,7 +69,7 @@ gh pr create --base <base> --head <head> --title "<title>" --body-file <file>
   "number": 123,
   "url": "https://github.com/owner/repo/pull/123",
   "title": "...",
-  "base": "main",
+  "base": "dev",
   "head": "feat/add-feature"
 }
 ```

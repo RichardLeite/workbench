@@ -25,7 +25,7 @@ git diff PREVIOUS_TAG..HEAD --stat
 Categorize: `feat` → minor, `fix` → patch, `BREAKING CHANGE` → major.
 
 ### 2. Pre-release checklist
-- [ ] All PRs merged to `release` branch
+- [ ] All PRs merged to `dev` and `dev` merged to `main`
 - [ ] Tests pass (`yarn test`)
 - [ ] Lint passes (`yarn lint`)
 - [ ] Migration scripts reviewed

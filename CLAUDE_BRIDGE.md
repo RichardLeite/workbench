@@ -100,7 +100,7 @@ fonte `.opencode/` (compartilhada) ou via override futuro.
 
 ## Guard-rails no Claude
 
-- `permissions.deny` bloqueia leitura de `.env` e commit direto em `main`/`release`.
+- `permissions.deny` bloqueia leitura de `.env` e commit direto em `main`/`dev`.
 - `permissions.ask` exige confirmação para `push --force`, push/commit em branches protegidas, `merge`, `rebase`, `reset`, `revert`, `branch -D`.
 - Notificações externas: nenhuma mensagem enviada sem aprovação explícita (STEP de aprovação nas skills).
 

@@ -76,7 +76,7 @@ def _run_branch(args: Namespace) -> int:
         print("❌ Não foi possível determinar a branch atual.", file=sys.stderr)
         return 2
 
-    if branch in {"main", "release", "develop"}:
+    if branch in {"main", "dev"}:
         print(f"⚠️  Branch '{branch}' é protegida. Não deve receber commits diretos.")
         print(f"   Crie uma branch a partir dela: git checkout -B feat/... origin/{branch}")
         return 0

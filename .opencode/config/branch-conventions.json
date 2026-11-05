@@ -13,7 +13,7 @@
     { "atividade": "Docs", "contexto": "qualquer", "pattern": "docs/descricao", "example": "docs/atualiza-readme" }
   ],
   "rules": [
-    "Nunca criar branch em main ou release — sempre da base correta",
+    "Nunca criar branch em main ou dev — sempre da base correta",
     "Prefixo do tipo em minúsculo com /: feat/, fix/, chore/",
     "Descrição em kebab-case",
     "Sem caracteres especiais: evitar acentos, @, #",

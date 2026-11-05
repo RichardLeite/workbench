@@ -16,7 +16,7 @@ description: "Branch + pull request genérico, sem tracker obrigatório"
 ## Fluxo
 
 1. Validar contexto e `git status`.
-2. Confirmar que a branch atual não é protegida (`main`, `release`, `develop`).
+2. Confirmar que a branch atual não é protegida (`main`, `dev`).
 3. Criar branch `type/descricao-kebab` a partir da base correta.
 4. Implementar/commitar mudanças em commits atômicos.
 5. Executar os gates definidos no processo do projeto.

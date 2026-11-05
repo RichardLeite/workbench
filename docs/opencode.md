@@ -84,17 +84,19 @@ Edite `.opencode/processes/meu-fluxo/process.json` ou
 
 ## Fluxo do `.workbench`
 
-- Base: `main`
-- Sempre branch + PR
-- Sem prefixo de task obrigatório
+- Base de desenvolvimento: `dev`
+- Promoção: `dev` → `main` via PR
+- Sempre branch + PR; nunca commit direto em `dev`/`main`
 
 ```bash
-git checkout main && git pull
+git checkout dev && git pull
 git checkout -b feat/new-issue-command
 # implementa...
 git push -u origin feat/new-issue-command
-# abre PR para main
+# abre PR para dev
 ```
+
+Depois da validação, abra um PR de `dev` para `main`.
 
 Commits do `.workbench`:
 

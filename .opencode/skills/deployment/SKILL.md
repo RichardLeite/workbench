@@ -16,7 +16,7 @@ Execute safe, auditable deployments with automatic health checks, rollback capab
 git branch --show-current
 
 # Check commits to deploy
-git log origin/release..HEAD --oneline
+git log origin/main..HEAD --oneline
 
 # Run tests
 yarn test
@@ -29,7 +29,7 @@ yarn build
 
 **API:**
 ```bash
-git checkout release && git pull
+git checkout main && git pull
 yarn install --production
 yarn run-migrate
 pm2 restart meu-projeto-api
@@ -37,7 +37,7 @@ pm2 restart meu-projeto-api
 
 **APP:**
 ```bash
-git checkout release && git pull
+git checkout main && git pull
 yarn install
 yarn build
 pm2 restart meu-projeto-app
@@ -88,7 +88,7 @@ pm2 restart meu-projeto-api
 ```json
 {
   "tipo": "deploy_report",
-  "ambiente": "release",
+  "ambiente": "production",
   "versao": "v2.5.0",
   "status": "success | failed | rolled_back",
   "health_checks": {
@@ -98,7 +98,7 @@ pm2 restart meu-projeto-api
   },
   "duracao": "4min 23s",
   "rollback_executado": false,
-  "comandos_executados": ["git checkout release", "yarn install", "pm2 restart"]
+  "comandos_executados": ["git checkout main", "yarn install", "pm2 restart"]
 }
 ```
 

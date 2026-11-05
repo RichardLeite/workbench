@@ -21,6 +21,13 @@ processo que quer seguir em `.opencode/processes/<nome>/process.json`.
 5. Gates são executados via `wb process gate`.
 6. O conhecimento gerado pode ser registrado no vault do projeto.
 
+## Branches
+
+- `feat/*`, `fix/*`, `docs/*`, `chore/*` → PR para `dev`
+- `dev` → PR para `main` após validação
+- CI roda somente em `dev` e `main`
+- Nunca commit direto em `dev`/`main`
+
 ## Estrutura
 
 ```
@@ -186,7 +193,7 @@ do próprio projeto. Skills externas mantêm suas licenças; veja
 
 | Regra | Comportamento |
 |-------|---------------|
-| Nunca commitar em `main`/`release` | Agente cria branch |
+| Nunca commitar em `main`/`dev` | Agente cria branch |
 | Nunca aprovar/mergear PRs | Agente recusa e reporta |
 | Nunca `git add .` / `-A` | Arquivos adicionados individualmente |
 | Nunca `git push --force` | Comando rejeitado |

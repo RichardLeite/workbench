@@ -69,13 +69,18 @@ flows in the orchestrator.
 
 ## Rules (Non-Negotiable)
 
-1. Never commit directly to protected branches (`main`, `release`).
+1. Never commit directly to protected branches (`main`, `dev`).
 2. Never approve or merge PRs via agent.
 3. Every change must be reproducible, testable, evidence-backed.
 4. No change without rollback strategy.
 5. Specs and backlog updated as part of done criteria when the process requires it.
 6. **Local repos first** — resolve runtime availability before cloning.
 7. Respect the project license. Never copy code from an incompatible license.
+
+## Branch Flow
+
+Feature/fix branches target `dev`. After validation, `dev` is promoted to `main` via PR.
+CI runs only on `dev` and `main`; never commit directly to either branch.
 
 ## Commits
 
