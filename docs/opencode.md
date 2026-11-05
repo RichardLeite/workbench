@@ -58,6 +58,9 @@ OpenCode injeta os aliases `@` em memória; o CLI e o hook `SessionStart` do
 Claude atualizam o catálogo no carregamento. Use `WB_NO_DISCOVERY=1` para
 desativar a atualização automática.
 
+O plugin do OpenCode reutiliza o cat?logo por at? 60s; use
+`WB_PROJECTS_SYNC_TTL_MS=0` para forçar sincronização a cada carregamento.
+
 ## Processos
 
 Cada projeto escolhe um processo no catálogo mesclado:

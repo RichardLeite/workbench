@@ -31,6 +31,8 @@ uv run --frozen python -m workbench projects exclude
 
 The OpenCode plugin, the `wb` CLI and the Claude Code `SessionStart` hook refresh
 the local catalog automatically. `opencode.json` references are generated in
+The OpenCode plugin caches the catalog for 60s by default; set
+`WB_PROJECTS_SYNC_TTL_MS=0` to force a sync on every load.
 memory, so do not register each repository manually. Use the repository name as
 the `@reference` alias to avoid ambiguity.
 
