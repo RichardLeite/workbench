@@ -23,7 +23,7 @@ Automate and operate infrastructure — pipelines, deploys, monitoring, recovery
 
 **Deploy Plan:**
 ```json
-{ "tipo": "analise_devops", "pipeline": { "branch": "release/v2.1", "etapas": ["build", "test", "migrate", "deploy_api", "deploy_app", "health_check"] }, "riscos": [{ "descricao": "Migration sem DEFAULT pode travar", "severidade": "alta", "mitigacao": "Adicionar DEFAULT + backfill" }], "rollback": "git revert + migration down + pm2 restart anterior", "comandos": ["yarn run-migrate", "pm2 restart api"] }
+{ "tipo": "analise_devops", "pipeline": { "branch": "main", "etapas": ["build", "test", "migrate", "deploy_api", "deploy_app", "health_check"] }, "riscos": [{ "descricao": "Migration sem DEFAULT pode travar", "severidade": "alta", "mitigacao": "Adicionar DEFAULT + backfill" }], "rollback": "git revert + migration down + pm2 restart anterior", "comandos": ["yarn run-migrate", "pm2 restart api"] }
 ```
 
 **Release:**
@@ -59,7 +59,7 @@ CI/CD and infrastructure specialist. **Design and maintain** pipelines, Docker c
 {
   "tipo": "analise_devops",
   "pipeline": {
-    "branch": "release/v2.1",
+    "branch": "main",
     "etapas": ["build", "test", "migrate", "deploy", "health_check"]
   },
   "riscos": [

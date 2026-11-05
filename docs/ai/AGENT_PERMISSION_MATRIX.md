@@ -56,7 +56,7 @@ Pode commitar, branch, PR.
 - Abrir PR
 
 **Não pode:**
-- Fazer push para main/release
+- Fazer push para main/dev
 - Mergear PR
 - Deploy em produção
 
@@ -77,7 +77,7 @@ Deploy e operações sensíveis.
 |---------|:-----:|-----------|
 | projeto com repo local | 3 | PR permitido via /git-pr |
 | projeto sem repo local | 3 | somente knowledge/specs |
-| workbench | 3 | Meta-projeto, PR para main |
+| workbench | 3 | Meta-projeto, PR para dev |
 | Demais projetos | 1 | Repositórios remotos sem clone local |
 
 ## Regras

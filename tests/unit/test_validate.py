@@ -26,6 +26,12 @@ def test_branch_protected(capsys) -> None:
     assert "protegida" in capsys.readouterr().out
 
 
+def test_dev_branch_is_protected(capsys) -> None:
+    code = validate._run_branch(Namespace(branch="dev"))
+    assert code == 0
+    assert "protegida" in capsys.readouterr().out
+
+
 def test_spec_valid(capsys) -> None:
     code = validate._run_spec(Namespace(path=str(FIXTURES / "spec-valid.md")))
     output = capsys.readouterr().out

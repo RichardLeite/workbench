@@ -18,7 +18,7 @@
 -
 
 ## Checklist
-- [ ] Sem commit direto em main/release
+- [ ] Sem commit direto em main/dev
 - [ ] Nomenclatura de branch segue pr-config.md Seção 1
 - [ ] Commits granulares e conventional commits usados
 - [ ] Agente NÃO aprovou/NÃO fez merge deste PR

@@ -10,7 +10,7 @@
 #
 # Escopo (deliberadamente estreito):
 #   - Bloqueia SOMENTE segmentos que COMEÇAM com `git ... commit`.
-#   - Qualquer outro comando Bash em main/release passa sem interferência.
+#   - Qualquer outro comando Bash em main/dev passa sem interferência.
 #   - `git commit --dry-run` passa (não cria commit).
 #
 # Invocação (sem depender de bit de execução — repo em /mnt/f):
@@ -20,7 +20,7 @@
 
 set -uo pipefail
 
-PROTECTED_BRANCHES='main release'
+PROTECTED_BRANCHES='main dev'
 
 payload=$(cat)
 
@@ -81,7 +81,7 @@ for protected in $PROTECTED_BRANCHES; do
     cat >&2 <<EOF
 BLOQUEADO: commit direto na branch protegida '$branch'.
 
-Regra: .opencode/rules/constitution.md (regra 1) — nunca commitar em main/release.
+Regra: .opencode/rules/constitution.md (regra 1) — nunca commitar em main/dev.
 Comando: $command_line
 
 Faça: crie uma branch (git checkout -b <tipo>/<escopo>), commite nela e abra PR.

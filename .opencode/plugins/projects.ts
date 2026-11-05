@@ -1,6 +1,6 @@
 import type { Plugin } from "@opencode-ai/plugin"
 import { execFile } from "node:child_process"
-import { existsSync, readFileSync } from "node:fs"
+import { existsSync, readFileSync, statSync } from "node:fs"
 import { delimiter, join } from "node:path"
 import { promisify } from "node:util"
 
@@ -74,6 +74,18 @@ async function syncCatalog(root: string): Promise<void> {
   }
 }
 
+function isFresh(root: string, ttlMs: number): boolean {
+  if (ttlMs <= 0) return false
+  const path = catalogPath(root)
+  if (!existsSync(path)) return false
+  try {
+    return Date.now() - statSync(path).mtimeMs < ttlMs
+  } catch {
+    return false
+  }
+}
+
+
 function readCatalog(root: string): Catalog {
   const path = catalogPath(root)
   if (!existsSync(path)) return {}
@@ -119,7 +131,10 @@ export const ProjectsPlugin: Plugin = async ({ worktree, directory }) => {
     config: async (config) => {
       if (process.env.WB_NO_DISCOVERY === "1") return
       try {
-        await syncCatalog(root)
+        const ttl = Number(process.env.WB_PROJECTS_SYNC_TTL_MS ?? "60000")
+        if (!Number.isFinite(ttl) || !isFresh(root, ttl)) {
+          await syncCatalog(root)
+        }
         addReferences(config, readCatalog(root))
       } catch {
         return
