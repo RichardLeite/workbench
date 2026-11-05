@@ -93,6 +93,7 @@ O Workbench descobre automaticamente os repositórios com `.git` na raiz do
 workspace e em `discovery.roots` (ou `WB_PROJECT_ROOTS`), sempre dentro do
 workspace. Se `repos` for omitido e houver apenas um repositório cujo nome seja o slug ou comece com
 `<slug>-`, ele é associado automaticamente; para vários repositórios, declare os papéis no manifesto.
+Use `discovery.ignore` para excluir paths/globs específicos da descoberta.
 
 ```bash
 uv run --frozen python -m workbench projects scan   # inspeção sem escrita

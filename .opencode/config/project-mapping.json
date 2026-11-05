@@ -18,6 +18,7 @@
     "roots": [
       "."
     ],
-    "exclude": []
+    "exclude": [],
+    "ignore": []
   }
 }

@@ -19,6 +19,7 @@ and in configured roots inside the workspace (`project-mapping.json#discovery.ro
 or `WB_PROJECT_ROOTS`). Metadata lives in `projects/<slug>/project.json`; if it is
 absent, the name comes from `AGENTS.md` or the directory name. Multi-repo
 projects declare `repos` roles in the manifest.
+Use `discovery.ignore` para excluir paths/globs específicos da descoberta.
 
 ```bash
 uv run --frozen python -m workbench projects scan
