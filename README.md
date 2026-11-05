@@ -102,6 +102,8 @@ workspace. Se `repos` for omitido e houver apenas um repositório cujo nome seja
 `<slug>-`, ele é associado automaticamente; para vários repositórios, declare os papéis no manifesto.
 Use `discovery.ignore` para excluir paths/globs específicos da descoberta.
 
+Sem manifesto, nome/descrição/licença são inferidos de `AGENTS.md`, `package.json`, `pyproject.toml` ou `LICENSE`.
+
 ```bash
 uv run --frozen python -m workbench projects scan   # inspeção sem escrita
 uv run --frozen python -m workbench projects validate # valida manifestos

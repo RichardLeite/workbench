@@ -14,6 +14,7 @@ from typing import Any
 
 from workbench.config import ConfigError, read_json
 from workbench.paths import config_dir, workbench_root
+from workbench.project_metadata import read_repo_metadata
 
 OVERLAY_FILE = "project-mapping.local.json"
 DEFAULT_ROOTS = ["."]
@@ -294,18 +295,27 @@ def _project_data(
     *,
     metadata_dir: Path | None = None,
     repo_name: str | None = None,
+    repo_path: Path | None = None,
     warnings: list[str] | None = None,
 ) -> dict[str, Any]:
     if warnings is None:
         warnings = []
+    repo_metadata = read_repo_metadata(repo_path) if repo_path else {}
     name = manifest.get("name")
     if not isinstance(name, str) or not name.strip():
-        name = _read_agents_name(metadata_dir / "AGENTS.md") if metadata_dir else repo_name
+        if metadata_dir:
+            name = _read_agents_name(metadata_dir / "AGENTS.md")
+        if not isinstance(name, str) or not name.strip():
+            name = repo_name
+        if not isinstance(name, str) or not name.strip():
+            name = repo_metadata.get("name")
     if not isinstance(name, str) or not name.strip():
         name = _title_from_slug(slug)
 
     description = manifest.get("description")
     description = description.strip() if isinstance(description, str) else ""
+    if not description:
+        description = repo_metadata.get("description", "")
 
     knowledge = _safe_rel(manifest.get("knowledge"), root, warnings, f"{slug}.knowledge")
     if knowledge is None and metadata_dir is not None:
@@ -325,7 +335,8 @@ def _project_data(
     process = manifest.get("process")
     process = process if isinstance(process, str) and process.strip() else "default"
     license_name = manifest.get("license")
-    license_name = license_name if isinstance(license_name, str) else None
+    if not isinstance(license_name, str) or not license_name.strip():
+        license_name = repo_metadata.get("license")
     tracker = manifest.get("tracker")
     tracker = tracker if isinstance(tracker, str) and tracker.strip() else "none"
 
@@ -467,6 +478,7 @@ def discover_projects(
             base,
             candidate.manifest,
             repo_name=candidate.name,
+            repo_path=candidate.path,
             warnings=warnings,
         )
         _assign_repos(data, candidate.manifest, slug, candidates, base, warnings)

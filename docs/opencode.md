@@ -42,6 +42,8 @@ do workspace e em `discovery.roots`/`WB_PROJECT_ROOTS` dentro dele. Os metadados
 diretório. Para vários repositórios, declare os papéis em `repos`.
 Use `discovery.ignore` para excluir paths/globs específicos da descoberta.
 
+Sem manifesto, nome/descrição/licença são inferidos de `AGENTS.md`, `package.json`, `pyproject.toml` ou `LICENSE`.
+
 ```bash
 uv run --frozen python -m workbench projects scan
 uv run --frozen python -m workbench projects validate

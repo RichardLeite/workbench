@@ -21,6 +21,8 @@ absent, the name comes from `AGENTS.md` or the directory name. Multi-repo
 projects declare `repos` roles in the manifest.
 Use `discovery.ignore` para excluir paths/globs específicos da descoberta.
 
+Sem manifesto, nome/descrição/licença são inferidos de `AGENTS.md`, `package.json`, `pyproject.toml` ou `LICENSE`.
+
 ```bash
 uv run --frozen python -m workbench projects scan
 uv run --frozen python -m workbench projects validate
