@@ -125,3 +125,38 @@ def test_gate_uses_project_process(tmp_path: Path, monkeypatch, capsys) -> None:
     )
     assert engine._run_gate(args) == 0
     assert '"status": "passed"' in capsys.readouterr().out
+
+
+def test_state_is_scoped_by_project(tmp_path: Path) -> None:
+    definition = engine.load_process("default")
+    workbench = engine.create_state(definition, "same-slug", "workbench")
+    project = engine.create_state(definition, "same-slug", "demo")
+    workbench_path = engine.save_state(workbench, tmp_path)
+    project_path = engine.save_state(project, tmp_path)
+
+    assert workbench_path != project_path
+    assert engine.load_state("default", "same-slug", tmp_path)["project"] == "workbench"
+    assert engine.load_state("default", "same-slug", tmp_path, "demo")["project"] == "demo"
+    assert engine.load_state("default", "same-slug", tmp_path, "missing") is None
+
+
+def test_load_state_falls_back_to_legacy_path_for_matching_project(tmp_path: Path) -> None:
+    legacy = engine.state_path("default", "legacy-slug", tmp_path, "workbench")
+    legacy.parent.mkdir(parents=True)
+    legacy.write_text(
+        json.dumps(
+            {
+                "tipo": "process_state",
+                "process": "default",
+                "slug": "legacy-slug",
+                "project": "demo",
+                "status": "in_progress",
+                "stages": {},
+                "gates": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    state = engine.load_state("default", "legacy-slug", tmp_path, "demo")
+    assert state is not None
+    assert state["project"] == "demo"
