@@ -139,7 +139,7 @@ git push -u origin {{BRANCH}}
 | --- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | 1   | **Nunca `git add .` ou `git add -A`**         | Adicionar arquivos individualmente                                                                                            |
 | 2   | **Nunca `git push --force` ou `-f`**          | Usar `git push` normal                                                                                                        |
-| 3   | **Nunca commitar em `main` ou `release`**     | Sempre em branch de feature/fix                                                                                               |
+| 3   | **Nunca commitar em `main` ou `dev`**     | Sempre em branch de feature/fix                                                                                               |
 | 4   | **Aprovacao humana obrigatoria via question** | So executar commits apos usuario marcar "APROVAR TODOS" como completed no question. Nunca usar chat para coleta de aprovacao. |
 | 5   | **Nunca `Co-authored-by`**                    | Manter autoria exclusiva do usuario                                                                                           |
 | 6   | **Commits em ingles**                         | `pr-config.md` 10.3.1 — idioma obrigatorio ingles                                                                            |

@@ -49,7 +49,7 @@ Catálogo completo: @.opencode/config/agent-registry.md · mapa de projetos: `wb
 
 @.opencode/rules/constitution.md
 
-Resumo operacional: nunca commitar em `main`/`release`; nunca aprovar/mergear PR;
+Resumo operacional: nunca commitar em `main`/`dev`; nunca aprovar/mergear PR;
 nunca `git add .`/`-A` (adicione arquivos individualmente); nunca `--force`/`--no-verify`;
 nunca resolver conflito (reporte ao humano); nunca `Co-authored-by`; nunca expor secrets;
 **nenhuma notificação externa sem aprovação explícita do usuário**.

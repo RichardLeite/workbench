@@ -13,7 +13,7 @@ Preparar um Pull Request completo com template, contexto de task e validações.
 - Antes de abrir PR (via `/git-pr`)
 
 ## Processo
-1. **Verificar branch**: Base correta (main ou release)
+1. **Verificar branch**: Base correta (dev)
 2. **Verificar diff**: Apenas arquivos relevantes, sem debug/logs
 3. **Template**: Preencher com o quê, por quê, como testar, riscos, evidências
 4. **Issue link**: Referenciar issue (#123) quando aplicável

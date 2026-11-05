@@ -22,15 +22,15 @@
 
 | Tipo | Branch de origem | Branch de destino |
 |------|------------------|-------------------|
-| Feature/fix | base padrão do projeto (`main`) | `main` |
-| Fluxo com release | `release` (se o projeto usar) | `release` |
-| Workbench | `main` | `main` |
+| Feature/fix | `dev` | `dev` |
+| Preparação de release | `dev` | `main` |
+| Workbench | `dev` | `dev` |
 
-Projetos que usam `release` devem declarar isso no `AGENTS.md` do projeto.
+A `main` recebe apenas merges de `dev`.
 
 ### 1.2 Regras
 
-- Nunca commitar diretamente em `main` ou `release`.
+- Nunca commitar diretamente em `main` ou `dev`.
 - Branch criada a partir da base correta, com nome descritivo.
 - Um PR = uma intenção. Evite misturar refactor e feature.
 - Todo PR precisa de rollback descrito.
@@ -178,7 +178,7 @@ docs/onboarding
 
 Regras:
 - kebab-case, sem espaços.
-- Branch de trabalho nunca é `main`/`release`.
+- Branch de trabalho nunca é `main`/`dev`.
 - Delete a branch após o merge.
 
 ---

@@ -7,7 +7,7 @@
 
 ## Constitution — Non-Negotiable Rules
 
-1. Never commit directly to protected branches (`main`, `release`)
+1. Never commit directly to protected branches (`main`, `dev`)
 2. Never approve or merge PRs via agent
 3. Every implementation starts by identifying work context (`.workbench` | `projects/<name>`)
 4. Every code change must be reproducible and testable

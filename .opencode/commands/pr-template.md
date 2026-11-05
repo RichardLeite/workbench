@@ -11,12 +11,12 @@ Before drafting, ask this mandatory gate:
 > - Seção 3: PR body template
 
 If the context is `.workbench`:
-- prepare one PR targeting `main`
+- prepare one PR targeting `dev`
 
 If the context is `projects/<nome>`:
 - read the project process and `wb projects list`
 - prepare one PR targeting the project base branch
-- if the project process defines multiple branches (ex: release), follow the process
+- if the project process defines multiple branches (ex: main), follow the process
 
 Fill all sections of the PR body template (pr-config.md Seção 3) with the context
 of this branch and changes. Keep placeholders only when data is truly unavailable.

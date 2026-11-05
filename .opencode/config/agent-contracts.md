@@ -265,7 +265,7 @@ Delegation payload sent to subagents:
   "subagent_type": "pedreiro|revisor|explorador|...",
   "context": {
     "branch": "feat/add-feature",
-    "base": "release",
+    "base": "dev",
     "files": ["src/file1.js", "src/file2.js"]
   }
 }
