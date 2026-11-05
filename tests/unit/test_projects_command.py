@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from argparse import Namespace
 from pathlib import Path
 
@@ -36,3 +37,15 @@ def test_sync_and_list(tmp_path: Path, capsys) -> None:
     assert projects._run_list(Namespace(root=str(tmp_path), json=True)) == 0
     listed = json.loads(capsys.readouterr().out)
     assert listed[0]["slug"] == "api"
+
+
+def test_exclude_json(tmp_path: Path, capsys) -> None:
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    make_repo(tmp_path / "api")
+    args = Namespace(root=str(tmp_path), dry_run=False, json=True)
+    assert projects._run_exclude(args) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["entries"] == ["api"]
+    assert payload["changed"] is True
+    exclude = tmp_path / ".git" / "info" / "exclude"
+    assert "/api/" in exclude.read_text(encoding="utf-8")

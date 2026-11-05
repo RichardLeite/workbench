@@ -98,6 +98,10 @@ workspace. Se `repos` for omitido e houver apenas um repositório cujo nome seja
 uv run --frozen python -m workbench projects scan   # inspeção sem escrita
 uv run --frozen python -m workbench projects sync   # grava o catálogo local
 uv run --frozen python -m workbench projects list   # catálogo mesclado
+
+Para repos clonados na raiz, rode `wb projects exclude` para manter
+`.git/info/exclude` sincronizado sem alterar o `.gitignore` versionado.
+
 ```
 
 Use `/new-project` para criar a estrutura do zero. O catálogo descoberto fica em
@@ -126,6 +130,7 @@ Processos podem ser globais (`.opencode/processes/`) ou específicos do projeto
 | `wb projects scan` | Descobre projetos/repos sem gravar |
 | `wb projects sync` | Atualiza `.opencode/config/project-mapping.local.json` |
 | `wb projects list` | Lista o catálogo mesclado |
+| `wb projects exclude` | Mantém repos descobertos em `.git/info/exclude` |
 
 ## Motor de processos
 

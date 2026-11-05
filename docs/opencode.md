@@ -45,6 +45,10 @@ diretório. Para vários repositórios, declare os papéis em `repos`.
 uv run --frozen python -m workbench projects scan
 uv run --frozen python -m workbench projects sync
 uv run --frozen python -m workbench projects list
+uv run --frozen python -m workbench projects exclude
+
+Para repos clonados na raiz, `wb projects exclude` mantém o
+`.git/info/exclude` sincronizado sem alterar o `.gitignore` versionado.
 ```
 
 O resultado local é gravado em `.opencode/config/project-mapping.local.json`

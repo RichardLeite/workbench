@@ -1,7 +1,7 @@
 # Windows reserved names
 nul
 
-# Project repos (cloned to root) — adicione os diretórios dos seus repos
+# Project repos (cloned to root) - use `wb projects exclude`
 # exemplo-api/
 # exemplo-app/
 
