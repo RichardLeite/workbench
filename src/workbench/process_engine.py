@@ -211,9 +211,19 @@ def validate_process(process: ProcessDefinition, root: Path | None = None) -> li
     return errors
 
 
-def state_path(process: str, slug: str, root: Path | None = None) -> Path:
+def state_path(
+    process: str,
+    slug: str,
+    root: Path | None = None,
+    project: str | None = None,
+) -> Path:
     safe_slug = re.sub(r"[^a-z0-9._-]", "_", slug.lower())
-    return _root(root) / PLANS_DIR / f"process-state-{process}-{safe_slug}.json"
+    safe_project = re.sub(r"[^a-z0-9._-]", "_", str(project or "workbench").lower())
+    if safe_project == "workbench":
+        filename = f"process-state-{process}-{safe_slug}.json"
+    else:
+        filename = f"process-state-{safe_project}-{process}-{safe_slug}.json"
+    return _root(root) / PLANS_DIR / filename
 
 
 def create_state(
@@ -254,21 +264,42 @@ def create_state(
 
 def save_state(state: dict[str, Any], root: Path | None = None) -> Path:
     state["updated_at"] = now_iso()
-    path = state_path(str(state["process"]), str(state["slug"]), root)
+    path = state_path(
+        str(state["process"]),
+        str(state["slug"]),
+        root,
+        str(state.get("project") or "workbench"),
+    )
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
     return path
 
 
-def load_state(process: str, slug: str, root: Path | None = None) -> dict[str, Any] | None:
-    path = state_path(process, slug, root)
-    if not path.is_file():
-        return None
-    return _read_json(path)
+def load_state(
+    process: str,
+    slug: str,
+    root: Path | None = None,
+    project: str | None = None,
+) -> dict[str, Any] | None:
+    path = state_path(process, slug, root, project)
+    if path.is_file():
+        return _read_json(path)
+    if project and str(project).lower() != "workbench":
+        legacy = state_path(process, slug, root, "workbench")
+        if legacy.is_file():
+            data = _read_json(legacy)
+            if str(data.get("project") or "workbench") == project:
+                return data
+    return None
 
 
-def resume_prompt(process: str, slug: str, root: Path | None = None) -> dict[str, Any]:
-    state = load_state(process, slug, root)
+def resume_prompt(
+    process: str,
+    slug: str,
+    root: Path | None = None,
+    project: str | None = None,
+) -> dict[str, Any]:
+    state = load_state(process, slug, root, project)
     if state is None:
         return {"exists": False, "state": None, "prompt": None}
     status = state.get("status")
@@ -457,8 +488,9 @@ def _process_name_from_args(args: Any) -> str:
 
 
 def _load_or_error(args: Any) -> tuple[ProcessDefinition, dict[str, Any]]:
-    definition = load_process(args.name, getattr(args, "project", None))
-    state = load_state(args.name, args.slug)
+    project = getattr(args, "project", None)
+    definition = load_process(args.name, project)
+    state = load_state(args.name, args.slug, project=project)
     if state is None:
         raise ConfigError(
             f'State não encontrado para processo "{args.name}" e slug "{args.slug}". '
@@ -533,7 +565,7 @@ def _run_state_create(args: Any) -> int:
 
 
 def _run_state_load(args: Any) -> int:
-    state = load_state(args.name, args.slug)
+    state = load_state(args.name, args.slug, project=getattr(args, "project", None))
     if state is None:
         print(f'ERRO: State "{args.slug}" não encontrado para "{args.name}"', file=sys.stderr)
         return 1
@@ -542,7 +574,13 @@ def _run_state_load(args: Any) -> int:
 
 
 def _run_state_resume(args: Any) -> int:
-    _print_json(resume_prompt(args.name, args.slug))
+    _print_json(
+        resume_prompt(
+            args.name,
+            args.slug,
+            project=getattr(args, "project", None),
+        )
+    )
     return 0
 
 
@@ -568,7 +606,7 @@ def _run_schema(args: Any) -> int:
 
 
 def _run_status(args: Any) -> int:
-    state = load_state(args.name, args.slug)
+    state = load_state(args.name, args.slug, project=getattr(args, "project", None))
     if state is None:
         print(f'ERRO: State "{args.slug}" não encontrado para "{args.name}"', file=sys.stderr)
         return 1

@@ -22,8 +22,8 @@ uv run --frozen python -m workbench process plan default --project <slug>
 3. Gere o plano com `wb process plan <name>`.
 4. Siga os `stages` na ordem, delegando ao `agent` de cada stage.
 5. Execute gates bloqueantes com `wb process gate <name> <gate> --slug <slug> --project <projeto>`.
-6. Atualize o estado com `wb process state create/load/resume`.
-7. Ao final, gere o relatório com `wb process report`.
+6. Atualize o estado com `wb process state create/load/resume --project <projeto>`.
+7. Ao final, gere o relatório com `wb process report <name> <slug> success --project <projeto>`.
 
 ## Regras
 
