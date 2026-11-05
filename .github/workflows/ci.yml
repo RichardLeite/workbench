@@ -73,6 +73,22 @@ jobs:
       - name: Run orchestrator tests
         run: node --test tests/validate.test.js
 
+  plugin:
+    name: 🧩 Plugin — TypeScript check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .opencode
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Typecheck
+        run: npx tsc --noEmit --target ES2022 --module NodeNext --moduleResolution NodeNext --skipLibCheck --types node plugins/projects.ts
+
   node-adapters:
     name: 🧩 Node adapters — syntax
     runs-on: ubuntu-latest
