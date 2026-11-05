@@ -49,3 +49,20 @@ def test_exclude_json(tmp_path: Path, capsys) -> None:
     assert payload["changed"] is True
     exclude = tmp_path / ".git" / "info" / "exclude"
     assert "/api/" in exclude.read_text(encoding="utf-8")
+
+
+def test_validate_json(tmp_path: Path, capsys) -> None:
+    path = tmp_path / "projects" / "demo" / "project.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({"name": "Demo"}), encoding="utf-8")
+    args = Namespace(root=str(tmp_path), slug=None, json=True)
+    assert projects._run_validate(args) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["ok"] is True
+    assert payload["checked"] == 1
+
+
+def test_validate_rejects_invalid_slug(tmp_path: Path, capsys) -> None:
+    args = Namespace(root=str(tmp_path), slug="../outside", json=True)
+    assert projects._run_validate(args) == 1
+    assert "Slug inv" in capsys.readouterr().err
