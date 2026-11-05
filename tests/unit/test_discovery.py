@@ -157,3 +157,36 @@ def test_discovery_ignore_metadata_directory(tmp_path: Path) -> None:
     )
     result = discovery.discover_projects(tmp_path)
     assert "legacy" not in result.projects
+
+
+def test_repo_metadata_inference_from_package(tmp_path: Path) -> None:
+    repo = make_repo(tmp_path / "api")
+    (repo / "package.json").write_text(
+        json.dumps(
+            {
+                "name": "Sample API",
+                "description": "Sample service",
+                "license": "MIT",
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = discovery.discover_projects(tmp_path)
+    project = result.projects["api"]
+    assert project["name"] == "Sample API"
+    assert project["description"] == "Sample service"
+    assert project["license"] == "MIT"
+
+
+def test_repo_metadata_inference_from_pyproject_and_license(tmp_path: Path) -> None:
+    repo = make_repo(tmp_path / "service")
+    (repo / "pyproject.toml").write_text(
+        '[project]\nname = "Service"\ndescription = "Service app"\n',
+        encoding="utf-8",
+    )
+    (repo / "LICENSE").write_text("Apache License\nVersion 2.0\n", encoding="utf-8")
+    result = discovery.discover_projects(tmp_path)
+    project = result.projects["service"]
+    assert project["name"] == "Service"
+    assert project["description"] == "Service app"
+    assert project["license"] == "Apache-2.0"
