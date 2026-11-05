@@ -148,7 +148,7 @@ def _load_manifest(path: Path, warnings: list[str]) -> dict[str, Any]:
     return data
 
 
-def _discovery_config(root: Path) -> tuple[list[str], set[str]]:
+def _discovery_config(root: Path) -> tuple[list[str], set[str], list[str]]:
     try:
         base = read_json(config_dir(root) / "project-mapping.json")
     except ConfigError:
@@ -164,7 +164,9 @@ def _discovery_config(root: Path) -> tuple[list[str], set[str]]:
     extra_exclude = settings.get("exclude")
     if isinstance(extra_exclude, list):
         exclude.update(str(item) for item in extra_exclude)
-    return roots, exclude
+    ignore = settings.get("ignore")
+    ignore = [str(item) for item in ignore] if isinstance(ignore, list) else []
+    return roots, exclude, ignore
 
 
 def _configured_roots(
@@ -172,7 +174,7 @@ def _configured_roots(
     extra_roots: list[str] | None,
     warnings: list[str],
 ) -> list[Path]:
-    roots, _ = _discovery_config(root)
+    roots, _, _ = _discovery_config(root)
     raw_roots = list(roots)
     env_roots = os.environ.get("WB_PROJECT_ROOTS")
     if env_roots:
@@ -208,6 +210,14 @@ def _skip_directory(path: Path, root: Path, exclude: set[str]) -> bool:
     return False
 
 
+def _is_ignored(relative: str, name: str, ignore: list[str]) -> bool:
+    value = relative.replace("\\", "/")
+    return any(
+        fnmatch.fnmatch(value, pattern.replace("\\", "/")) or fnmatch.fnmatch(name, pattern)
+        for pattern in ignore
+    )
+
+
 def _candidate_directories(scan_root: Path, root: Path, exclude: set[str]) -> list[Path]:
     if scan_root.resolve() != root.resolve() and _is_git_marker(scan_root):
         return [scan_root]
@@ -228,6 +238,7 @@ def _repo_candidates(
     root: Path,
     scan_roots: list[Path],
     exclude: set[str],
+    ignore: list[str],
     warnings: list[str],
 ) -> dict[str, RepoCandidate]:
     candidates: dict[str, RepoCandidate] = {}
@@ -238,6 +249,8 @@ def _repo_candidates(
                 warnings.append(f"repo fora do workbench ignorado: {directory}")
                 continue
             rel = _relative(resolved, root)
+            if _is_ignored(rel, resolved.name, ignore):
+                continue
             if rel in candidates:
                 continue
             manifest_path = resolved / ".workbench" / "project.json"
@@ -253,7 +266,11 @@ def _repo_candidates(
     return candidates
 
 
-def _metadata_directories(root: Path, exclude: set[str]) -> list[Path]:
+def _metadata_directories(
+    root: Path,
+    exclude: set[str],
+    ignore: list[str],
+) -> list[Path]:
     projects_dir = root / "projects"
     if not projects_dir.is_dir():
         return []
@@ -262,6 +279,8 @@ def _metadata_directories(root: Path, exclude: set[str]) -> list[Path]:
         if not child.is_dir() or child.name.startswith("_") or child.name in exclude:
             continue
         if not _inside_root(child.resolve(), root):
+            continue
+        if _is_ignored(_relative(child, root), child.name, ignore):
             continue
         if (child / "project.json").is_file() or (child / "AGENTS.md").is_file():
             directories.append(child)
@@ -406,11 +425,11 @@ def discover_projects(
     base = (root or workbench_root()).resolve()
     warnings: list[str] = []
     scanned_roots = _configured_roots(base, extra_roots, warnings)
-    _, exclude = _discovery_config(base)
-    candidates = _repo_candidates(base, scanned_roots, exclude, warnings)
+    _, exclude, ignore = _discovery_config(base)
+    candidates = _repo_candidates(base, scanned_roots, exclude, ignore, warnings)
     projects: dict[str, dict[str, Any]] = {}
 
-    for metadata_dir in _metadata_directories(base, exclude):
+    for metadata_dir in _metadata_directories(base, exclude, ignore):
         manifest_path = metadata_dir / "project.json"
         manifest = _load_manifest(manifest_path, warnings)
         slug = _valid_slug(manifest.get("slug")) or _valid_slug(metadata_dir.name)

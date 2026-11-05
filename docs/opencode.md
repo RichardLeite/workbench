@@ -40,6 +40,7 @@ Os projetos são descobertos automaticamente a partir dos checkouts git na raiz
 do workspace e em `discovery.roots`/`WB_PROJECT_ROOTS` dentro dele. Os metadados ficam em
 `projects/<slug>/project.json`; sem esse arquivo, o nome vem do `AGENTS.md` ou do
 diretório. Para vários repositórios, declare os papéis em `repos`.
+Use `discovery.ignore` para excluir paths/globs específicos da descoberta.
 
 ```bash
 uv run --frozen python -m workbench projects scan

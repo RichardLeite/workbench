@@ -133,3 +133,27 @@ def test_multiple_prefix_repositories_require_manifest(tmp_path: Path) -> None:
     result = discovery.discover_projects(tmp_path)
     assert result.projects["carflow"]["repos"] == {}
     assert any("project.json#repos" in warning for warning in result.warnings)
+
+
+def test_discovery_ignore_glob(tmp_path: Path) -> None:
+    make_repo(tmp_path / "api")
+    make_repo(tmp_path / "legacy-api")
+    write_json(
+        tmp_path / ".opencode" / "config" / "project-mapping.json",
+        {"projects": {}, "discovery": {"ignore": ["legacy-*"]}},
+    )
+    result = discovery.discover_projects(tmp_path)
+    assert "api" in result.projects
+    assert "legacy-api" not in result.projects
+
+
+def test_discovery_ignore_metadata_directory(tmp_path: Path) -> None:
+    metadata = tmp_path / "projects" / "legacy"
+    metadata.mkdir(parents=True)
+    (metadata / "project.json").write_text(json.dumps({"name": "Legacy"}), encoding="utf-8")
+    write_json(
+        tmp_path / ".opencode" / "config" / "project-mapping.json",
+        {"projects": {}, "discovery": {"ignore": ["projects/legacy"]}},
+    )
+    result = discovery.discover_projects(tmp_path)
+    assert "legacy" not in result.projects
