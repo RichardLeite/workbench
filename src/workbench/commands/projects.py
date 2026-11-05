@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from argparse import ArgumentParser, Namespace, _SubParsersAction
 from pathlib import Path
 from typing import Any
@@ -11,6 +12,7 @@ from workbench.config import ConfigError, load_project_mapping
 from workbench.discovery import discover_projects, sync_projects
 from workbench.git_exclude import apply_exclude, discovered_entries
 from workbench.paths import workbench_root
+from workbench.project_schema import SLUG_PATTERN, validate_manifests
 
 
 def register(subparsers: _SubParsersAction) -> None:
@@ -31,6 +33,15 @@ def register(subparsers: _SubParsersAction) -> None:
     sync.add_argument("--quiet", action="store_true")
     sync.add_argument("--json", action="store_true", help="Saída JSON no stdout.")
     sync.set_defaults(handler=_run_sync)
+
+    validate = projects_sub.add_parser(
+        "validate",
+        help="Valida manifestos projects/<slug>/project.json.",
+    )
+    validate.add_argument("slug", nargs="?", default=None)
+    validate.add_argument("--root", default=None)
+    validate.add_argument("--json", action="store_true", help="Saída JSON no stdout.")
+    validate.set_defaults(handler=_run_validate)
 
     list_command = projects_sub.add_parser("list", help="Lista o catálogo mesclado.")
     list_command.add_argument("--root", default=None)
@@ -152,3 +163,28 @@ def _run_exclude(args: Namespace) -> int:
     if result["removed"]:
         print(f"Removidos: {', '.join(result['removed'])}")
     return 0
+
+
+def _run_validate(args: Namespace) -> int:
+    if args.slug and not SLUG_PATTERN.fullmatch(args.slug):
+        print("Slug inválido: use lowercase, números e hífens.", file=sys.stderr)
+        return 1
+    root = _root(args.root)
+    results = validate_manifests(root, args.slug)
+    ok = all(item["ok"] for item in results)
+    payload = {"ok": ok, "checked": len(results), "results": results}
+    if args.json:
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return 0 if ok else 1
+
+    if not results:
+        print("Nenhum manifesto de projeto encontrado.")
+        return 0
+    for item in results:
+        if item["ok"]:
+            print(f"✅ {item['path']}")
+            continue
+        print(f"❌ {item['path']}")
+        for error in item["errors"]:
+            print(f"   - {error}")
+    return 0 if ok else 1

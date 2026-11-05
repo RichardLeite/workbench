@@ -81,6 +81,7 @@ Use o template `projects/_template/AGENTS.md` e substitua os placeholders
 
 ```bash
 uv run --frozen python -m workbench projects scan
+uv run --frozen python -m workbench projects validate
 uv run --frozen python -m workbench projects sync
 ```
 

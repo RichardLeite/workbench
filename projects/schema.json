@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Workbench Project Manifest",
+  "description": "Manifesto de projeto em projects/<slug>/project.json.",
+  "type": "object",
+  "required": ["name"],
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "process": {
+      "type": "string",
+      "minLength": 1
+    },
+    "license": {
+      "type": ["string", "null"]
+    },
+    "tracker": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agents": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "knowledge": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "vault": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "repos": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

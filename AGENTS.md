@@ -22,6 +22,7 @@ projects declare `repos` roles in the manifest.
 
 ```bash
 uv run --frozen python -m workbench projects scan
+uv run --frozen python -m workbench projects validate
 uv run --frozen python -m workbench projects sync
 uv run --frozen python -m workbench projects list
 uv run --frozen python -m workbench projects exclude
