@@ -116,11 +116,7 @@ function addReferences(config: unknown, catalog: Catalog): void {
       if (repoPath.startsWith("/") || /^[a-zA-Z]:[\\/]/.test(repoPath)) continue
       const alias = repoPath.replace(/\\/g, "/").split("/").filter(Boolean).pop()
       if (!alias || !/^[A-Za-z0-9._-]+$/.test(alias) || alias in reference) continue
-      const name = project.name || alias
-      const description = project.description
-        ? `${name} — ${project.description}`
-        : name
-      reference[alias] = { path: repoPath, description }
+      reference[alias] = { path: repoPath }
     }
   }
 }

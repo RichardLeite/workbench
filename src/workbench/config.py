@@ -96,9 +96,10 @@ def resolve_project(slug: str, root: Path | None = None) -> dict[str, Any]:
 
 def default_project(root: Path | None = None) -> str:
     opencode = load_opencode(root)
-    reference = opencode.get("reference")
-    if isinstance(reference, dict) and ".workbench" in reference:
-        return "workbench"
+    for key in ("references", "reference"):
+        reference = opencode.get(key)
+        if isinstance(reference, dict) and ".workbench" in reference:
+            return "workbench"
     mapping = load_project_mapping(root)
     projects = mapping.get("projects")
     if isinstance(projects, dict) and projects:

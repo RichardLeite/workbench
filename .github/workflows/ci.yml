@@ -88,6 +88,26 @@ jobs:
         run: npm install
       - name: Typecheck
         run: npx tsc --noEmit --target ES2022 --module NodeNext --moduleResolution NodeNext --skipLibCheck --types node plugins/projects.ts
+      - name: Plugin tests
+        run: npm run test:plugin
+
+  opencode-integration:
+    name: OpenCode 1.19.5 — plugin integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Sync dependencies
+        run: uv sync --all-groups
+      - name: Install pinned OpenCode CLI
+        run: npm install --prefix "$RUNNER_TEMP/opencode-cli" --no-audit --no-fund opencode-ai@1.19.5
+      - name: OpenCode config/plugin smoke
+        env:
+          OPENCODE_BIN: ${{ runner.temp }}/opencode-cli/node_modules/.bin/opencode
+        run: uv run pytest tests/integration/test_opencode_plugin.py -q
 
   node-adapters:
     name: 🧩 Node adapters — syntax
