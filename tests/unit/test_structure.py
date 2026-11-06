@@ -23,6 +23,14 @@ def test_opencode_config_and_agent_prompts() -> None:
         assert (ROOT / relative).is_file(), f"prompt de {key} não existe: {relative}"
 
 
+def test_local_plugins_are_not_registered_as_packages() -> None:
+    config = json.loads((ROOT / "opencode.json").read_text(encoding="utf-8"))
+    for spec in config.get("plugin", []):
+        if isinstance(spec, str):
+            normalized = spec.replace("\\", "/")
+            assert not normalized.startswith(".opencode/plugins/")
+
+
 def test_agent_catalog_files_exist() -> None:
     data = json.loads((ROOT / ".opencode/config/agent-catalog.json").read_text(encoding="utf-8"))
     agents = []
