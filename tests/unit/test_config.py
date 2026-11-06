@@ -44,6 +44,15 @@ def test_project_mapping_and_resolution(tmp_path: Path) -> None:
     assert config.default_project(tmp_path) == "workbench"
 
 
+def test_default_project_accepts_references_field(tmp_path: Path) -> None:
+    write_json(tmp_path / "opencode.json", {"references": {".workbench": {"path": "."}}})
+    write_json(
+        tmp_path / ".opencode" / "config" / "project-mapping.json",
+        {"projects": {"workbench": {"name": "Workbench"}}},
+    )
+    assert config.default_project(tmp_path) == "workbench"
+
+
 def test_resolve_unknown_project(tmp_path: Path) -> None:
     write_json(
         tmp_path / ".opencode" / "config" / "project-mapping.json",

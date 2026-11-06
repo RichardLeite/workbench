@@ -5,5 +5,9 @@
   "devDependencies": {
     "@types/node": "26.6.6",
     "typescript": "7.0.2"
+  },
+  "scripts": {
+    "build:plugin": "tsc --outDir .plugin-test --rootDir plugins --target ES2022 --module NodeNext --moduleResolution NodeNext --skipLibCheck --types node plugins/projects.ts",
+    "test:plugin": "npm run build:plugin && node --test tests/projects.test.cjs"
   }
 }
