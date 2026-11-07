@@ -1,13 +1,13 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "default_agent": "Orquestrador",
+  "default_agent": "orquestrador",
   "reference": {
     ".workbench": {
       "path": "."
     }
   },
   "agent": {
-    "Orquestrador": {
+    "orquestrador": {
       "description": "Agente principal responsável por coordenar o fluxo entre backend, frontend, banco, revisão de PR e demais tarefas.",
       "mode": "primary",
       "skills": [
@@ -225,7 +225,7 @@
       },
       "prompt": "{file:./.opencode/agents/review/revisor.md}"
     },
-    "Integracoes-Power": {
+    "integracoes-power": {
       "description": "Especialista em análise de integrações — APIs de terceiros, documentações, Swagger, mapeamento com codebase e documentação no vault.",
       "mode": "subagent",
       "temperature": 0.1,

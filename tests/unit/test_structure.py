@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,6 +22,23 @@ def test_opencode_config_and_agent_prompts() -> None:
         assert "{file:" in prompt, f"agent {key} sem prompt de arquivo"
         relative = prompt.split("{file:", 1)[1].split("}", 1)[0]
         assert (ROOT / relative).is_file(), f"prompt de {key} não existe: {relative}"
+
+
+def test_configured_agent_names_match_file_agent_names() -> None:
+    config = json.loads((ROOT / "opencode.json").read_text(encoding="utf-8"))
+    file_names: dict[str, Path] = {}
+    for path in (ROOT / ".opencode" / "agents").rglob("*.md"):
+        match = re.search(r"^name:\s*(\S+)\s*$", path.read_text(encoding="utf-8"), re.MULTILINE)
+        if match:
+            file_names[match.group(1)] = path
+
+    for configured in config.get("agent", {}):
+        for file_name, path in file_names.items():
+            if configured.lower() == file_name.lower():
+                assert configured == file_name, (
+                    f"agent {configured!r} duplica {file_name!r} ({path.relative_to(ROOT)}) "
+                    "por diferença de maiúsculas/minúsculas"
+                )
 
 
 def test_local_plugins_are_not_registered_as_packages() -> None:
