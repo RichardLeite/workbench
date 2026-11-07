@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -270,6 +271,59 @@ def link_dir(name: str, root: Path) -> None:
             print(f"   ⚠️  cópia .claude/{name} falhou ({copy_exc}). Crie o link à mão.")
 
 
+def _is_link(path: Path) -> bool:
+    try:
+        os.readlink(path)
+    except OSError:
+        return False
+    return True
+
+
+def _remove_link(path: Path) -> None:
+    if path.is_symlink():
+        path.unlink()
+    elif sys.platform == "win32":
+        path.rmdir()
+    else:
+        path.unlink()
+
+
+def gen_claude_skills_plugin(root: Path) -> None:
+    """Expose .opencode/skills through a Claude skills-directory plugin.
+
+    OpenCode scans both .opencode/skills and .claude/skills. A junction of the
+    latter into the former therefore produces duplicate skill warnings. Claude
+    Code loads a plugin manifest under .claude/skills/<name>/ and supports a
+    skills path, so Claude can read the canonical .opencode/skills without
+    OpenCode seeing a second copy of every skill.
+    """
+    skills_dir = root / ".claude" / "skills"
+    if skills_dir.exists() or skills_dir.is_symlink():
+        if _is_link(skills_dir):
+            _remove_link(skills_dir)
+        elif skills_dir.is_dir():
+            entries = [item for item in skills_dir.iterdir() if item.name != "workbench"]
+            if entries:
+                print(
+                    "   aviso: .claude/skills contém entradas antigas; "
+                    "mantendo-as para não apagar dados do usuário."
+                )
+
+    plugin_dir = skills_dir / "workbench" / ".claude-plugin"
+    plugin_dir.mkdir(parents=True, exist_ok=True)
+    manifest = {
+        "name": "workbench",
+        "version": "1.0.0",
+        "description": "Skills do Workbench expostas ao Claude Code.",
+        "skills": ["../../../.opencode/skills"],
+    }
+    (plugin_dir / "plugin.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print("   plugin: .claude/skills/workbench -> .opencode/skills")
+
+
 def _run_claude(args: Namespace) -> int:
     root = workbench_root()
     print("🔁 OpenCode → Claude Code Sync")
@@ -278,7 +332,7 @@ def _run_claude(args: Namespace) -> int:
     gen_agents(config, root)
     gen_mcp(config, root)
     gen_settings(root)
-    link_dir("skills", root)
+    gen_claude_skills_plugin(root)
     link_dir("commands", root)
     print("\n✅ Claude Code pronto. Reinicie o Claude Code para carregar agents/MCP.")
     return 0

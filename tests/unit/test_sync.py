@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from pathlib import Path
+
+import pytest
 
 from workbench.commands import sync
 
@@ -45,6 +49,47 @@ def test_gen_mcp_and_settings(tmp_path: Path) -> None:
     assert settings["permissions"]["defaultMode"] == "acceptEdits"
     assert settings["hooks"]["PreToolUse"]
     assert settings["hooks"]["SessionStart"]
+
+
+def test_gen_claude_skills_plugin(tmp_path: Path) -> None:
+    skill = tmp_path / ".opencode" / "skills" / "foo"
+    skill.mkdir(parents=True)
+    (skill / "SKILL.md").write_text("---\nname: foo\ndescription: Foo\n---\n", encoding="utf-8")
+
+    sync.gen_claude_skills_plugin(tmp_path)
+
+    manifest = json.loads(
+        (
+            tmp_path / ".claude" / "skills" / "workbench" / ".claude-plugin" / "plugin.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert manifest["name"] == "workbench"
+    assert manifest["skills"] == ["../../../.opencode/skills"]
+    assert not (tmp_path / ".claude" / "skills" / "foo").exists()
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="junction behavior is Windows-specific")
+def test_gen_claude_skills_plugin_replaces_junction(tmp_path: Path) -> None:
+    source = tmp_path / ".opencode" / "skills"
+    skill = source / "foo"
+    skill.mkdir(parents=True)
+    (skill / "SKILL.md").write_text("---\nname: foo\ndescription: Foo\n---\n", encoding="utf-8")
+    (tmp_path / ".claude").mkdir()
+    link = tmp_path / ".claude" / "skills"
+    subprocess.run(
+        ["cmd", "/c", "mklink", "/J", str(link), str(source)],
+        check=True,
+        capture_output=True,
+    )
+
+    sync.gen_claude_skills_plugin(tmp_path)
+
+    assert not sync._is_link(link)
+    assert (source / "foo" / "SKILL.md").is_file()
+    manifest = json.loads(
+        (link / "workbench" / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
+    )
+    assert manifest["skills"] == ["../../../.opencode/skills"]
 
 
 def test_gen_agents(tmp_path: Path) -> None:
