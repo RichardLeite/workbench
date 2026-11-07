@@ -41,6 +41,13 @@ def test_configured_agent_names_match_file_agent_names() -> None:
                 )
 
 
+def test_tdd_rule_is_loaded() -> None:
+    config = json.loads((ROOT / "opencode.json").read_text(encoding="utf-8"))
+    rule = Path(".opencode/rules/tdd.md")
+    assert rule.is_file()
+    assert ".opencode/rules/tdd.md" in config["instructions"]
+
+
 def test_local_plugins_are_not_registered_as_packages() -> None:
     config = json.loads((ROOT / "opencode.json").read_text(encoding="utf-8"))
     for spec in config.get("plugin", []):

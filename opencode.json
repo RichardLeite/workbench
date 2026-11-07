@@ -482,6 +482,7 @@
     "AGENTS.md",
     "CONVENTIONS.md",
     ".opencode/rules/rag-retrieval.md",
-    ".opencode/rules/tech-debt.md"
+    ".opencode/rules/tech-debt.md",
+    ".opencode/rules/tdd.md"
   ]
 }
