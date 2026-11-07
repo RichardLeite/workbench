@@ -9,12 +9,17 @@
 
 O Workbench mantém duas representações para o manifesto `projects/<slug>/project.json`:
 
-- `projects/schema.json`, usado por editores e ferramentas JSON Schema;
+- `projects/schema.json`, schema declarativo para ferramentas JSON Schema;
 - `src/workbench/project_schema.py`, usado pelo runtime (`wb projects validate`).
 
-As duas implementações podem divergir silenciosamente: um campo aceito pelo editor pode ser rejeitado pelo CLI, ou vice-versa. Isso aumenta o risco de manifests inválidos passarem na edição e falharem apenas no runtime.
+Hoje o schema não está associado a nenhum editor no repositório e o template do manifesto não declara `$schema`. Ainda assim, as duas representações podem divergir: um campo ou entrada aceita por uma pode ser rejeitada pela outra.
 
-O P5 do plano exige um contrato explícito entre schema e validador, sem introduzir dependência pesada no runtime.
+Exemplos reais de divergência que o contrato precisa cobrir:
+
+- `name: "   "` é aceito pelo `minLength: 1` do schema, mas rejeitado por `not name.strip()` no validador;
+- `knowledge`/`vault` são strings nullable no schema, mas o validador exige path relativo contido no workbench.
+
+O P5 exige um contrato explícito, sem introduzir dependência pesada no runtime.
 
 ## Evidence
 
@@ -23,6 +28,7 @@ O P5 do plano exige um contrato explícito entre schema e validador, sem introdu
 - `tests/unit/test_project_schema.py`
 - `wb projects validate`
 - `projects/_template/project.json`
+- `src/workbench/discovery.py` — manifestos em `<repo>/.workbench/project.json` não passam pelo validador de `projects/`.
 
 ## Options
 
@@ -37,7 +43,7 @@ O P5 do plano exige um contrato explícito entre schema e validador, sem introdu
 
 3. **Manter schema + validador Python com teste de contrato (recomendado)**
    - Cada representação permanece adequada ao seu consumidor.
-   - Um teste compara campos, obrigatoriedade e formatos.
+   - Um teste compara metadados e comportamento.
    - Drift vira falha de CI.
 
 4. **Gerar o validador a partir do schema**
@@ -47,16 +53,22 @@ O P5 do plano exige um contrato explícito entre schema e validador, sem introdu
 
 ## Decision
 
-Adotar a **opção 3**:
+Adotar a **opção 3**, com dois níveis de contrato:
 
-- `projects/schema.json` continua sendo a fonte declarativa para editores.
-- `project_schema.py` continua sendo o validador de runtime.
-- Adicionar teste de contrato em `tests/unit/test_project_schema.py` cobrindo:
-  - campos permitidos;
-  - campos obrigatórios;
-  - tipos e padrões;
-  - `additionalProperties: false`.
-- O teste deve falhar quando uma das representações ganhar ou perder um campo sem a outra.
+1. **Metadados:** comparar `properties`, `required`, `type`, `pattern`, `minLength`, `additionalProperties` e os campos de `ALLOWED_FIELDS`.
+2. **Comportamento:** executar uma tabela compartilhada de entradas válidas e inválidas contra o schema e contra `validate_manifest`, incluindo:
+   - nome vazio/whitespace;
+   - `knowledge`/`vault` fora do workbench;
+   - `repos` com path absoluto ou `..`;
+   - `additionalProperties`;
+   - `agents` com tipos inválidos.
+
+Além disso:
+
+- Adicionar `$schema` como propriedade permitida no schema e no validador.
+- Adicionar o mapeamento do schema para o editor (ex.: `.vscode/settings.json`) ou documentar o comando de validação, para que a premissa do editor tenha um consumidor real.
+- Manter `project_schema.py` como validador de runtime.
+- Registrar explicitamente que manifestos descobertos em `<repo>/.workbench/project.json` estão fora deste contrato, a menos que sejam integrados ao `projects/` em um trabalho separado.
 
 O teste será escrito primeiro (**Red**), seguido do alinhamento mínimo (**Green**) e da extração de helpers (**Refactor**), conforme `.opencode/rules/tdd.md`.
 
@@ -64,7 +76,7 @@ O teste será escrito primeiro (**Red**), seguido do alinhamento mínimo (**Gree
 
 ### Positivas
 
-- Detecta drift antes do merge.
+- Detecta drift de campos e de comportamento antes do merge.
 - Mantém editores e runtime alinhados.
 - Não adiciona dependências ao runtime.
 - Documenta o contrato de forma executável.
@@ -74,19 +86,21 @@ O teste será escrito primeiro (**Red**), seguido do alinhamento mínimo (**Gree
 - Ainda existem duas representações para manter.
 - O teste precisa ser atualizado quando o schema evoluir.
 - Alguns comportamentos do validador Python (paths seguros, globs) não são expressáveis no JSON Schema e exigem testes próprios.
+- Manifestos em `<repo>/.workbench/project.json` continuam fora do contrato.
 
 ## Trade-offs
 
 - **Ganho:** segurança contra divergência silenciosa com baixo custo.
-- **Custo:** manutenção de um teste de contrato.
+- **Custo:** manutenção de testes de metadados e comportamento.
 - **Aceito:** schema e validador continuam separados.
-- **Não aceito:** permitir que o schema e o CLI aceitem conjuntos diferentes de campos.
+- **Não aceito:** permitir que schema e CLI aceitem conjuntos diferentes de campos ou entradas válidas.
 
 ## Risks
 
 | Risco | Impacto | Mitigação |
 |---|---|---|
-| Teste refletir apenas campos, não tipos | Médio | Comparar propriedades, `required`, `type`, `pattern` e `additionalProperties` |
+| Teste refletir apenas metadados | Médio | Tabela de entradas válidas/inválidas executada nos dois lados |
+| Editor sem wiring | Médio | Adicionar mapping ou documentar validação; coberto na decisão |
 | Validador aceitar regras extras não representáveis no schema | Baixo | Testes específicos para paths, repos e segurança |
 | Schema evoluir sem atualizar o teste | Médio | Falha de CI e revisão no mesmo PR |
 | Dependência futura de JSON Schema | Baixo | Decisão limita o escopo ao contrato atual |
@@ -101,6 +115,6 @@ O teste será escrito primeiro (**Red**), seguido do alinhamento mínimo (**Gree
 ## Validation
 
 - Teste de contrato verde para o estado atual.
-- Teste **Red** ao remover um campo de uma das representações.
+- Teste **Red** ao remover um campo ou ao alterar uma regra de comportamento.
 - `wb projects validate` continua passando.
 - `uv run pytest` e `uv run ruff check src tests` verdes.

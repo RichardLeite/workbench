@@ -14,13 +14,19 @@ O Workbench gera e valida artefatos para OpenCode, Claude Code e Codex, mas apen
 - `.codex-plugin/plugin.json` aponta para `.opencode/skills`;
 - `wb sync codex` valida os arquivos de agentes esperados.
 
-Não existe hoje um teste que confirme que Claude Code ou Codex carregam esses artefatos sem erro. Também não há garantia de que os CLIs estejam instalados nos ambientes de CI.
+Já existe cobertura parcial:
 
-O P7 pede um smoke real, mas sem tornar a pipeline dependente de autenticação, display ou ferramentas externas opcionais.
+- `tests/unit/test_sync.py::test_gen_claude_skills_plugin` valida o manifesto e o path de skills;
+- `test_gen_claude_skills_plugin_replaces_junction` cobre a migração do junction no Windows.
+
+O que falta é contrato explícito para `.codex-plugin`, validação de `settings.json`/`wb sync codex` e um smoke real opcional dos CLIs.
+
+O P7 pede smoke real sem tornar a pipeline dependente de autenticação, display ou ferramentas externas opcionais.
 
 ## Evidence
 
 - `src/workbench/commands/sync.py` — `wb sync claude/codex`.
+- `tests/unit/test_sync.py` — plugin de skills do Claude e junction.
 - `.claude/settings.json` — hooks e permissões gerados.
 - `.claude/skills/workbench/.claude-plugin/plugin.json` — plugin de skills do Claude.
 - `.codex-plugin/plugin.json` — skills e metadados do Codex.
@@ -35,8 +41,8 @@ O P7 pede um smoke real, mas sem tornar a pipeline dependente de autenticação,
 
 2. **Contrato de artefatos no CI + smoke opcional dos CLIs (recomendado)**
    - O CI sempre valida os arquivos gerados e seus paths.
-   - Se `claude` ou `codex` estiverem disponíveis, executa um smoke real.
-   - Sem CLI, o teste é skipped com motivo explícito.
+   - Se `claude` ou `codex` estiverem disponíveis **e** houver configuração/auth detectável, executa um smoke real.
+   - Sem CLI ou sem auth, o teste é skipped com motivo explícito.
    - Não exige auth/modelo para o contrato básico.
 
 3. **Smoke real obrigatório no CI**
@@ -53,15 +59,17 @@ O P7 pede um smoke real, mas sem tornar a pipeline dependente de autenticação,
 Adotar a **opção 2**:
 
 - Testes de contrato obrigatórios no CI para:
-  - existência e validade do plugin de skills do Claude;
+  - existência e validade do plugin de skills do Claude (já coberto; manter);
   - paths declarados em `.claude/skills/workbench/.claude-plugin/plugin.json`;
   - `.codex-plugin/plugin.json` e seu caminho de skills;
   - agents esperados por `wb sync codex`;
+  - validade de `.claude/settings.json`;
   - execução de `wb sync claude` e `wb sync codex` sem erro.
 - Smoke real opcional:
-  - executar `claude` e/ou `codex` somente quando o binário estiver disponível;
+  - executar `claude` e/ou `codex` somente quando o binário **e** a prontidão de configuração/auth forem detectáveis;
   - usar workspace temporário e ambiente isolado;
-  - pular com mensagem clara quando ausente;
+  - pular com mensagem clara quando CLI ou auth estiverem ausentes;
+  - mapear falhas de auth para `pytest.skip`, nunca para falha do PR comum;
   - nunca falhar por falta de auth em PR comum.
 - Fixar as versões mínimas suportadas e registrar a versão no output do teste.
 
@@ -69,7 +77,7 @@ O ciclo TDD será:
 
 - **Red:** path quebrado ou plugin ausente deve falhar no contrato;
 - **Green:** artefatos gerados e sync passam;
-- **Refactor:** helpers compartilhados para workspace temporário e skip por CLI.
+- **Refactor:** helpers compartilhados para workspace temporário e skip por CLI/auth.
 
 ## Consequences
 
@@ -77,8 +85,9 @@ O ciclo TDD será:
 
 - Detecta regressões de paths e plugins antes do uso manual.
 - Mantém o CI determinístico.
-- Permite smoke real quando o ambiente oferece os CLIs.
+- Permite smoke real quando o ambiente oferece CLIs e auth.
 - Documenta claramente o que é garantido em CI e o que é opcional.
+- Aproveita a cobertura existente do plugin do Claude.
 
 ### Negativas
 
@@ -92,13 +101,14 @@ O ciclo TDD será:
 - **Ganho:** cobertura útil sem transformar PRs em testes dependentes de auth.
 - **Custo:** dois níveis de teste e manutenção de skip.
 - **Aceito:** smoke real é local/nightly, não gate universal.
-- **Não aceito:** pipeline obrigatória que falha por CLI não instalado.
+- **Não aceito:** pipeline obrigatória que falha por CLI não instalado ou auth ausente.
 
 ## Risks
 
 | Risco | Impacto | Mitigação |
 |---|---|---|
 | CLI externo ausente | Médio | Skip explícito no CI comum |
+| Binário presente sem auth | Alto | Detectar prontidão de auth/config; mapear falha de auth para skip |
 | Auth/modelo indisponível | Alto | Smoke real não obrigatório em PR |
 | Versão do Claude/Codex incompatível | Médio | Fixar versão mínima e reportar versão |
 | Path absoluto específico da máquina | Médio | Usar paths relativos e workspace temporário |
@@ -113,9 +123,9 @@ O ciclo TDD será:
 
 ## Validation
 
-- Teste de contrato do plugin do Claude falha com path quebrado.
+- Teste de contrato do plugin do Claude falha com path quebrado (cobertura existente mantida).
 - Teste de contrato do Codex falha com `plugin.json` inválido.
 - `wb sync claude` e `wb sync codex` passam em workspace temporário.
-- Se `claude`/`codex` existirem, smoke real executa e reporta versão.
-- Se não existirem, testes são `skipped` com motivo.
+- Se `claude`/`codex` existirem e auth/config estiverem prontos, smoke real executa e reporta versão.
+- Se CLI ou auth não existirem, testes são `skipped` com motivo.
 - Pytest, Ruff e CI OpenCode continuam verdes.

@@ -25,7 +25,8 @@ O Workbench adotou TDD como regra obrigatória, portanto o gate do Desktop deve 
 - `.opencode/plugins/projects.ts` — geração de referências locais.
 - `tests/integration/test_opencode_plugin.py` — integração via `opencode debug config`.
 - `.opencode/rules/tdd.md` — regra TDD.
-- `~/.local/share/opencode/log/opencode.log` — evidências de `schema rejection`.
+- `opencode debug paths log` — resolve o log do OpenCode; no Windows o caminho observado foi `%USERPROFILE%\.local\share\opencode\log\opencode.log`.
+- Log/trace de falha: `schema rejection` em `opencode.log`, com `run=<id>`.
 - OpenCode Desktop `1.19.5`.
 
 ## Options
@@ -60,7 +61,8 @@ Adotar a **opção 2**:
    - versão fixada do Desktop;
    - assert de ausência de `schema rejection`;
    - assert de agente único `orquestrador`;
-   - evidência de carregamento do alias do projeto.
+   - evidência de carregamento do alias do projeto;
+   - log/trace id registrado no output do teste.
 2. Manter a matriz CLI existente como gate obrigatório de CI.
 3. Adiar o **P4b — Playwright/Electron E2E completo** até que o smoke se mostre insuficiente.
 4. Aplicar TDD no harness:
@@ -97,8 +99,8 @@ Adotar a **opção 2**:
 |---|---|---|
 | Flakiness do Electron | Alto | Timeout generoso, retries limitados, logs estruturados |
 | Versão do Desktop diferente do CLI | Alto | Fixar versão e falhar explicitamente em mismatch |
-| Cache/servidor compartilhado | Médio | Perfil, `HOME`, `XDG_*` e workspace isolados |
-| Falso positivo por log antigo | Médio | Rotacionar/limpar log antes do teste |
+| Cache/servidor compartilhado | Médio | Perfil, `HOME`, `XDG_*`, `USERPROFILE`, `APPDATA`, `LOCALAPPDATA` e workspace isolados; preferir perfil Windows/VM separado |
+| Falso positivo por log antigo | Médio | Rotacionar/limpar log antes do teste e registrar `run` id |
 | Perda de sessões/auth | Alto | Nunca apagar dados reais; usar perfil temporário |
 | UI sem hooks de teste | Médio | P4a baseado em logs/config; P4b somente se necessário |
 
@@ -125,6 +127,7 @@ Adotar a **opção 2**:
 - `orquestrador` aparece exatamente uma vez.
 - Alias `@JARVIS` é carregado.
 - Log não contém `schema rejection` após o início do teste.
+- O log/trace id é anexado ao resultado do teste.
 
 ### Critérios de sucesso
 
