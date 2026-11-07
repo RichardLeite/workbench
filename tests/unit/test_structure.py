@@ -23,6 +23,13 @@ def test_opencode_config_and_agent_prompts() -> None:
         assert (ROOT / relative).is_file(), f"prompt de {key} não existe: {relative}"
 
 
+def test_tdd_rule_is_loaded() -> None:
+    config = json.loads((ROOT / "opencode.json").read_text(encoding="utf-8"))
+    rule = Path(".opencode/rules/tdd.md")
+    assert rule.is_file()
+    assert ".opencode/rules/tdd.md" in config["instructions"]
+
+
 def test_local_plugins_are_not_registered_as_packages() -> None:
     config = json.loads((ROOT / "opencode.json").read_text(encoding="utf-8"))
     for spec in config.get("plugin", []):
