@@ -92,8 +92,13 @@ jobs:
         run: npm run test:plugin
 
   opencode-integration:
-    name: OpenCode 1.19.5 — plugin integration
-    runs-on: ubuntu-latest
+    name: OpenCode 1.19.5 — plugin integration (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.3.3
@@ -103,10 +108,10 @@ jobs:
       - name: Sync dependencies
         run: uv sync --all-groups
       - name: Install pinned OpenCode CLI
-        run: npm install --prefix "$RUNNER_TEMP/opencode-cli" --no-audit --no-fund opencode-ai@1.19.5
+        run: npm install --prefix "${{ runner.temp }}/opencode-cli" --no-audit --no-fund opencode-ai@1.19.5
       - name: OpenCode config/plugin smoke
         env:
-          OPENCODE_BIN: ${{ runner.temp }}/opencode-cli/node_modules/.bin/opencode
+          OPENCODE_BIN: ${{ runner.temp }}/opencode-cli/node_modules/opencode-ai/bin/opencode.exe
         run: uv run pytest tests/integration/test_opencode_plugin.py -q
 
   node-adapters:
