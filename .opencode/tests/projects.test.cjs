@@ -50,10 +50,24 @@ test("injects project repositories as local references", async () => {
   await runConfig(root, config, { WB_PROJECTS_SYNC_TTL_MS: "600000" })
 
   assert.deepEqual(config.reference.existing, { path: "." })
-  assert.deepEqual(config.reference.alpha, { path: "alpha" })
-  assert.deepEqual(config.reference.api, { path: "nested/api" })
+  assert.equal(config.reference.alpha, "./alpha")
+  assert.equal(config.reference.api, "./nested/api")
   assert.equal(config.reference.absolute, undefined)
   assert.equal(config.reference.posix, undefined)
+})
+
+test("uses string shorthand for bare local repository paths", async () => {
+  const root = makeRoot()
+  writeCatalog(root, {
+    JARVIS: { repos: { root: "JARVIS" } },
+    nested: { repos: { api: "nested\\api" } },
+  })
+
+  const config = { reference: {} }
+  await runConfig(root, config, { WB_PROJECTS_SYNC_TTL_MS: "600000" })
+
+  assert.equal(config.reference.JARVIS, "./JARVIS")
+  assert.equal(config.reference.api, "./nested/api")
 })
 
 test("creates the reference map when it does not exist", async () => {
@@ -63,7 +77,7 @@ test("creates the reference map when it does not exist", async () => {
   const config = {}
   await runConfig(root, config, { WB_PROJECTS_SYNC_TTL_MS: "600000" })
 
-  assert.deepEqual(config.reference, { alpha: { path: "alpha" } })
+  assert.deepEqual(config.reference, { alpha: "./alpha" })
 })
 
 test("does not overwrite an existing alias", async () => {

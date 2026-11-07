@@ -64,5 +64,5 @@ def test_opencode_loads_plugin_generated_reference(tmp_path: Path) -> None:
     combined = f"{result.stdout}\n{result.stderr}"
     assert result.returncode == 0, combined
     assert '"smoke-project"' in result.stdout, combined
-    assert '"path": "smoke-project"' in result.stdout, combined
+    assert '"smoke-project": "./smoke-project"' in result.stdout, combined
     assert "schema rejection" not in combined.lower(), combined

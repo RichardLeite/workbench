@@ -97,6 +97,11 @@ function readCatalog(root: string): Catalog {
   }
 }
 
+function localReferencePath(repoPath: string): string {
+  const normalized = repoPath.replace(/\\/g, "/")
+  return /^[./~]/.test(normalized) ? normalized : `./${normalized}`
+}
+
 function addReferences(config: unknown, catalog: Catalog): void {
   if (typeof config !== "object" || config === null) return
   const target = config as { reference?: Record<string, unknown> }
@@ -114,9 +119,10 @@ function addReferences(config: unknown, catalog: Catalog): void {
     for (const repoPath of Object.values(repos)) {
       if (typeof repoPath !== "string" || !repoPath) continue
       if (repoPath.startsWith("/") || /^[a-zA-Z]:[\\/]/.test(repoPath)) continue
-      const alias = repoPath.replace(/\\/g, "/").split("/").filter(Boolean).pop()
+      const normalized = repoPath.replace(/\\/g, "/")
+      const alias = normalized.split("/").filter(Boolean).pop()
       if (!alias || !/^[A-Za-z0-9._-]+$/.test(alias) || alias in reference) continue
-      reference[alias] = { path: repoPath }
+      reference[alias] = localReferencePath(repoPath)
     }
   }
 }
